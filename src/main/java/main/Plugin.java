@@ -131,10 +131,12 @@ public class Plugin extends JavaPlugin {
 
         this.teams_names = this.getConfig().getStringList("team_list");
 
-        File worlds = Bukkit.getWorldContainer();
-        for(String world : worlds.list()){
-            WorldCreator worldCreator = new WorldCreator(world);
-            worldCreator.createWorld();
+        File worlds = new File("./", "worlds");
+        for(int i = 0; i < worlds.list().length; i++){
+            File w = new File("./worlds/", worlds.list()[i]);
+            if(w.isFile()) continue;
+            WorldCreator world = new WorldCreator(worlds.list()[i]);
+            world.createWorld();
         }
 
         for(String color : this.getTeamsNames()){
