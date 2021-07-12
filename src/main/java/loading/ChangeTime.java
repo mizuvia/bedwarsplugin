@@ -1,0 +1,34 @@
+package loading;
+
+import main.Plugin;
+import tasks.TaskGUI;
+
+public class ChangeTime extends TaskGUI{
+
+    public int time = -1;
+
+    public ChangeTime(Plugin plugin){
+        this.period = 20;
+        this.plugin = plugin;
+    }
+
+    @Override
+    public void run() {
+        if(!this.getPlugin().isEnabled() || !this.getPlugin().isLoading()) return;
+
+        if(this.getTime() == 0) {
+            this.getPlugin().setLoading(false);
+            this.getPlugin().getSidebar().changeTime(-1);
+            this.getPlugin().getSidebar().clear();
+            this.getPlugin().getGame().start();
+        }
+        else this.getPlugin().getSidebar().changeTime(this.getTime());
+        if(this.getTime() != -1) this.decreaseTime();
+    }
+
+    public void setTime(int time){ this.time = time; }
+
+    public void decreaseTime(){ this.time--; }
+
+    public int getTime(){ return this.time; }
+}
