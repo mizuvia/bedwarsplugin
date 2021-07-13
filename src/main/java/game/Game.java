@@ -154,7 +154,7 @@ public class Game {
         this.getPlugin().getWaiting().checkAmount();
 
         this.getPlugin().setLoading(true);
-
+        this.getPlugin().getJedis().publish("bw", this.getPlugin().getConfig().getString("server_name") + " " + this.getPlugin().getOnlinePlayers());
     }
 
     public void checkWin(){

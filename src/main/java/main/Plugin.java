@@ -121,13 +121,13 @@ public class Plugin extends JavaPlugin {
 
     public int getPlayersPerTeam() {return this.players_per_team; }
 
-    private Jedis getJedis(){return this.jedis;}
+    public Jedis getJedis(){return this.jedis;}
 
     @Override
     public void onEnable(){
         this.loadConfig();
         this.jedis = new Jedis("127.0.0.1", 6379);
-        this.jedis.publish("bw", "bw001 0");
+        this.jedis.publish("bw", this.getConfig().getString("server_name") + " 0");
 
         this.teams_names = this.getConfig().getStringList("team_list");
 

@@ -45,6 +45,8 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             this.getPlugin().getTab().addPlayer(p);
 
             e.setJoinMessage(e.getPlayer().getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().online_players + "§f/§b" + this.getPlugin().players_amount + "§f]");
+
+            this.getPlugin().getJedis().publish("bw", this.getPlugin().getConfig().getString("server_name") + " " + this.getPlugin().getOnlinePlayers());
         }
         if(this.getPlugin().isWorking()){
             e.getPlayer().setGameMode(GameMode.SPECTATOR);

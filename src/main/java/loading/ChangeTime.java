@@ -21,6 +21,8 @@ public class ChangeTime extends TaskGUI{
             this.getPlugin().getSidebar().changeTime(-1);
             this.getPlugin().getSidebar().clear();
             this.getPlugin().getGame().start();
+
+            this.getPlugin().getJedis().publish("bw", this.getPlugin().getConfig().getString("server_name") + " -1");
         }
         else this.getPlugin().getSidebar().changeTime(this.getTime());
         if(this.getTime() != -1) this.decreaseTime();
