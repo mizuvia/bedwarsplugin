@@ -1,10 +1,13 @@
 package main;
 
+import com.hoshion.mongoapi.MongoProvider;
+import com.hoshion.mongoapi.MongoService;
 import events.*;
 import game.Game;
 import game.Participant;
 import game.Team;
 import inventories.*;
+import jedis.RedisThread;
 import loading.Sidebar;
 import loading.Waiting;
 import org.bukkit.Bukkit;
@@ -61,6 +64,8 @@ public class Plugin extends JavaPlugin {
     private List<String> emeralds;
     private Location center;
     private Jedis jedis;
+    private Thread jedisThread;
+    private MongoService mongo;
 
     public Location getCenter(){return this.center; }
 
@@ -122,12 +127,11 @@ public class Plugin extends JavaPlugin {
     public int getPlayersPerTeam() {return this.players_per_team; }
 
     public Jedis getJedis(){return this.jedis;}
+    public MongoService getMongo(){return this.mongo;}
 
     @Override
     public void onEnable(){
         this.loadConfig();
-        this.jedis = new Jedis("127.0.0.1", 6379);
-        this.jedis.publish("bw", this.getConfig().getString("server_name") + " 0");
 
         this.teams_names = this.getConfig().getStringList("team_list");
 
@@ -264,6 +268,8 @@ public class Plugin extends JavaPlugin {
             this.getTab().addPlayer(p);
         }
 
+        this.mongo = new MongoService(MongoProvider.connect().getDatastore());
+        this.loadJedis();
 
         getLogger().info("enabled!");
     }
@@ -291,6 +297,13 @@ public class Plugin extends JavaPlugin {
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
+    }
+
+    private void loadJedis(){
+        this.jedis = new Jedis("127.0.0.1", 6379);
+        this.jedis.publish("bw", this.getConfig().getString("server_name") + " 0");
+        this.jedisThread = new Thread(new RedisThread(jedis, this));
+        this.jedisThread.start();
     }
 
     public void resetTeamSelection() {

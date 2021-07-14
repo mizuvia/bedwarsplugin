@@ -1,6 +1,9 @@
 package events;
 
+import com.hoshion.mongoapi.docs.Party;
 import game.Participant;
+import game.Team;
+import inventories.TeamSelection;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Bukkit;
@@ -47,6 +50,23 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             e.setJoinMessage(e.getPlayer().getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().online_players + "§f/§b" + this.getPlugin().players_amount + "§f]");
 
             this.getPlugin().getJedis().publish("bw", this.getPlugin().getConfig().getString("server_name") + " " + this.getPlugin().getOnlinePlayers());
+
+            Party party = this.getPlugin().getMongo().findOneParty("id", this.getPlugin().getMongo().findOnePlayer("uuid", e.getPlayer().getUniqueId().toString()));
+            if(party != null){
+                for(Team team : this.getPlugin().getTeams().values()){
+                    for(Participant par : team.getTeammates().values()){
+                        if(party.members.contains(par.getPlayer().getUniqueId().toString())) {
+                            TeamSelection.addPlayerToTeam(plugin, team, p);
+                            return;
+                        }
+                    }
+                }
+                for(Team team : this.getPlugin().getTeams().values()){
+                    if(this.getPlugin().getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
+                        TeamSelection.addPlayerToTeam(plugin, team, p);
+                    }
+                }
+            }
         }
         if(this.getPlugin().isWorking()){
             e.getPlayer().setGameMode(GameMode.SPECTATOR);

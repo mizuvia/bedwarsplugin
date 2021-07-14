@@ -1,5 +1,7 @@
 package inventories;
 
+import game.Participant;
+import game.Team;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Material;
@@ -29,15 +31,19 @@ public class TeamSelection implements IGUI{
     @Override
     public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
         if(clickedItem.getType().name().equals("GRAY_STAINED_GLASS_PANE")) return;
+
         String color = clickedItem.getType().name().replace("_WOOL", "").toLowerCase(Locale.ROOT);
-        if(this.getPlugin().getTeams().get(color).getTeammatesAmount() == this.getPlugin().players_per_team){
+        Team team = this.getPlugin().getTeams().get(color);
+        Participant participant = this.getPlugin().getPlayers().get(whoClicked.getName());
+
+        if(team.getTeammatesAmount() == this.getPlugin().getPlayersPerTeam()){
             whoClicked.closeInventory();
             whoClicked.sendMessage("§cКоманда заполнена!");
             return;
         }
 
-        if(this.getPlugin().getPlayers().get(whoClicked.getName()).hasTeam()) {
-            String oldColor = this.getPlugin().getPlayers().get(whoClicked.getName()).getTeam().getColor();
+        if(participant.hasTeam()) {
+            String oldColor = participant.getTeam().getColor();
 
             if(oldColor.equals(color)){
                 whoClicked.closeInventory();
@@ -45,41 +51,63 @@ public class TeamSelection implements IGUI{
                 return;
             }
 
-            int oldSlot = this.getPlugin().getTeamSelectionInventory().first(Material.getMaterial(oldColor.toUpperCase(Locale.ROOT) + "_WOOL"));
-            ItemStack item = this.getPlugin().getTeamSelectionInventory().getContents()[oldSlot];
-            ItemMeta meta = item.getItemMeta();
-            List<String> lore = meta.getLore();
-            lore.remove("§r" + PlayerManager.getCodeColor(oldColor) + whoClicked.getName());
-            meta.setLore(lore);
-            item.setItemMeta(meta);
-
-
-            this.getPlugin().getTab().removePlayer(this.getPlugin().getPlayers().get(whoClicked.getName()));
-
-            this.getPlugin().getTeams().get(oldColor).getTeammates().remove(whoClicked.getName());
-            this.getPlugin().getTeams().get(oldColor).decreaseTeammatesAmount();
-            this.getPlugin().getTeamSelectionInventory().setItem(oldSlot, item);
+            TeamSelection.removePlayerFromTeam(plugin, participant);
         }
 
-        this.getPlugin().getPlayers().get(whoClicked.getName()).setTeam(this.getPlugin().getTeams().get(color));
+        TeamSelection.addPlayerToTeam(plugin, team, participant);
+    }
 
-        ItemStack item = this.getPlugin().getTeamSelectionInventory().getContents()[slot];
+    public static void addPlayerToTeam(Plugin plugin, Team team, Participant participant){
+
+        participant.getPlayer().setPlayerListName("§8§l[" + team.getName() + "§8§l]§r§7 " + participant.getPlayer().getName());
+        plugin.getTab().addPlayer(participant);
+
+        TeamSelection.addPlayerToItem(plugin, team, participant.getPlayer());
+
+        participant.setTeam(team);
+
+        team.getTeammates().put(participant.getPlayer().getName(), participant);
+        team.increaseTeammatesAmount();
+        participant.getPlayer().closeInventory();
+        participant.getPlayer().sendMessage("§eВы успешно присоединились к команде " + team.getName() + "§e!");
+    }
+
+    public static void removePlayerFromTeam(Plugin plugin, Participant participant){
+        plugin.getTab().removePlayer(participant);
+
+        TeamSelection.removePlayerFromItem(plugin, participant);
+
+        participant.getTeam().getTeammates().remove(participant.getPlayer().getName());
+        participant.getTeam().decreaseTeammatesAmount();
+    }
+
+    public static void addPlayerToItem(Plugin plugin, Team team, Player player){
+        String color = team.getColor();
+        int index = plugin.getTeamSelectionInventory().first(Material.getMaterial(color.toUpperCase(Locale.ROOT) + "_WOOL"));
+
+        ItemStack item = plugin.getTeamSelectionInventory().getItem(index);
         ItemMeta meta = item.getItemMeta();
         List<String> lore = meta.getLore();
         if(lore == null) lore = new ArrayList<>();
-        lore.add("§r" + PlayerManager.getCodeColor(color) + whoClicked.getName());
+        lore.add("§r" + PlayerManager.getCodeColor(color) + player.getName());
         meta.setLore(lore);
         item.setItemMeta(meta);
 
-        whoClicked.setPlayerListName("§8§l[" + this.getPlugin().getTeams().get(color).getName() + "§8§l]§r§7 " + whoClicked.getName());
+        plugin.getTeamSelectionInventory().setItem(index, item);
+    }
 
-        this.getPlugin().getTab().addPlayer(this.getPlugin().getPlayers().get(whoClicked.getName()));
+    public static void removePlayerFromItem(Plugin plugin, Participant participant){
+        String color = participant.getTeam().getColor();
+        int index = plugin.getTeamSelectionInventory().first(Material.getMaterial(color.toUpperCase(Locale.ROOT) + "_WOOL"));
 
-        this.getPlugin().getTeams().get(color).getTeammates().put(whoClicked.getName(), this.getPlugin().getPlayers().get(whoClicked.getName()));
-        this.getPlugin().getTeams().get(color).increaseTeammatesAmount();
-        this.getPlugin().getTeamSelectionInventory().setItem(slot, item);
-        whoClicked.closeInventory();
-        whoClicked.sendMessage("§eВы успешно присоединились к команде!");
+        ItemStack item = plugin.getTeamSelectionInventory().getItem(index);
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = meta.getLore();
+        lore.remove("§r" + PlayerManager.getCodeColor(color) + participant.getPlayer().getName());
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        plugin.getTeamSelectionInventory().setItem(index, item);
     }
 
     public Plugin getPlugin(){ return this.plugin; }
