@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import util.PlayerInv;
 import util.Utils;
 
+import java.util.logging.Logger;
+
 public class onPlayerJoin extends SimpleListener implements Listener, EventExecutor {
 
     public onPlayerJoin(Plugin plugin){
@@ -61,6 +63,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
                         }
                     }
                 }
+                Logger.getLogger("").info("Приколист");
                 for(Team team : this.getPlugin().getTeams().values()){
                     if(this.getPlugin().getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
                         TeamSelection.addPlayerToTeam(plugin, team, p);
