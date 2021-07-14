@@ -300,9 +300,10 @@ public class Plugin extends JavaPlugin {
     }
 
     private void loadJedis(){
+        Jedis subJedis = new Jedis("127.0.0.1", 6379);
         this.jedis = new Jedis("127.0.0.1", 6379);
         this.jedis.publish("bw", this.getConfig().getString("server_name") + " 0");
-        this.jedisThread = new Thread(new RedisThread(jedis, this));
+        this.jedisThread = new Thread(new RedisThread(subJedis, this));
         this.jedisThread.start();
     }
 
