@@ -133,24 +133,26 @@ public class Game {
 
             Party party = this.getPlugin().getMongo().findOneParty("id", this.getPlugin().getMongo().findOnePlayer("uuid", p.getPlayer().getUniqueId().toString()).gen$party_id);
             if(party == null){
-                for(Team team : this.getPlugin().getTeams().values())
-                    if(team.getTeammatesAmount() != this.getPlugin().getPlayersPerTeam())
-                        TeamSelection.addPlayerToTeam(this.getPlugin(), team, p);
-                        break;
+                for1: for(Team team : this.getPlugin().getTeams().values()){
+                        if(team.getTeammatesAmount() != this.getPlugin().getPlayersPerTeam()){
+                            TeamSelection.addPlayerToTeam(this.getPlugin(), team, p);
+                            break for1;
+                        }
+                    }
             } else {
-                for(Team team : this.getPlugin().getTeams().values()){
+                for2: for(Team team : this.getPlugin().getTeams().values()){
                     for(Participant par : team.getTeammates().values()){
                         if(party.members.contains(par.getPlayer().getUniqueId().toString()) && team.getTeammatesAmount() != this.getPlugin().getPlayersPerTeam()) {
                             TeamSelection.addPlayerToTeam(plugin, team, p);
-                            break;
+                            break for2;
                         }
                     }
                 }
                 if(!p.hasTeam()){
-                    for(Team team : this.getPlugin().getTeams().values()){
+                    for3: for(Team team : this.getPlugin().getTeams().values()){
                         if(this.getPlugin().getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
                             TeamSelection.addPlayerToTeam(plugin, team, p);
-                            break;
+                            break for3;
                         }
                     }
                 }
