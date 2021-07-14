@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 public class TeamSelection implements IGUI{
     private final Plugin plugin;
@@ -64,6 +65,7 @@ public class TeamSelection implements IGUI{
 
         TeamSelection.addPlayerToItem(plugin, team, participant.getPlayer());
 
+        Logger.getLogger("").info("checking");
         participant.setTeam(team);
 
         team.getTeammates().put(participant.getPlayer().getName(), participant);
