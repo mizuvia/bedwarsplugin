@@ -140,7 +140,8 @@ public class Game {
                 for(Team team : this.getPlugin().getTeams().values()){
                     for(Participant par : team.getTeammates().values()){
                         if(party.members.contains(par.getPlayer().getUniqueId().toString()) && team.getTeammatesAmount() != this.getPlugin().getPlayersPerTeam()) {
-                            TeamSelection.addPlayerToTeam(plugin, team, p);;
+                            TeamSelection.addPlayerToTeam(plugin, team, p);
+                            break;
                         }
                     }
                 }
@@ -148,6 +149,7 @@ public class Game {
                     for(Team team : this.getPlugin().getTeams().values()){
                         if(this.getPlugin().getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
                             TeamSelection.addPlayerToTeam(plugin, team, p);
+                            break;
                         }
                     }
                 }
