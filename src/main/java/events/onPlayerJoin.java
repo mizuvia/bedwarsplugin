@@ -68,6 +68,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
                 for(Team team : this.getPlugin().getTeams().values()){
                     if(this.getPlugin().getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
                         TeamSelection.addPlayerToTeam(plugin, team, p);
+                        return;
                     }
                 }
             }
