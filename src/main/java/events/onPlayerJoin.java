@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
+import util.Colors;
 import util.PlayerInv;
 import util.Utils;
 
@@ -38,7 +39,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
 
             Participant p = new Participant(e.getPlayer(), this.getPlugin());
 
-            e.getPlayer().setDisplayName(PlayerManager.getGroupDisplayName(p) + e.getPlayer().getName());
+            e.getPlayer().setDisplayName(Colors.replaceHex(PlayerManager.getGroupDisplayName(p)) + e.getPlayer().getName());
             e.getPlayer().setPlayerListName(e.getPlayer().getDisplayName());
 
             this.getPlugin().getPlayers().put(e.getPlayer().getName(), p);
@@ -53,7 +54,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
 
             this.getPlugin().getJedis().publish("bw", this.getPlugin().getConfig().getString("server_name") + " " + this.getPlugin().getOnlinePlayers());
 
-            Party party = this.getPlugin().getMongo().findOneParty("id", this.getPlugin().getMongo().findOnePlayer("uuid", e.getPlayer().getUniqueId().toString()));
+            Party party = this.getPlugin().getMongo().findOneParty("id", this.getPlugin().getMongo().findOnePlayer("uuid", e.getPlayer().getUniqueId().toString()).gen$party_id);
             if(party != null){
                 for(Team team : this.getPlugin().getTeams().values()){
                     for(Participant par : team.getTeammates().values()){
