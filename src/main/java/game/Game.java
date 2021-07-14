@@ -1,5 +1,6 @@
 package game;
 
+import com.hoshion.mongoapi.docs.Party;
 import inventories.*;
 import main.PlayerManager;
 import main.Plugin;
@@ -117,11 +118,41 @@ public class Game {
         this.spawnShopEntity();
         this.createArmorStands();
 
+        this.checkPlayersWithoutTeams();
+
         this.getPlugin().getSidebar().setForWorking();
         this.checkEmptyTeams();
         this.teleportPlayers();
 
         this.getPlugin().setWorking(true);
+    }
+
+    private void checkPlayersWithoutTeams(){
+        for(Participant p : this.getPlugin().getPlayers().values()){
+            if(p.hasTeam()) continue;
+
+            Party party = this.getPlugin().getMongo().findOneParty("id", this.getPlugin().getMongo().findOnePlayer("uuid", p.getPlayer().getUniqueId().toString()).gen$party_id);
+            if(party == null){
+                for(Team team : this.getPlugin().getTeams().values())
+                    if(team.getTeammatesAmount() != this.getPlugin().getPlayersPerTeam())
+                        TeamSelection.addPlayerToTeam(this.getPlugin(), team, p);
+            } else {
+                for(Team team : this.getPlugin().getTeams().values()){
+                    for(Participant par : team.getTeammates().values()){
+                        if(party.members.contains(par.getPlayer().getUniqueId().toString()) && team.getTeammatesAmount() != this.getPlugin().getPlayersPerTeam()) {
+                            TeamSelection.addPlayerToTeam(plugin, team, p);;
+                        }
+                    }
+                }
+                if(!p.hasTeam()){
+                    for(Team team : this.getPlugin().getTeams().values()){
+                        if(this.getPlugin().getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
+                            TeamSelection.addPlayerToTeam(plugin, team, p);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void checkEmptyTeams() {
