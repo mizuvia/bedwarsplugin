@@ -136,6 +136,7 @@ public class Game {
                 for(Team team : this.getPlugin().getTeams().values())
                     if(team.getTeammatesAmount() != this.getPlugin().getPlayersPerTeam())
                         TeamSelection.addPlayerToTeam(this.getPlugin(), team, p);
+                        break;
             } else {
                 for(Team team : this.getPlugin().getTeams().values()){
                     for(Participant par : team.getTeammates().values()){
