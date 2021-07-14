@@ -6,6 +6,7 @@ import main.Plugin;
 import redis.clients.jedis.JedisPubSub;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class RedisSubscription extends JedisPubSub{
 
@@ -19,6 +20,8 @@ public class RedisSubscription extends JedisPubSub{
 
     public void onMessage(String channel, String uuid){
         if(!plugin.isEnabled()) return;
+
+        Logger.getLogger("").info(uuid);
 
         Party party = this.getPlugin().getMongo().findOneParty("id", this.getPlugin().getMongo().findOnePlayer("uuid", uuid).gen$party_id);
         if(party == null) this.getPlugin().getJedis().publish("pending", uuid + " true");
