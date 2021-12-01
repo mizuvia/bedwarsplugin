@@ -21,19 +21,19 @@ public class OthersInventory extends SimpleInventory{
         this.addItem(this.createItem(11, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-        this.addItem(ShopItems.GOLDEN_APPLE);
-        this.addItem(ShopItems.TNT);
+        this.addItem(ShopItem.GOLDEN_APPLE.getItem());
+        this.addItem(ShopItem.TNT.getItem());
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-        this.addItem(ShopItems.GOLEM);
-        this.addItem(ShopItems.MILK);
+        this.addItem(ShopItem.GOLEM.getItem());
+        this.addItem(ShopItem.MILK.getItem());
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-        this.addItem(ShopItems.TELEPORT);
-        this.addItem(ShopItems.ENDER_PEARL);
+        this.addItem(ShopItem.TELEPORT.getItem());
+        this.addItem(ShopItem.ENDER_PEARL.getItem());
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-        this.addItem(ShopItems.WATER_BUCKER);
-        this.addItem(ShopItems.FIRE_CHARGE);
+        this.addItem(ShopItem.WATER_BUCKER.getItem());
+        this.addItem(ShopItem.FIRE_CHARGE.getItem());
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 
         this.addItem(this.createItem(11, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));

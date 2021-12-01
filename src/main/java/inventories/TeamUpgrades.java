@@ -231,14 +231,14 @@ public class TeamUpgrades implements IGUI{
 
         List<LevelInfo> lvls = upgrades.get(name).getLevels();
 
-        int var1 = lore.indexOf(lvls.get(level).getItemPrice().makeString());
-        lore.remove(lvls.get(level).getItemPrice().makeString());
+        int var1 = lore.indexOf(lvls.get(level).getItemPrice().toString());
+        lore.remove(lvls.get(level).getItemPrice().toString());
 
         if(level + 1 == lvls.size()){
             lore.add(" ");
             lore.add("§a§lКУПЛЕНО");
         }
-        else lore.add(var1, lvls.get(level + 1).getItemPrice().makeString());
+        else lore.add(var1, lvls.get(level + 1).getItemPrice().toString());
     }
 
     @NotNull

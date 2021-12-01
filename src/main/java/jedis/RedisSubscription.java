@@ -1,7 +1,9 @@
 package jedis;
 
+import com.hoshion.mongoapi.MongoService;
 import com.hoshion.mongoapi.docs.Party;
 import game.Team;
+import main.Config;
 import main.Plugin;
 import redis.clients.jedis.JedisPubSub;
 
@@ -21,13 +23,13 @@ public class RedisSubscription extends JedisPubSub{
     public void onMessage(String channel, String uuid){
         if(!plugin.isEnabled()) return;
 
-        Party party = this.getPlugin().getMongo().findOneParty("id", this.getPlugin().getMongo().findOnePlayer("uuid", uuid).gen$party_id);
+        Party party = MongoService.findOneParty("id", MongoService.findOnePlayer("uuid", uuid).gen$party_id);
         if(party == null) this.getPlugin().getJedis().publish("pending", uuid + " true");
         else {
             int amount = party.members.size();
 
             for(Team team : this.getPlugin().getTeams().values()){
-                if(this.getPlugin().getPlayersPerTeam() - team.getTeammatesAmount() >= amount){
+                if(Config.getPlayersPerTeam() - team.getTeammatesAmount() >= amount){
                     this.getPlugin().getJedis().publish("pending", uuid + " true");
                     return;
                 }

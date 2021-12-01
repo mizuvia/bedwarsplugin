@@ -21,13 +21,10 @@ public class ArmorInventory extends SimpleInventory{
         this.addItem(ShopItems.OTHERS);
         this.addItem(this.createItem(11, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 
-        this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-        this.addItem(ShopItems.GOLDEN_BOOTS);
-        this.addItem(ShopItems.CHAINMAIL_BOOTS);
-        this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-        this.addItem(ShopItems.IRON_BOOTS);
-        this.addItem(ShopItems.DIAMOND_BOOTS);
-        this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
+        this.addItem(ShopItem.CHAINMAIL_BOOTS.getItem());
+        this.addItem(ShopItem.IRON_BOOTS.getItem());
+        this.addItem(ShopItem.DIAMOND_BOOTS.getItem());
+        this.addItem(this.createItem(4, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 
         this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         this.addItem(this.createItem(7, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));

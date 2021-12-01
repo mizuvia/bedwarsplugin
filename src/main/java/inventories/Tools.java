@@ -28,16 +28,16 @@ public class Tools implements IGUI{
                 if (this.getInventory().makeTrade(this.getPlayer(), clickedItem)) {
                     switch (clickedItem.getType()) {
                         case WOODEN_PICKAXE:
-                            this.getInventory().setItem(slot, ShopItems.STONE_PICKAXE);
+                            this.getInventory().setItem(slot, ShopItem.STONE_PICKAXE.getItem());
                             break;
                         case STONE_PICKAXE:
-                            this.getInventory().setItem(slot, ShopItems.IRON_PICKAXE);
+                            this.getInventory().setItem(slot, ShopItem.IRON_PICKAXE.getItem());
                             break;
                         case IRON_PICKAXE:
-                            this.getInventory().setItem(slot, ShopItems.DIAMOND_PICKAXE);
+                            this.getInventory().setItem(slot, ShopItem.DIAMOND_PICKAXE.getItem());
                             break;
                         case DIAMOND_PICKAXE:
-                            this.getInventory().setItem(slot, ShopItems.GOLDEN_PICKAXE);
+                            this.getInventory().setItem(slot, ShopItem.GOLDEN_PICKAXE.getItem());
                             break;
                         case GOLDEN_PICKAXE:
                             this.getInventory().setItem(slot, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", " ")[0]);
@@ -51,16 +51,16 @@ public class Tools implements IGUI{
                 if (this.getInventory().makeTrade(this.getPlayer(), clickedItem)) {
                     switch (clickedItem.getType()) {
                         case WOODEN_AXE:
-                            this.getInventory().setItem(slot, ShopItems.STONE_AXE);
+                            this.getInventory().setItem(slot, ShopItem.STONE_AXE.getItem());
                             break;
                         case STONE_AXE:
-                            this.getInventory().setItem(slot, ShopItems.IRON_AXE);
+                            this.getInventory().setItem(slot, ShopItem.IRON_AXE.getItem());
                             break;
                         case IRON_AXE:
-                            this.getInventory().setItem(slot, ShopItems.DIAMOND_AXE);
+                            this.getInventory().setItem(slot, ShopItem.DIAMOND_AXE.getItem());
                             break;
                         case DIAMOND_AXE:
-                            this.getInventory().setItem(slot, ShopItems.GOLDEN_AXE);
+                            this.getInventory().setItem(slot, ShopItem.GOLDEN_AXE.getItem());
                             break;
                         case GOLDEN_AXE:
                             this.getInventory().setItem(slot, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", " ")[0]);

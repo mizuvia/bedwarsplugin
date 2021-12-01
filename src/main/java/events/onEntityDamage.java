@@ -1,6 +1,7 @@
 package events;
 
 import game.Participant;
+import inventories.ShopItem;
 import inventories.ShopItems;
 import main.Config;
 import main.PlayerManager;
@@ -110,36 +111,36 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
                         if (item == null) continue;
                         switch(item.getType()){
                             case STONE_PICKAXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.WOODEN_PICKAXE));
-                                participant.getToolsInventory().setItem(30, ShopItems.STONE_PICKAXE);
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.WOODEN_PICKAXE.getItem()));
+                                participant.getToolsInventory().setItem(30, ShopItem.STONE_PICKAXE.getItem());
                             }
                             case STONE_AXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.WOODEN_AXE));
-                                participant.getToolsInventory().setItem(31, ShopItems.STONE_AXE);
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.WOODEN_AXE.getItem()));
+                                participant.getToolsInventory().setItem(31, ShopItem.STONE_AXE.getItem());
                             }
                             case IRON_PICKAXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.STONE_PICKAXE));
-                                participant.getToolsInventory().setItem(30, ShopItems.IRON_PICKAXE);
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.STONE_PICKAXE.getItem()));
+                                participant.getToolsInventory().setItem(30, ShopItem.IRON_PICKAXE.getItem());
                             }
                             case IRON_AXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.STONE_AXE));
-                                participant.getToolsInventory().setItem(31, ShopItems.IRON_AXE);
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.STONE_AXE.getItem()));
+                                participant.getToolsInventory().setItem(31, ShopItem.IRON_AXE.getItem());
                             }
                             case DIAMOND_PICKAXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.IRON_PICKAXE));
-                                participant.getToolsInventory().setItem(30, ShopItems.DIAMOND_PICKAXE);
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.IRON_PICKAXE.getItem()));
+                                participant.getToolsInventory().setItem(30, ShopItem.DIAMOND_PICKAXE.getItem());
                             }
                             case DIAMOND_AXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.IRON_AXE));
-                                participant.getToolsInventory().setItem(31, ShopItems.DIAMOND_AXE);
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.IRON_AXE.getItem()));
+                                participant.getToolsInventory().setItem(31, ShopItem.DIAMOND_AXE.getItem());
                             }
                             case GOLDEN_PICKAXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.DIAMOND_PICKAXE));
-                                participant.getToolsInventory().setItem(30, ShopItems.GOLDEN_PICKAXE);
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.DIAMOND_PICKAXE.getItem()));
+                                participant.getToolsInventory().setItem(30, ShopItem.GOLDEN_PICKAXE.getItem());
                             }
                             case GOLDEN_AXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.DIAMOND_AXE));
-                                participant.getToolsInventory().setItem(31, ShopItems.GOLDEN_AXE);
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.DIAMOND_AXE.getItem()));
+                                participant.getToolsInventory().setItem(31, ShopItem.GOLDEN_AXE.getItem());
                             }
                             case GOLDEN_BOOTS, CHAINMAIL_BOOTS, IRON_BOOTS, DIAMOND_BOOTS, FISHING_ROD, LEATHER_BOOTS,
                                     LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_HELMET, SHEARS, WOODEN_PICKAXE, WOODEN_AXE -> participant.getRespawnItems().add(item);

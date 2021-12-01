@@ -1,5 +1,6 @@
 package jedis;
 
+import main.Config;
 import main.Plugin;
 import redis.clients.jedis.Jedis;
 
@@ -15,7 +16,7 @@ public class RedisThread implements Runnable{
     @Override
     public void run(){
 
-        jedis.subscribe(new RedisSubscription(plugin), this.plugin.server_name);
+        jedis.subscribe(new RedisSubscription(plugin), Config.getServerName());
 
     }
 }

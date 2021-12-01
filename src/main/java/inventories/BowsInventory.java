@@ -20,20 +20,20 @@ public class BowsInventory extends SimpleInventory{
         this.addItem(ShopItems.OTHERS);
         this.addItem(this.createItem(11, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 
-        this.addItem(ShopItems.BOW1);
-        this.addItem(ShopItems.BOW2);
-        this.addItem(ShopItems.BOW3);
+        this.addItem(ShopItem.BOW1.getItem());
+        this.addItem(ShopItem.BOW2.getItem());
+        this.addItem(ShopItem.BOW3.getItem());
 
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 
-        this.addItem(ShopItems.ARROW1);
-        this.addItem(ShopItems.ARROW2);
-        this.addItem(ShopItems.ARROW3);
+        this.addItem(ShopItem.ARROW1.getItem());
+        this.addItem(ShopItem.ARROW2.getItem());
+        this.addItem(ShopItem.ARROW3.getItem());
 
         this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 
-        this.addItem(ShopItems.CROSSBOW1);
-        this.addItem(ShopItems.CROSSBOW2);
+        this.addItem(ShopItem.CROSSBOW1.getItem());
+        this.addItem(ShopItem.CROSSBOW2.getItem());
 
         this.addItem(this.createItem(5, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         this.addItem(this.createItem(10, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));

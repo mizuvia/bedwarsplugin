@@ -15,10 +15,6 @@ public class ItemPrice {
     }
 
     public ItemPrice(String str){
-        if(str.matches("(.*)брон(.*)")){
-            price = Integer.parseInt(str.replace("§8Стоимость: §6", "").split(" ")[0]);
-            material = Material.BRICK;
-        }
         if(str.matches("(.*)жел(.*)")){
             price = Integer.parseInt(str.replace("§8Стоимость: §7", "").split(" ")[0]);
             material = Material.IRON_INGOT;
@@ -37,7 +33,7 @@ public class ItemPrice {
         }
     }
 
-    public String makeString(){
+    public String toString(){
         return "§8Стоимость: " + getColor() + price + " " + makeEnding();
     }
 
@@ -59,7 +55,6 @@ public class ItemPrice {
 
     private ChatColor getColor(){
         return switch (material){
-            case BRICK -> ChatColor.GOLD;
             case IRON_INGOT -> ChatColor.GRAY;
             case GOLD_INGOT -> ChatColor.YELLOW;
             case DIAMOND -> ChatColor.AQUA;
@@ -70,7 +65,6 @@ public class ItemPrice {
 
     private String getWord(){
         return switch (material){
-            case BRICK -> "бронза";
             case IRON_INGOT -> "железо";
             case GOLD_INGOT -> "золото";
             case DIAMOND -> "алмаз";
@@ -98,13 +92,6 @@ public class ItemPrice {
                 if(price % 10 < 5 && price % 10 > 1) ending = "ов";
                 if(price % 10 == 0 || price % 10 > 4) ending = "а";
                 if(price % 10 == 1) ending = "";
-            }
-        } else if(word.equals("бронза")){
-            if(price > 10 && price < 20) ending = "ы";
-            else {
-                if(price % 10 < 5 && price % 10 > 1) ending = "ы";
-                if(price % 10 == 0 || price % 10 > 4) ending = "ы";
-                if(price % 10 == 1) ending = "а";
             }
         }
         return word.concat(ending);

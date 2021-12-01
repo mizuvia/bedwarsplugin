@@ -1,5 +1,6 @@
 package inventories;
 
+import game.ItemPrice;
 import game.Participant;
 import main.Plugin;
 import org.bukkit.Material;
@@ -50,23 +51,7 @@ public class SimpleInventory extends CraftInventoryCustom {
         ItemStack item = new ItemStack(oldItem.getType(), oldItem.getAmount());
         if(oldItem.getType().name().matches("(.*)WOOL")) item.setType(Material.getMaterial(p.getTeam().getColor().toUpperCase(Locale.ROOT) + "_WOOL"));
         if(oldItem.getType().name().matches("(.*)TERRACOTTA")) item.setType(Material.getMaterial(p.getTeam().getColor().toUpperCase(Locale.ROOT) + "_TERRACOTTA"));
-        String price = oldItem.getItemMeta().getLore().get(0);
-        if(price.matches("(.*)брон(.*)")){
-            amount = Integer.parseInt(price.replace("§8Стоимость: §6", "").split(" ")[0]);
-            mat = Material.BRICK;
-        }
-        if(price.matches("(.*)жел(.*)")){
-            amount = Integer.parseInt(price.replace("§8Стоимость: §7", "").split(" ")[0]);
-            mat = Material.IRON_INGOT;
-        }
-        if(price.matches("(.*)зол(.*)")){
-            amount = Integer.parseInt(price.replace("§8Стоимость: §e", "").split(" ")[0]);
-            mat = Material.GOLD_INGOT;
-        }
-        if(price.matches("(.*)изум(.*)")){
-            amount = Integer.parseInt(price.replace("§8Стоимость: §2", "").split(" ")[0]);
-            mat = Material.EMERALD;
-        }
+        ItemPrice price = ShopItem.getPriceByMaterial(oldItem.getType());
 
         item.setItemMeta(oldItem.getItemMeta());
         ItemMeta itemMeta = item.getItemMeta();
@@ -74,7 +59,7 @@ public class SimpleInventory extends CraftInventoryCustom {
         if(item.getType().isBlock()) itemMeta.setDisplayName(null);
         item.setItemMeta(itemMeta);
 
-        boolean take = p.takeItem(mat, amount);
+        boolean take = p.takeItem(price.getMaterial(), price.getPrice());
 
         if(take){
             p.giveItem(item);

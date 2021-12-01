@@ -22,9 +22,9 @@ public class PotionsInventory extends SimpleInventory{
 
         this.addItem(this.createItem(2, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 
-        this.addItem(ShopItems.INVISIBILITY_POTION);
-        this.addItem(ShopItems.JUMPING_POTION);
-        this.addItem(ShopItems.SWIFTNESS_POTION);
+        this.addItem(ShopItem.INVISIBILITY_POTION.getItem());
+        this.addItem(ShopItem.JUMPING_POTION.getItem());
+        this.addItem(ShopItem.SWIFTNESS_POTION.getItem());
 
         this.addItem(this.createItem(2, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));

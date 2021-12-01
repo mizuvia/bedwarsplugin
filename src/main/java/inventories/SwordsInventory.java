@@ -21,14 +21,13 @@ public class SwordsInventory extends SimpleInventory{
         this.addItem(ShopItems.OTHERS);
         this.addItem(this.createItem(11, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 
-        this.addItem(ShopItems.STICK);
+        this.addItem(ShopItem.STICK.getItem());
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-        this.addItem(ShopItems.WOODEN_SWORD);
-        this.addItem(ShopItems.STONE_SWORD);
-        this.addItem(ShopItems.IRON_SWORD);
-        this.addItem(ShopItems.DIAMOND_SWORD);
+        this.addItem(ShopItem.STONE_SWORD.getItem());
+        this.addItem(ShopItem.IRON_SWORD.getItem());
+        this.addItem(ShopItem.DIAMOND_SWORD.getItem());
 
-        this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
+        this.addItem(this.createItem(2, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         this.addItem(this.createItem(7, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         this.addItem(this.createItem(10, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
