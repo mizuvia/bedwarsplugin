@@ -86,6 +86,8 @@ public class Plugin extends JavaPlugin {
     @Override
     public void onEnable(){
 
+        Config.createInstance(this);
+
         File worlds = new File("./", "worlds");
         for(int i = 0; i < worlds.list().length; i++){
             File w = new File("./worlds/", worlds.list()[i]);
@@ -122,7 +124,6 @@ public class Plugin extends JavaPlugin {
         }
 
         MongoService.createInstance();
-        Config.createInstance(this);
         this.loadJedis();
 
         getLogger().info("enabled!");
