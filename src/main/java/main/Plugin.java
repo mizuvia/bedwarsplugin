@@ -86,8 +86,6 @@ public class Plugin extends JavaPlugin {
     @Override
     public void onEnable(){
 
-        Config.createInstance(this);
-
         File worlds = new File("./", "worlds");
         for(int i = 0; i < worlds.list().length; i++){
             File w = new File("./worlds/", worlds.list()[i]);
@@ -99,6 +97,7 @@ public class Plugin extends JavaPlugin {
         }
 
         this.reloadWorld();
+        Config.createInstance(this);
 
         this.game = new Game(this);
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
