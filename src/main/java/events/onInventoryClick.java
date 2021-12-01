@@ -29,11 +29,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         }
         if(e.getInventory().getHolder() instanceof HumanEntity){
             switch (e.getSlot()) {
-                case 36:
-                case 37:
-                case 38:
-                case 39:
-                    e.setCancelled(true);
+                case 36, 37, 38, 39 -> e.setCancelled(true);
             }
         }
     }

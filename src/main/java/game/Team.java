@@ -33,6 +33,9 @@ public class Team {
     private IronGolem golem;
     private List<String> traps = new ArrayList<>();
     private Participant bedDestroyer;
+    private Location shopVillager;
+    private Location upgradesVillager;
+    private SpawnResources spawnResources;
 
     public void clearAfterGame(){
         this.silverTimeout = 4;
@@ -52,7 +55,7 @@ public class Team {
         this.teamUpgrades.put("Sharpness", 0);
         this.teamUpgrades.put("Protection", 0);
         this.teamUpgrades.put("Haste", 0);
-        this.teamUpgrades.put("Bedrok", 2);
+        this.teamUpgrades.put("Bedrock", 0);
         this.teamUpgrades.put("Forge", 0);
         this.teamUpgrades.put("Healing", 0);
         this.teamUpgrades.put("Trap", 0);
@@ -61,10 +64,11 @@ public class Team {
     public Team(Plugin plugin, String color) {
         this.plugin = plugin;
         this.color = color;
+        this.spawnResources = new SpawnResources(plugin.getGame());
         this.teamUpgrades.put("Sharpness", 0);
         this.teamUpgrades.put("Protection", 0);
         this.teamUpgrades.put("Haste", 0);
-        this.teamUpgrades.put("Bedrok", 2);
+        this.teamUpgrades.put("Bedrock", 0);
         this.teamUpgrades.put("Forge", 0);
         this.teamUpgrades.put("Healing", 0);
         this.teamUpgrades.put("Trap", 0);
@@ -83,7 +87,7 @@ public class Team {
     public void setBroken(boolean isBroken) {
         if(this.isBroken) return;
         this.isBroken = isBroken;
-        this.getPlugin().getSidebar().setBroken(this);
+        this.getPlugin().getSidebar().decreaseTeammatesAmount(this);
         this.checkAlive();
     }
 
@@ -165,5 +169,21 @@ public class Team {
             this.setDead(true);
             this.getPlugin().getGame().increaseDeadTeams();
         }
+    }
+
+    public void setShopVillager(Location location) {
+        this.shopVillager = location;
+    }
+
+    public void setUpgradesVillager(Location location) {
+        this.upgradesVillager = location;
+    }
+
+    public Location getShopVillager() {
+        return shopVillager;
+    }
+
+    public Location getUpgradesVillager() {
+        return upgradesVillager;
     }
 }

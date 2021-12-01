@@ -2,141 +2,182 @@ package loading;
 
 import game.Participant;
 import game.Team;
+import game.Time;
+import main.Config;
 import main.Plugin;
-import net.minecraft.server.v1_16_R3.*;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.ChatColor;
+import org.bukkit.scoreboard.Score;
 import util.Utils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class Sidebar{
 
+    public static final String SIDEBAR_NAME = ChatColor.GOLD + "" + ChatColor.BOLD + "BED" + ChatColor.DARK_PURPLE + ChatColor.BOLD + "WARS";
+    private final Time timeClass;
     private final Plugin plugin;
-    public final Scoreboard scoreboard;
-    private final Objective objective;
-    public int time = -1;
+    public HashMap<String, String> stringsList = new HashMap<>();
+    public List<String> keyList = new ArrayList<>();
 
     public Sidebar(Plugin plugin){
         this.plugin = plugin;
-        this.scoreboard = this.plugin.getScoreboard();
-        this.objective = this.scoreboard.registerNewObjective("sidebar", "dummy", "§6§lBED§5§lWARS");
+        this.timeClass = this.getPlugin().getGame().getTime();
 
-        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        fillWaitingList();
 
     }
 
-    public void changePlayersAmount(int i){
-        if(this.getPlugin().isLoading()){
-            this.scoreboard.resetScores("§b" + (this.getPlugin().online_players - i) + "/" + this.getPlugin().players_amount);
-            this.objective.getScore("§b" + (this.getPlugin().online_players) + "/" + this.getPlugin().players_amount).setScore(11);
+    private void putInList(String key, String value){
+        stringsList.put(key, value);
+        keyList.add(key);
+    }
+
+    public void fillWaitingList(){
+        stringsList.clear();
+        keyList.clear();
+
+        putInList("SERVER_NAME", "   " + ChatColor.DARK_GRAY + Config.getServerName());
+        putInList("GAP1", " ");
+        putInList("PLAYERS", ChatColor.YELLOW + "" + ChatColor.BOLD + "Игроков:");
+        putInList("PLAYERS_AMOUNT", ChatColor.AQUA + "" + this.getPlugin().getOnlinePlayers() + "/" + Config.getMaxPlayers());
+        putInList("GAP2", "  ");
+        putInList("TIME", ChatColor.YELLOW + "" + ChatColor.BOLD + "Времени:");
+        putInList("TIME_AMOUNT", ChatColor.AQUA + "Ожидаем...");
+        putInList("GAP3", "   ");
+        putInList("MAP", ChatColor.YELLOW + "" + ChatColor.BOLD + "Карта:");
+        putInList("MAP_NAME", ChatColor.AQUA + Config.getMapName());
+        putInList("GAP4", "    ");
+        putInList("PROJECT", ChatColor.GOLD + "" + ChatColor.BOLD + "   Mizuvia");
+
+        fillPlayersSidebars();
+    }
+
+    public void fillPlayingList(){
+        stringsList.clear();
+        keyList.clear();
+
+        putInList("SERVER_NAME", "   " + ChatColor.DARK_GRAY + Config.getServerName());
+        putInList("STAGE", ChatColor.AQUA + "" + ChatColor.BOLD + "Алмазы II: " + ChatColor.GRAY + Utils.getTime(getTime().getStage().getTime()));
+        putInList("GAP1", "  ");
+        for(String team : Config.getTeamsNames())
+            putInList("TEAM_" + team.toUpperCase(Locale.ROOT), "§a✔ §7§l| §r" + this.getPlugin().getTeams().get(team).getName().replace("§l", ""));
+        putInList("GAP2", "   ");
+        putInList("KILLS", ChatColor.GRAY + "Убийств: " + ChatColor.RED + "0");
+        putInList("BROKEN_BEDS", ChatColor.GRAY + "Разрушено кроватей: " + ChatColor.RED + "0");
+        putInList("FINAL_KILLS", ChatColor.GRAY + "Финальных убийств: " + ChatColor.RED + "0");
+
+        fillPlayersSidebars();
+
+        for(Participant p : getPlugin().getPlayers().values()){
+            String key = "TEAM_" + p.getTeam().getColor().toUpperCase(Locale.ROOT);
+            updatePlayerSidebar(p, key, getPlayerString(p, key) + ChatColor.GRAY + " ВЫ");
         }
+
+    }
+
+    public void changePlayersAmount(){
+        updateSidebar("PLAYERS_AMOUNT", ChatColor.AQUA.toString() + (this.getPlugin().getOnlinePlayers()) + "/" + Config.getMaxPlayers());
     }
 
     public void changeTime(int time){
-        if(this.time == -1) this.scoreboard.resetScores("§bОжидаем...");
-        else this.scoreboard.resetScores("§b" + this.time + " сек.");
-        if(time == -1) this.objective.getScore("§bОжидаем...").setScore(8);
-        else this.objective.getScore("§b" + time + " сек.").setScore(8);
-
-        this.time = time;
+        if(time == -1)
+            updateSidebar("TIME_AMOUNT", "§bОжидаем...");
+        else
+            updateSidebar("TIME_AMOUNT", "§b" + time + " сек.");
     }
 
-    public void setForLoading(){
-
-        this.objective.getScore(" ").setScore(13);
-        this.objective.getScore("§e§lИгроков:").setScore(12);
-        this.objective.getScore("§b" + (this.getPlugin().online_players) + "/" + this.getPlugin().players_amount).setScore(11);
-        this.objective.getScore("  ").setScore(10);
-        this.objective.getScore("§e§lВремени:").setScore(9);
-        this.objective.getScore("§bОжидаем...").setScore(8);
-        this.objective.getScore("   ").setScore(7);
-        this.objective.getScore("§e§lКарта:").setScore(6);
-        this.objective.getScore("§b" + this.plugin.map_name).setScore(5);
-        this.objective.getScore("    ").setScore(4);
-        this.objective.getScore("§e§lСервер:").setScore(3);
-        this.objective.getScore("§b" + this.plugin.server_name).setScore(2);
-        this.objective.getScore("     ").setScore(1);
-        this.objective.getScore("      §6§lMizu§5§lCraft").setScore(0);
-
-    }
-
-    public void clear(){
-        for(String string : this.scoreboard.getEntries()){
-            this.scoreboard.resetScores(string);
-        }
-    }
-
-    public void setForWorking(){
-
-        this.objective.getScore(" ").setScore(6 + this.getPlugin().teams_amount);
-        this.objective.getScore("§b§lАлмазы II: §7" + Utils.getTime(this.getPlugin().getGame().getTime().getStagesTimes().get(0))).setScore(5 + this.getPlugin().teams_amount);
-        this.objective.getScore("  ").setScore(4 + this.getPlugin().teams_amount);
-
-        int i = 0;
-
-        for(String team : this.getPlugin().getTeamsNames()){
-
-            this.objective.getScore("§a✔ §7§l| §r" + this.getPlugin().getTeams().get(team).getName().replace("§l", "")).setScore(3 + (this.getPlugin().teams_amount - i));
-
-            i++;
-        }
-
-        this.objective.getScore("   ").setScore(3);
-
-        for(Participant participant : this.getPlugin().getPlayers().values()){
-
-            ((CraftPlayer) participant.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, "sidebar", "§7Убито игроков: §c" + participant.getKilledPlayers(), 2));
-            ((CraftPlayer) participant.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, "sidebar", "§7Разрушено кроватей: §c" + participant.getBrokenBeds(), 1));
-            ((CraftPlayer) participant.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, "sidebar", "§7Финальных убийств: §c" + participant.getFinalKills(), 0));
-
-        }
-
-    }
-
-    public void changeStageTime(int time, int stage){
-        this.scoreboard.resetScores(this.getPlugin().getGame().getTime().getStages().get(stage) + ": §7" + Utils.getTime(time + 1));
-        this.objective.getScore(this.getPlugin().getGame().getTime().getStages().get(stage) + ": §7" + Utils.getTime(time)).setScore(5 + this.getPlugin().teams_amount);
-    }
-
-    public void changeStage(int time, int stage){
-        this.scoreboard.resetScores(this.getPlugin().getGame().getTime().getStages().get(stage - 1) + ": §7" + Utils.getTime(1));
-        this.objective.getScore(this.getPlugin().getGame().getTime().getStages().get(stage) + ": §7" + Utils.getTime(time)).setScore(5 + this.getPlugin().teams_amount);
-    }
-
-    public void setBroken(Team team){
-        int score = this.objective.getScore("§a✔ §7§l| §r" + team.getName().replace("§l", "")).getScore();
-        this.scoreboard.resetScores("§a✔ §7§l| §r" + team.getName().replace("§l", ""));
-        this.objective.getScore("§e§l" + team.getTeammatesAmount() + "§r §7§l| §r" + team.getName().replace("§l", "")).setScore(score);
+    public void updateStage(Time.Stage stage){
+        updateSidebar("STAGE", stage.getName() + ChatColor.RESET +  ": " + Utils.getTime(stage.getTime()));
     }
 
     public void changeKilled(Participant p){
-        ((CraftPlayer) p.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.REMOVE, "sidebar", "§7Убито игроков: §c" + (p.getKilledPlayers() - 1), 2));
-        ((CraftPlayer) p.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, "sidebar", "§7Убито игроков: §c" + p.getKilledPlayers(), 2));
+        updatePlayerSidebar(p, "KILLS", "§7Убито игроков: §c" + p.getKilledPlayers());
+    }
+
+    private void updateSidebar(String key, String value){
+        stringsList.replace(key, value);
+        updatePlayersSidebar(key, value);
+    }
+
+    private void updatePlayersSidebar(String key, String value){
+        for(Participant p : this.getPlugin().getPlayers().values())
+            updatePlayerSidebar(p, key, value);
+    }
+
+    private void updatePlayerSidebar(Participant p, String key, String value){
+        String oldValue = p.getSidebarStrings().get(key);
+        for(Score score : p.getScoreboard().getScores(oldValue)){
+            p.getScoreboard().resetScores(oldValue);
+            p.getObjective().getScore(value).setScore(getScoreIndex(key));
+            break;
+        }
+        p.getSidebarStrings().replace(key, value);
+    }
+
+    public void drawPlayerSidebar(Participant p){
+        for(String entry : p.getScoreboard().getEntries())
+            p.getScoreboard().resetScores(entry);
+
+        HashMap<String, String> list = p.getSidebarStrings();
+
+        for(String key : keyList){
+            p.getObjective().getScore(list.get(key)).setScore(getScoreIndex(key));
+        }
+    }
+
+    public void fillPlayersSidebars(){
+        for(Participant p : this.getPlugin().getPlayers().values()){
+            fillPlayerSidebar(p);
+        }
+    }
+
+    public void fillPlayerSidebar(Participant p){
+        p.getSidebarStrings().clear();
+        for(String key : keyList){
+            p.getSidebarStrings().put(key, stringsList.get(key));
+        }
+        drawPlayerSidebar(p);
+    }
+
+    private int getScoreIndex(String key){
+        return keyList.size() - (keyList.indexOf(key) + 1);
+    }
+
+    private String getPlayerString(Participant p, String key){
+        return p.getSidebarStrings().get(key);
     }
 
     public void changeBrokenBeds(Participant p){
-        ((CraftPlayer) p.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.REMOVE, "sidebar", "§7Разрушено кроватей: §c" + (p.getBrokenBeds() - 1), 1));
-        ((CraftPlayer) p.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, "sidebar", "§7Разрушено кроватей: §c" + p.getBrokenBeds(), 1));
+        updatePlayerSidebar(p, "BROKEN_BEDS", ChatColor.GRAY + "Разрушено кроватей: " + ChatColor.RED + p.getBrokenBeds());
     }
+
+    public Time getTime(){return this.timeClass;}
 
     public Plugin getPlugin() {return this.plugin; }
 
     public void setDead(Team team){
-        int score = this.objective.getScore("§e§l0§r §7§l| §r" + team.getName().replace("§l", "")).getScore();
-        this.scoreboard.resetScores("§e§l0§r §7§l| §r" + team.getName().replace("§l", ""));
-        this.objective.getScore("§c§l×§r §7§l| §r" + team.getName().replace("§l", "")).setScore(score);
+        String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
+        String message = ChatColor.RED + "" + ChatColor.BOLD + "×" + ChatColor.RESET + " " + ChatColor.GRAY + ChatColor.BOLD + "| " + ChatColor.RESET + team.getName().replace("§l", "");
+        updateSidebar(key, message);
+        for(Participant p : team.getTeammates().values()){
+            updatePlayerSidebar(p, key, message + " " + ChatColor.RESET + ChatColor.GRAY + "ВЫ");
+        }
     }
 
     public void decreaseTeammatesAmount(Team team) {
-        int score = this.objective.getScore("§e§l" + (team.getTeammatesAmount() + 1) + "§r §7§l| §r" + team.getName().replace("§l", "")).getScore();
-        this.scoreboard.resetScores("§e§l" + (team.getTeammatesAmount() + 1) + "§r §7§l| §r" + team.getName().replace("§l", ""));
-        this.objective.getScore("§e§l" + team.getTeammatesAmount() + "§r §7§l| §r" + team.getName().replace("§l", "")).setScore(score);
+        String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
+        String message = ChatColor.YELLOW + "" + ChatColor.BOLD + team.getTeammatesAmount() + ChatColor.RESET + " " + ChatColor.GRAY + ChatColor.BOLD + "| " + ChatColor.RESET + team.getName().replace(ChatColor.BOLD.toString(), "");
+        updateSidebar(key, message);
+        for(Participant p : team.getTeammates().values()){
+            updatePlayerSidebar(p, key, message + " " + ChatColor.RESET + ChatColor.GRAY + "ВЫ");
+        }
     }
 
     public void changeFinalKills(Participant p) {
-        ((CraftPlayer) p.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.REMOVE, "sidebar", "§7Финальных убийств: §c" + (p.getFinalKills() - 1), 0));
-        ((CraftPlayer) p.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, "sidebar", "§7Финальных убийств: §c" + p.getFinalKills(), 0));
+        updatePlayerSidebar(p, "FINAL_KILLS", ChatColor.GRAY + "Финальных убийств: " + ChatColor.RED + p.getFinalKills());
 
     }
 }

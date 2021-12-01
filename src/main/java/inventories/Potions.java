@@ -16,21 +16,15 @@ public class Potions implements IGUI{
 
     @Override
     public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
-        switch (slot){
-            case 10: whoClicked.openInventory(this.getGame().getBlocksInventory()); break;
-            case 11: whoClicked.openInventory(this.getGame().getSwordsInventory()); break;
-            case 12: whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getArmorInventory()); break;
-            case 13: whoClicked.openInventory(this.getGame().getBowsInventory()); break;
-            case 14: whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getToolsInventory()); break;
-            case 15: whoClicked.openInventory(this.getGame().getPotionsInventory()); break;
-            case 16: whoClicked.openInventory(this.getGame().getOthersInventory()); break;
-
-            case 30:
-            case 31:
-            case 32:
-                this.getInventory().makeTrade(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()), clickedItem);
-
-
+        switch (slot) {
+            case 10 -> whoClicked.openInventory(this.getGame().getBlocksInventory());
+            case 11 -> whoClicked.openInventory(this.getGame().getSwordsInventory());
+            case 12 -> whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getArmorInventory());
+            case 13 -> whoClicked.openInventory(this.getGame().getBowsInventory());
+            case 14 -> whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getToolsInventory());
+            case 15 -> whoClicked.openInventory(this.getGame().getPotionsInventory());
+            case 16 -> whoClicked.openInventory(this.getGame().getOthersInventory());
+            case 30, 31, 32 -> this.getInventory().makeTrade(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()), clickedItem);
         }
     }
 

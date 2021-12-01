@@ -10,7 +10,7 @@ public abstract class TaskGUI extends BukkitRunnable {
     public long period;
 
     public void startTask(){
-        this.runTaskTimer(Bukkit.getPluginManager().getPlugin("BedWarsPlugin"), 0L, this.period);
+        this.runTaskTimer(Bukkit.getPluginManager().getPlugin(Plugin.PluginName), 0L, this.period);
     }
 
     public Plugin getPlugin(){ return this.plugin; }

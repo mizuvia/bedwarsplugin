@@ -1,10 +1,10 @@
 package game;
 
+import main.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -12,70 +12,52 @@ import org.bukkit.scheduler.BukkitRunnable;
 import tasks.TaskGUI;
 import util.Utils;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class Time extends TaskGUI {
 
     private final Game game;
-    private int diamondTimeLeft = 60;
-    private int emeraldTimeLeft = 90;
-    private int stage = 0;
-    private final HashMap<Integer, String> stages = new HashMap<>();
-    private final HashMap<Integer, Integer> stagesTimes = new HashMap<>();
+    private Stage stage;
+    private final List<Stage> stages = new ArrayList<>();
+    private Iterator<Stage> it;
 
     public Time(Game game){
         this.game = game;
         this.period = 20;
-        stages.put(0, "§b§lАлмазы II");
-        stages.put(1, "§a§lИзумруды II");
-        stages.put(2, "§b§lАлмазы III");
-        stages.put(3, "§a§lИзумруды III");
-        stages.put(4, "§c§lПоломка кроватей");
-        stages.put(5, "§c§lКонец игры");
-        stagesTimes.put(0, 300);
-        stagesTimes.put(1, 600);
-        stagesTimes.put(2, 960);
-        stagesTimes.put(3, 1320);
-        stagesTimes.put(4, 1560);
-        stagesTimes.put(5, 1800);
+        resetData();
     }
-
-    public int getDiamondTimeLeft() {return this.diamondTimeLeft; }
-
-    public int getEmeraldTimeLeft() {return this.emeraldTimeLeft; }
-
-    public void setDiamondTimeLeft(int diamondTimeLeft) { this.diamondTimeLeft = diamondTimeLeft; }
-
-    public void setEmeraldTimeLeft(int emeraldTimeLeft) { this.emeraldTimeLeft = emeraldTimeLeft; }
 
     public Game getGame() {return this.game;}
 
     public void resetData(){
-        this.diamondTimeLeft = 60;
-        this.emeraldTimeLeft = 90;
-        this.stage = 0;
+        stages.clear();
+        setStages();
+        it = stages.iterator();
+        stage = it.next();
     }
 
     @Override
     public void run() {
         if(!this.getGame().getPlugin().isWorking()) return;
 
-        this.changeArmorTime();
-        this.changeStage();
+        getGame().getArmorStandsManager().changeSpawners();
+        changeStage();
+        getGame().increaseMatchTime(1);
     }
 
     public void changeStage() {
-        if(this.getGame().getMatchTime() == this.getStagesTimes().get(this.getStage())) {
-            if(this.getStage() != 4 && this.getStage() != 5) this.getGame().getArmorStandsManager().changeStage(this.getStage());
-            if(this.getStage() == 4) this.breakBeds();
-            if(this.getStage() == 5) this.finishGame(1);
+        if(stage.getTime() == 0) {
+            int index = stage.getIndex();
+            if(index != 4 && index != 5) getGame().getArmorStandsManager().changeStage(index);
+            if(index == 4) breakBeds();
+            if(index == 5) finishGame(1);
 
-            this.setStage(this.getStage() + 1);
-            this.getGame().getPlugin().getSidebar().changeStage(this.getStagesTimes().get(this.getStage()) - this.getStagesTimes().get(this.getStage() - 1), this.getStage());
+            nextStage();
         }
-        else this.getGame().getPlugin().getSidebar().changeStageTime(this.getStagesTimes().get(this.getStage()) - this.getGame().getMatchTime(), this.getStage());
-
-        this.getGame().increaseMatchTime(1);
+        getGame().getPlugin().getSidebar().updateStage(stage);
+        stage.decreaseTime();
     }
 
     public void finishGame(int reason) {
@@ -106,36 +88,22 @@ public class Time extends TaskGUI {
                 }
 
                 for(Participant participant : this.getGame().getPlugin().getPlayers().values()) {
-                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getGame().getPlugin(), () -> {
-
-                        Utils.connectToHub(participant.getPlayer());
-
-                    }, 200L);
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getGame().getPlugin(), () -> Utils.connectToHub(participant.getPlayer()), 200L);
                 }
             }
         } else {
             for(Participant participant : this.getGame().getPlugin().getPlayers().values()) {
-                participant.getPlayer().sendTitle("2§lНичья!", "§aСейчас вы будете перемещены в хаб!", 10, 150, 20);
+                participant.getPlayer().sendTitle("§2§lНичья!", "§aСейчас вы будете перемещены в хаб!", 10, 150, 20);
 
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getGame().getPlugin(), () -> {
-
-                    Utils.connectToHub(participant.getPlayer());
-
-                }, 200);
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getGame().getPlugin(), () -> Utils.connectToHub(participant.getPlayer()), 200);
             }
         }
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getGame().getPlugin(), () -> getGame().stop(), 250L);
     }
 
-    public HashMap<Integer, Integer> getStagesTimes(){return this.stagesTimes;}
-
-    public HashMap<Integer, String> getStages(){return this.stages;}
-
-    private int getStage() { return this.stage; }
-
     private void breakBeds() {
-        for(String name : this.getGame().getPlugin().getTeamsNames()){
+        for(String name : Config.getTeamsNames()){
             String cords_bottom = this.getGame().getPlugin().getConfig().getString("teams." + name + ".bed_bottom");
             String cords_top = this.getGame().getPlugin().getConfig().getString("teams." + name + ".bed_top");
 
@@ -148,25 +116,40 @@ public class Time extends TaskGUI {
         }
     }
 
-    private void changeArmorTime() {
+    public List<Stage> getStages(){return this.stages;}
 
-        for(ArmorStand arm : this.getGame().getDiamondArmorStands()){
-            if(arm.getCustomName() == null) continue;
-            if(arm.getCustomName().matches("(.*)появления(.*)")) arm.setCustomName("§e§lДо появления: " + Utils.getTime(this.getDiamondTimeLeft()));
-        }
+    public Stage getStage() { return this.stage; }
 
-        for(ArmorStand arm : this.getGame().getEmeraldArmorStands()){
-            if(arm.getCustomName() == null) continue;
-            if(arm.getCustomName().matches("(.*)появления(.*)")) arm.setCustomName("§e§lДо появления: " + Utils.getTime(this.getEmeraldTimeLeft()));
-        }
-
-        if(this.getDiamondTimeLeft() == 1) this.setDiamondTimeLeft(this.getGame().getDiamondTimeout() + 1);
-        if(this.getEmeraldTimeLeft() == 1) this.setEmeraldTimeLeft(this.getGame().getEmeraldTimeout() + 1);
-
-        diamondTimeLeft--;
-        emeraldTimeLeft--;
+    public void nextStage() {
+        this.stage = it.next();
     }
 
-    public void setStage(int stage) { this.stage = stage; }
+    public class Stage {
+        private int time;
+        private final String name;
 
+        public Stage(int time, String name){
+            this.time = time;
+            this.name = name;
+        }
+
+        public int getTime(){return this.time;}
+
+        public String getName(){return this.name;}
+
+        public void decreaseTime(){
+            this.time--;
+        }
+
+        public int getIndex(){ return stages.indexOf(this); }
+    }
+
+    private void setStages(){
+        stages.add(new Stage(315, "§b§lАлмазы II"));
+        stages.add(new Stage(335, "§a§lИзумруды II"));
+        stages.add(new Stage(360, "§b§lАлмазы III"));
+        stages.add(new Stage(360, "§a§lИзумруды III"));
+        stages.add(new Stage(240, "§c§lПоломка кроватей"));
+        stages.add(new Stage(240, "§c§lКонец игры"));
+    }
 }

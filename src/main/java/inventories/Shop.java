@@ -18,14 +18,14 @@ public class Shop implements IGUI {
 
     @Override
     public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
-        switch (slot){
-            case 10: this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getBlocksInventory()); break;
-            case 11: this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getSwordsInventory()); break;
-            case 12: this.player.getPlayer().openInventory(this.player.getArmorInventory()); break;
-            case 13: this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getBowsInventory()); break;
-            case 14: this.player.getPlayer().openInventory(this.player.getToolsInventory()); break;
-            case 15: this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getPotionsInventory()); break;
-            case 16: this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getOthersInventory()); break;
+        switch (slot) {
+            case 10 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getBlocksInventory());
+            case 11 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getSwordsInventory());
+            case 12 -> this.player.getPlayer().openInventory(this.player.getArmorInventory());
+            case 13 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getBowsInventory());
+            case 14 -> this.player.getPlayer().openInventory(this.player.getToolsInventory());
+            case 15 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getPotionsInventory());
+            case 16 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getOthersInventory());
         }
     }
 

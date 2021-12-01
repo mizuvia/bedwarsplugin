@@ -13,6 +13,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
 public class Utils {
 
     public static Location getLocation(String cord){
@@ -47,5 +52,11 @@ public class Utils {
 
         PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(new MinecraftKey("bungeecord:main"), new PacketDataSerializer(Unpooled.wrappedBuffer(hub.toByteArray())));
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    private static final List<String> ROMAN_NUMERALS = Arrays.asList("0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX");
+
+    public static String getRomanNumeral(int number){
+        return ROMAN_NUMERALS.get(number);
     }
 }

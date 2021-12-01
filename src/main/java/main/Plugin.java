@@ -1,6 +1,5 @@
 package main;
 
-import com.hoshion.mongoapi.MongoProvider;
 import com.hoshion.mongoapi.MongoService;
 import events.*;
 import game.Game;
@@ -10,12 +9,9 @@ import inventories.*;
 import jedis.RedisThread;
 import loading.Sidebar;
 import loading.Waiting;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.WorldCreator;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -28,46 +24,30 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
-import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
 import tab.Tab;
 import util.PlayerInv;
-import util.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 public class Plugin extends JavaPlugin {
 
-    private FileConfiguration config;
-    private File configFile;
+    public static final String JedisChannel = "bw";
+    public static final String PluginName = "BedWarsPlugin";
     private Tab tab;
     private Scoreboard scoreboard;
     private Sidebar sidebar;
     private Game game;
-    public int players_amount;
-    public int teams_amount;
-    public int players_per_team;
     public Waiting waiting;
     private boolean isLoading = false;
     private boolean isWorking = false;
     public int online_players;
-    public String server_name;
-    public String map_name;
-    public List<String> teams_names;
     public TeamSelectionInventory choose_team;
     public HashMap<String, Team> teams = new HashMap<>();
     public HashMap<String, Participant> players = new HashMap<>();
-    private List<String> diamonds;
-    private List<String> emeralds;
-    private Location center;
     private Jedis jedis;
-    private Thread jedisThread;
-    private MongoService mongo;
-
-    public Location getCenter(){return this.center; }
 
     public boolean isLoading() {return this.isLoading;}
 
@@ -81,28 +61,11 @@ public class Plugin extends JavaPlugin {
 
     public Scoreboard getScoreboard() { return this.scoreboard; }
 
-    public List<String> getTeamsNames() { return this.teams_names; }
-
-    public int getTeamsAmount(){ return this.teams_amount; }
-
     public HashMap<String, Team> getTeams() {return this.teams; }
-
-    public List<String> getEmeralds() {return this.emeralds; }
-
-    public void setEmeralds(List<String> emeralds) { this.emeralds = emeralds; }
-
-    public List<String> getDiamonds(){ return this.diamonds; }
-
-    public String getMapName(){ return this.map_name; }
 
     public HashMap<String, Participant> getPlayers(){ return this.players; }
 
     public Game getGame(){ return this.game; }
-
-    @NotNull
-    public FileConfiguration getConfig(){ return this.config; }
-
-    public File getConfigFile(){return this.configFile; }
 
     public Tab getTab(){
         return this.tab;
@@ -112,82 +75,97 @@ public class Plugin extends JavaPlugin {
 
     public Waiting getWaiting(){ return this.waiting; }
 
-    private void setDiamonds(List<String> diamonds) {
-        this.diamonds = diamonds;
-    }
-
     public void decreaseOnlinePlayers() { this.online_players--; }
 
     public void increaseOnlinePlayers() { this.online_players++; }
 
     public int getOnlinePlayers(){ return this.online_players; }
 
-    public int getMaxPlayers() {return this.players_amount; }
-
-    public int getPlayersPerTeam() {return this.players_per_team; }
-
     public Jedis getJedis(){return this.jedis;}
-    public MongoService getMongo(){return this.mongo;}
 
     @Override
     public void onEnable(){
-        this.loadConfig();
-
-        this.teams_names = this.getConfig().getStringList("team_list");
 
         File worlds = new File("./", "worlds");
         for(int i = 0; i < worlds.list().length; i++){
             File w = new File("./worlds/", worlds.list()[i]);
             if(w.isFile()) continue;
+            Bukkit.unloadWorld(worlds.list()[i], false);
             WorldCreator world = new WorldCreator(worlds.list()[i]);
-            world.createWorld();
+
+            Bukkit.getServer().createWorld(world).setAutoSave(false);
         }
 
-        for(String color : this.getTeamsNames()){
-            Team team = new Team(this, color);
-
-            String name = this.getConfig().getString("teams." + color + ".display_name");
-            String cord = this.getConfig().getString("teams." + color + ".res_location");
-            String spawnCord = this.getConfig().getString("teams." + color + ".spawn_location");
-            String cords_bottom = this.getConfig().getString("teams." + color + ".bed_bottom");
-            String cords_top = this.getConfig().getString("teams." + color + ".bed_top");
-
-            team.setName(name);
-            team.setResourceLocation(Utils.getLocation(cord));
-            team.setSpawnLocation(Utils.getLocation(spawnCord));
-            team.setBedBottom(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).getBlockData().clone());
-            team.setBedTop(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).getBlockData().clone());
-
-            this.getTeams().put(color, team);
-        }
-
-        this.setDiamonds(this.getConfig().getStringList("diamonds"));
-        this.setEmeralds(this.getConfig().getStringList("emeralds"));
-
-        this.teams_amount = this.getConfig().getInt("teams_amount");
-        this.players_per_team = this.getConfig().getInt("players_amount");
-        this.players_amount = this.getPlayersPerTeam() * this.getTeamsAmount();
-        this.server_name = this.getConfig().getString("server_name");
-        this.map_name = this.getConfig().getString("map_name");
-
-        this.center = Utils.getLocation(this.getConfig().getString("world_center"));
+        this.reloadWorld();
 
         this.game = new Game(this);
-
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
-
         this.sidebar = new Sidebar(this);
         this.online_players = this.getServer().getOnlinePlayers().size();
-
         this.waiting = new Waiting(this);
-
         this.tab = new Tab(this);
 
-        this.getServer().getMessenger().registerIncomingPluginChannel(this, "bungeecord:main", new PluginMessageHandler(this));
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "bungeecord:main");
-        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessageHandler(this));
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        this.loadEvents();
+
+        for(Player player : this.getServer().getOnlinePlayers()){
+            Participant p = new Participant(player, this);
+
+            player.setDisplayName(PlayerManager.getGroupDisplayName(p) + player.getName());
+            player.setPlayerListName(player.getDisplayName());
+
+            this.getPlayers().put(player.getName(), p);
+            PlayerInv.setWaitingInventory(p);
+
+            player.setScoreboard(this.getScoreboard());
+            this.getTab().addPlayer(p);
+        }
+
+        MongoService.createInstance();
+        Config.createInstance(this);
+        this.loadJedis();
+
+        getLogger().info("enabled!");
+    }
+
+    public void reloadWorld(){
+        Bukkit.unloadWorld(Bukkit.getWorld("world"), false);
+
+        System.gc();
+
+        try{
+            File world = new File(Bukkit.getWorldContainer(), "world");
+            File srcDir = new File("./presets/", "world");
+            FileUtils.deleteDirectory(world);
+            world.mkdir();
+            FileUtils.copyDirectory(srcDir, world);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        WorldCreator wc = new WorldCreator("world");
+        Bukkit.getServer().createWorld(wc);
+    }
+
+    public void onDisable(){
+        getLogger().info("disabled!");
+
+        this.getGame().stop();
+    }
+
+    private void loadJedis(){
+        Jedis subJedis = new Jedis("127.0.0.1", 6379);
+        this.jedis = new Jedis("127.0.0.1", 6379);
+        this.jedis.publish(Plugin.JedisChannel, Config.getServerName() + " 0");
+        Thread jedisThread = new Thread(new RedisThread(subJedis, this));
+        jedisThread.start();
+    }
+
+    public void resetTeamSelection() {
+        this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
+    }
+
+    private void loadEvents(){
 
         onAsyncPlayerChat onAsyncPlayerChat = new onAsyncPlayerChat(this);
         Bukkit.getPluginManager().registerEvent(AsyncPlayerChatEvent.class, onAsyncPlayerChat, EventPriority.NORMAL, onAsyncPlayerChat, this);
@@ -254,61 +232,6 @@ public class Plugin extends JavaPlugin {
 
         onPrepareItemCraft onPrepareItemCraft = new onPrepareItemCraft(this);
         Bukkit.getPluginManager().registerEvent(PrepareItemCraftEvent.class, onPrepareItemCraft, EventPriority.NORMAL, onPrepareItemCraft, this);
-
-        for(Player player : this.getServer().getOnlinePlayers()){
-            Participant p = new Participant(player, this);
-
-            player.setDisplayName(PlayerManager.getGroupDisplayName(p) + player.getName());
-            player.setPlayerListName(player.getDisplayName());
-
-            this.getPlayers().put(player.getName(), p);
-            PlayerInv.setWaitingInventory(p);
-
-            player.setScoreboard(this.getScoreboard());
-            this.getTab().addPlayer(p);
-        }
-
-        this.mongo = new MongoService(MongoProvider.connect().getDatastore());
-        this.loadJedis();
-
-        getLogger().info("enabled!");
-    }
-
-
-    public void onDisable(){
-        getLogger().info("disabled!");
-
-        this.getGame().stop();
-    }
-
-    private void loadConfig(){
-        this.configFile = new File("./worlds/world", "config.yml");
-        if(!this.configFile.exists()){
-            try {
-                this.configFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        this.config = new YamlConfiguration();
-        try{
-            this.config.load(this.configFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadJedis(){
-        Jedis subJedis = new Jedis("127.0.0.1", 6379);
-        this.jedis = new Jedis("127.0.0.1", 6379);
-        this.jedis.publish("bw", this.getConfig().getString("server_name") + " 0");
-        this.jedisThread = new Thread(new RedisThread(subJedis, this));
-        this.jedisThread.start();
-    }
-
-    public void resetTeamSelection() {
-        this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
     }
 }
 

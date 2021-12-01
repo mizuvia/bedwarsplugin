@@ -1,9 +1,11 @@
 package events;
 
+import com.hoshion.mongoapi.MongoService;
 import com.hoshion.mongoapi.docs.Party;
 import game.Participant;
 import game.Team;
 import inventories.TeamSelection;
+import main.Config;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Bukkit;
@@ -17,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import util.Colors;
 import util.PlayerInv;
 import util.Utils;
-
-import java.util.logging.Logger;
 
 public class onPlayerJoin extends SimpleListener implements Listener, EventExecutor {
 
@@ -45,27 +45,27 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             this.getPlugin().getPlayers().put(e.getPlayer().getName(), p);
             PlayerInv.setWaitingInventory(p);
 
-            this.getPlugin().getSidebar().changePlayersAmount(1);
+            this.getPlugin().getSidebar().changePlayersAmount();
 
             e.getPlayer().setScoreboard(this.getPlugin().getScoreboard());
             this.getPlugin().getTab().addPlayer(p);
 
-            e.setJoinMessage(e.getPlayer().getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().online_players + "§f/§b" + this.getPlugin().players_amount + "§f]");
+            e.setJoinMessage(e.getPlayer().getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().online_players + "§f/§b" + Config.getMaxPlayers() + "§f]");
 
             this.getPlugin().getJedis().publish("bw", this.getPlugin().getConfig().getString("server_name") + " " + this.getPlugin().getOnlinePlayers());
 
-            Party party = this.getPlugin().getMongo().findOneParty("id", this.getPlugin().getMongo().findOnePlayer("uuid", e.getPlayer().getUniqueId().toString()).gen$party_id);
+            Party party = MongoService.findOneParty("id", MongoService.findOnePlayer("uuid", e.getPlayer().getUniqueId().toString()).gen$party_id);
             if(party != null){
                 for(Team team : this.getPlugin().getTeams().values()){
                     for(Participant par : team.getTeammates().values()){
-                        if(party.members.contains(par.getPlayer().getUniqueId().toString()) && team.getTeammatesAmount() != this.getPlugin().getPlayersPerTeam()) {
+                        if(party.members.contains(par.getPlayer().getUniqueId().toString()) && team.getTeammatesAmount() != Config.getPlayersPerTeam()) {
                             TeamSelection.addPlayerToTeam(plugin, team, p);
                             return;
                         }
                     }
                 }
                 for(Team team : this.getPlugin().getTeams().values()){
-                    if(this.getPlugin().getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
+                    if(Config.getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
                         TeamSelection.addPlayerToTeam(plugin, team, p);
                         return;
                     }

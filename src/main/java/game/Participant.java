@@ -1,15 +1,21 @@
 package game;
 
 import inventories.*;
+import loading.Sidebar;
 import main.PlayerManager;
 import main.Plugin;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Participant {
@@ -27,17 +33,29 @@ public class Participant {
     private int brokenBeds = 0;
     private int killedPlayers = 0;
     private int finalKills = 0;
+    private final Scoreboard scoreboard;
+    private final Objective objective;
+    private final HashMap<String, String> sidebarStrings = new HashMap<>();
 
     public Participant(Player player, Plugin plugin){
         this.player = player;
         this.plugin = plugin;
         this.setGroup();
+        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        this.objective = this.getScoreboard().registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
+        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
 
     public void increaseFinalKills() {
         this.finalKills++;
         this.getPlugin().getSidebar().changeFinalKills(this);
     }
+
+    public Scoreboard getScoreboard(){ return this.scoreboard; }
+
+    public Objective getObjective(){ return this.objective; }
+
+    public HashMap<String, String> getSidebarStrings(){ return sidebarStrings; }
 
     public int getFinalKills() { return this.finalKills; }
 

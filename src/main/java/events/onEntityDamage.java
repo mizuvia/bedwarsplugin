@@ -2,6 +2,7 @@ package events;
 
 import game.Participant;
 import inventories.ShopItems;
+import main.Config;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Bukkit;
@@ -27,7 +28,6 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
-
 
         EntityDamageEvent e = (EntityDamageEvent) event;
 
@@ -63,39 +63,35 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
                             ItemStack resource;
                             ItemMeta meta;
 
-                            switch (item.getType()) {
-                                case BRICK: {
+                            switch(item.getType()){
+                                case BRICK -> {
                                     resource = new ItemStack(Material.BRICK, amount);
                                     meta = resource.getItemMeta();
                                     meta.setDisplayName("§eБронза");
-                                    break;
                                 }
-                                case IRON_INGOT: {
+                                case IRON_INGOT -> {
                                     resource = new ItemStack(Material.IRON_INGOT, amount);
                                     meta = resource.getItemMeta();
                                     meta.setDisplayName("§eЖелезо");
-                                    break;
                                 }
-                                case GOLD_INGOT: {
+                                case GOLD_INGOT -> {
                                     resource = new ItemStack(Material.GOLD_INGOT, amount);
                                     meta = resource.getItemMeta();
                                     meta.setDisplayName("§eЗолото");
-                                    break;
                                 }
-                                case DIAMOND: {
+                                case DIAMOND -> {
                                     resource = new ItemStack(Material.DIAMOND, amount);
                                     meta = resource.getItemMeta();
                                     meta.setDisplayName("§eАлмаз");
-                                    break;
                                 }
-                                case EMERALD: {
+                                case EMERALD -> {
                                     resource = new ItemStack(Material.EMERALD, amount);
                                     meta = resource.getItemMeta();
                                     meta.setDisplayName("§eИзумруд");
-                                    break;
                                 }
-                                default:
+                                default -> {
                                     continue;
+                                }
                             }
 
                             resource.setItemMeta(meta);
@@ -112,50 +108,42 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
                     for (ItemStack item : ((Player) e.getEntity()).getInventory().getContents()) {
                         if (item == null) continue;
-                        if (item.getType().equals(Material.SHEARS)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.WOODEN_PICKAXE)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.WOODEN_AXE)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.STONE_PICKAXE)) {
-                            participant.getRespawnItems().add(Utils.clearItem(ShopItems.WOODEN_PICKAXE));
-                            participant.getToolsInventory().setItem(30, ShopItems.STONE_PICKAXE);
+                        switch(item.getType()){
+                            case STONE_PICKAXE -> {
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.WOODEN_PICKAXE));
+                                participant.getToolsInventory().setItem(30, ShopItems.STONE_PICKAXE);
+                            }
+                            case STONE_AXE -> {
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.WOODEN_AXE));
+                                participant.getToolsInventory().setItem(31, ShopItems.STONE_AXE);
+                            }
+                            case IRON_PICKAXE -> {
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.STONE_PICKAXE));
+                                participant.getToolsInventory().setItem(30, ShopItems.IRON_PICKAXE);
+                            }
+                            case IRON_AXE -> {
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.STONE_AXE));
+                                participant.getToolsInventory().setItem(31, ShopItems.IRON_AXE);
+                            }
+                            case DIAMOND_PICKAXE -> {
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.IRON_PICKAXE));
+                                participant.getToolsInventory().setItem(30, ShopItems.DIAMOND_PICKAXE);
+                            }
+                            case DIAMOND_AXE -> {
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.IRON_AXE));
+                                participant.getToolsInventory().setItem(31, ShopItems.DIAMOND_AXE);
+                            }
+                            case GOLDEN_PICKAXE -> {
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.DIAMOND_PICKAXE));
+                                participant.getToolsInventory().setItem(30, ShopItems.GOLDEN_PICKAXE);
+                            }
+                            case GOLDEN_AXE -> {
+                                participant.getRespawnItems().add(Utils.clearItem(ShopItems.DIAMOND_AXE));
+                                participant.getToolsInventory().setItem(31, ShopItems.GOLDEN_AXE);
+                            }
+                            case GOLDEN_BOOTS, CHAINMAIL_BOOTS, IRON_BOOTS, DIAMOND_BOOTS, FISHING_ROD, LEATHER_BOOTS,
+                                    LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_HELMET, SHEARS, WOODEN_PICKAXE, WOODEN_AXE -> participant.getRespawnItems().add(item);
                         }
-                        if (item.getType().equals(Material.STONE_AXE)) {
-                            participant.getRespawnItems().add(Utils.clearItem(ShopItems.WOODEN_AXE));
-                            participant.getToolsInventory().setItem(31, ShopItems.STONE_AXE);
-                        }
-                        if (item.getType().equals(Material.IRON_PICKAXE)) {
-                            participant.getRespawnItems().add(Utils.clearItem(ShopItems.STONE_PICKAXE));
-                            participant.getToolsInventory().setItem(30, ShopItems.IRON_PICKAXE);
-                        }
-                        if (item.getType().equals(Material.IRON_AXE)) {
-                            participant.getRespawnItems().add(Utils.clearItem(ShopItems.STONE_AXE));
-                            participant.getToolsInventory().setItem(31, ShopItems.IRON_AXE);
-                        }
-                        if (item.getType().equals(Material.DIAMOND_PICKAXE)) {
-                            participant.getRespawnItems().add(Utils.clearItem(ShopItems.IRON_PICKAXE));
-                            participant.getToolsInventory().setItem(30, ShopItems.DIAMOND_PICKAXE);
-                        }
-                        if (item.getType().equals(Material.DIAMOND_AXE)) {
-                            participant.getRespawnItems().add(Utils.clearItem(ShopItems.IRON_AXE));
-                            participant.getToolsInventory().setItem(31, ShopItems.DIAMOND_AXE);
-                        }
-                        if (item.getType().equals(Material.GOLDEN_PICKAXE)) {
-                            participant.getRespawnItems().add(Utils.clearItem(ShopItems.DIAMOND_PICKAXE));
-                            participant.getToolsInventory().setItem(30, ShopItems.GOLDEN_PICKAXE);
-                        }
-                        if (item.getType().equals(Material.GOLDEN_AXE)) {
-                            participant.getRespawnItems().add(Utils.clearItem(ShopItems.DIAMOND_AXE));
-                            participant.getToolsInventory().setItem(31, ShopItems.GOLDEN_AXE);
-                        }
-                        if (item.getType().equals(Material.GOLDEN_BOOTS)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.CHAINMAIL_BOOTS)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.IRON_BOOTS)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.DIAMOND_BOOTS)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.FISHING_ROD)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.LEATHER_BOOTS)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.LEATHER_CHESTPLATE)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.LEATHER_LEGGINGS)) participant.getRespawnItems().add(item);
-                        if (item.getType().equals(Material.LEATHER_HELMET)) participant.getRespawnItems().add(item);
                     }
 
                     if (this.getPlugin().isWorking()) {
@@ -167,9 +155,9 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
                         if (this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().isBroken()) {
                             this.getPlugin().getTab().removePlayer(this.getPlugin().getPlayers().get(e.getEntity().getName()));
                             ((Player) e.getEntity()).setPlayerListName("§7Наблюдатель " + e.getEntity().getName());
-                            e.getEntity().teleport(this.getPlugin().getCenter());
+                            e.getEntity().teleport(Config.getCenter());
                         } else {
-                            e.getEntity().teleport(this.getPlugin().getCenter());
+                            e.getEntity().teleport(Config.getCenter());
                             ((Player) e.getEntity()).sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
 
                             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {

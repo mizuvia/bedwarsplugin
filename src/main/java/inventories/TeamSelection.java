@@ -2,6 +2,7 @@ package inventories;
 
 import game.Participant;
 import game.Team;
+import main.Config;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Material;
@@ -37,7 +38,7 @@ public class TeamSelection implements IGUI{
         Team team = this.getPlugin().getTeams().get(color);
         Participant participant = this.getPlugin().getPlayers().get(whoClicked.getName());
 
-        if(team.getTeammatesAmount() == this.getPlugin().getPlayersPerTeam()){
+        if(team.getTeammatesAmount() == Config.getPlayersPerTeam()){
             whoClicked.closeInventory();
             whoClicked.sendMessage("§cКоманда заполнена!");
             return;

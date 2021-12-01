@@ -27,86 +27,52 @@ public class PlayerManager {
     }
 
     public static String getCodeColor(Participant p){
-        switch (p.getTeam().getColor()){
-            case "red": return "§4";
-            case "green": return "§2";
-            case "yellow": return "§e";
-            case "cyan": return "§3";
-            case "orange": return "§6";
-            case "pink": return "§c";
-            case "light_blue": return "§b";
-            case "purple": return "§5";
-            case "magenta": return "§d";
-            case "black": return "§0";
-            case "blue": return "§9";
-            case "gray": return "§8";
-            case "light_gray": return "§7";
-            case "lime": return "§a";
-            case "white": return "§f";
-            default: return "§1";
-        }
+        return getCodeColor(p.getTeam().getColor());
     }
 
     public static String getCodeColor(String color){
-        switch (color){
-            case "red": return "§4";
-            case "green": return "§2";
-            case "yellow": return "§e";
-            case "cyan": return "§3";
-            case "orange": return "§6";
-            case "pink": return "§c";
-            case "light_blue": return "§b";
-            case "purple": return "§5";
-            case "magenta": return "§d";
-            case "black": return "§0";
-            case "blue": return "§9";
-            case "gray": return "§8";
-            case "light_gray": return "§7";
-            case "lime": return "§a";
-            case "white": return "§f";
-            default: return "§1";
-        }
+        return switch (color) {
+            case "red" -> "§4";
+            case "green" -> "§2";
+            case "yellow" -> "§e";
+            case "cyan" -> "§3";
+            case "orange" -> "§6";
+            case "pink" -> "§c";
+            case "light_blue" -> "§b";
+            case "purple" -> "§5";
+            case "magenta" -> "§d";
+            case "black" -> "§0";
+            case "blue" -> "§9";
+            case "gray" -> "§8";
+            case "light_gray" -> "§7";
+            case "lime" -> "§a";
+            case "white" -> "§f";
+            default -> "§1";
+        };
     }
 
     public static Color getColor(Participant p){
-        switch (p.getTeam().getColor()){
-            case "red": return Color.MAROON;
-            case "green": return Color.GREEN;
-            case "yellow": return Color.YELLOW;
-            case "cyan": return Color.TEAL;
-            case "orange": return Color.ORANGE;
-            case "pink": return Color.RED;
-            case "light_blue": return Color.AQUA;
-            case "purple": return Color.PURPLE;
-            case "magenta": return Color.FUCHSIA;
-            case "black": return Color.BLACK;
-            case "blue": return Color.BLUE;
-            case "gray": return Color.GRAY;
-            case "light_gray": return Color.SILVER;
-            case "lime": return Color.LIME;
-            case "white": return Color.WHITE;
-            default: return Color.NAVY;
-        }
+        return getColor(p.getTeam().getColor());
     }
 
     public static Color getColor(String color){
-        switch (color){
-            case "red": return Color.MAROON;
-            case "green": return Color.GREEN;
-            case "yellow": return Color.YELLOW;
-            case "cyan": return Color.TEAL;
-            case "orange": return Color.ORANGE;
-            case "pink": return Color.RED;
-            case "light_blue": return Color.AQUA;
-            case "purple": return Color.PURPLE;
-            case "magenta": return Color.FUCHSIA;
-            case "black": return Color.BLACK;
-            case "blue": return Color.BLUE;
-            case "gray": return Color.GRAY;
-            case "light_gray": return Color.SILVER;
-            case "lime": return Color.LIME;
-            case "white": return Color.WHITE;
-            default: return Color.NAVY;
-        }
+        return switch (color) {
+            case "red" -> Color.MAROON;
+            case "green" -> Color.GREEN;
+            case "yellow" -> Color.YELLOW;
+            case "cyan" -> Color.TEAL;
+            case "orange" -> Color.ORANGE;
+            case "pink" -> Color.RED;
+            case "light_blue" -> Color.AQUA;
+            case "purple" -> Color.PURPLE;
+            case "magenta" -> Color.FUCHSIA;
+            case "black" -> Color.BLACK;
+            case "blue" -> Color.BLUE;
+            case "gray" -> Color.GRAY;
+            case "light_gray" -> Color.SILVER;
+            case "lime" -> Color.LIME;
+            case "white" -> Color.WHITE;
+            default -> Color.NAVY;
+        };
     }
 }

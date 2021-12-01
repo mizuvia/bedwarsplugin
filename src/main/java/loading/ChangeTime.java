@@ -1,5 +1,6 @@
 package loading;
 
+import main.Config;
 import main.Plugin;
 import tasks.TaskGUI;
 
@@ -19,10 +20,9 @@ public class ChangeTime extends TaskGUI{
         if(this.getTime() == 0) {
             this.getPlugin().setLoading(false);
             this.getPlugin().getSidebar().changeTime(-1);
-            this.getPlugin().getSidebar().clear();
             this.getPlugin().getGame().start();
 
-            this.getPlugin().getJedis().publish("bw", this.getPlugin().getConfig().getString("server_name") + " -1");
+            this.getPlugin().getJedis().publish(Plugin.JedisChannel, Config.getServerName() + " -1");
         }
         else this.getPlugin().getSidebar().changeTime(this.getTime());
         if(this.getTime() != -1) this.decreaseTime();

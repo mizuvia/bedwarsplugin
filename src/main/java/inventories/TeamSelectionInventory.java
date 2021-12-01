@@ -1,6 +1,7 @@
 package inventories;
 
 import game.Participant;
+import main.Config;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Material;
@@ -21,8 +22,8 @@ public class TeamSelectionInventory extends SimpleInventory {
     }
 
     public void addItems() {
-        List<String> teams = this.plugin.getTeamsNames();
-        if(this.plugin.teams_amount == 8){
+        List<String> teams = Config.getTeamsNames();
+        if(Config.getTeamsAmount() == 8){
             this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
             this.addItem(this.createItem(1, Material.getMaterial(teams.get(0).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.plugin.getConfig().getString("teams." + teams.get(0) + ".display_name"), ""));
             this.addItem(this.createItem(1, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
@@ -41,7 +42,7 @@ public class TeamSelectionInventory extends SimpleInventory {
             this.addItem(this.createItem(1, Material.getMaterial(teams.get(7).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.plugin.getConfig().getString("teams." + teams.get(7) + ".display_name"), ""));
             this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         }
-        if(this.plugin.teams_amount == 4){
+        if(Config.getTeamsAmount() == 4){
             this.addItem(this.createItem(10, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
             this.addItem(this.createItem(1, Material.getMaterial(teams.get(0).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.plugin.getConfig().getString("teams." + teams.get(0) + ".display_name"), ""));
             this.addItem(this.createItem(1, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
@@ -52,7 +53,7 @@ public class TeamSelectionInventory extends SimpleInventory {
             this.addItem(this.createItem(1, Material.getMaterial(teams.get(3).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.plugin.getConfig().getString("teams." + teams.get(3) + ".display_name"), ""));
             this.addItem(this.createItem(10, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         }
-        if(this.plugin.teams_amount == 2){
+        if(Config.getTeamsAmount() == 2){
             this.addItem(this.createItem(11, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
             this.addItem(this.createItem(1, Material.getMaterial(teams.get(0).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.plugin.getConfig().getString("teams." + teams.get(0) + ".display_name"), ""));
             this.addItem(this.createItem(3, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));

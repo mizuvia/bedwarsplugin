@@ -1,5 +1,6 @@
 package game;
 
+import main.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,13 +12,13 @@ import java.util.List;
 
 public class SpawnResources extends TaskGUI {
 
-    private int diamondCounter = 61;
-    private int emeraldCounter = 91;
+    private int silverCounter = (int) (1.5 * 20);
+    private int goldCounter = 6 * 20;
     private final Game game;
 
     public SpawnResources(Game game){
         this.game = game;
-        this.period = 20;
+        this.period = 1;
     }
 
     @Override
@@ -27,12 +28,10 @@ public class SpawnResources extends TaskGUI {
         spawnBronze();
         spawnSilver();
         spawnGold();
-        spawnDiamond();
-        spawnEmerald();
     }
 
     public void spawnBronze(){
-        for(String color : this.getGame().getPlugin().getTeamsNames()){
+        for(String color : Config.getTeamsNames()){
             Team team = this.getGame().getPlugin().getTeams().get(color);
             int amount = 1 + team.getTeamUpgrades().get("Forge");
 
@@ -45,7 +44,7 @@ public class SpawnResources extends TaskGUI {
     }
 
     public void spawnSilver(){
-        for(String color : this.getGame().getPlugin().getTeamsNames()){
+        for(String color : Config.getTeamsNames()){
             Team team = this.getGame().getPlugin().getTeams().get(color);
             if(team.silverCounter >= team.silverTimeout) {
                 int amount = (team.getTeamUpgrades().get("Forge") == 3) ? 2 : 1;
@@ -61,7 +60,7 @@ public class SpawnResources extends TaskGUI {
     }
 
     public void spawnGold(){
-        for(String color : this.getGame().getPlugin().getTeamsNames()){
+        for(String color : Config.getTeamsNames()){
             Team team = this.getGame().getPlugin().getTeams().get(color);
             if(team.goldCounter >= team.goldTimeout) {
                 ItemStack gold = new ItemStack(Material.GOLD_INGOT, 1);
@@ -75,46 +74,6 @@ public class SpawnResources extends TaskGUI {
         }
     }
 
-    public void spawnDiamond(){
-
-        if(this.diamondCounter == 1) {
-            List<String> diamonds = this.getGame().getPlugin().getDiamonds();
-            for (String cord : diamonds) {
-                Location loc = new Location(this.getGame().getPlugin().getServer().getWorld("world"), Double.parseDouble(cord.split(" ")[0]) + 0.5, Double.parseDouble(cord.split(" ")[1]) + 1.0, Double.parseDouble(cord.split(" ")[2]) + 0.5);
-                ItemStack diamond = new ItemStack(Material.DIAMOND, 1);
-                ItemMeta dmeta = diamond.getItemMeta();
-                dmeta.setDisplayName("§eАлмаз");
-                diamond.setItemMeta(dmeta);
-                Bukkit.getServer().getWorld("world").dropItem(loc, diamond);
-            }
-            this.diamondCounter = this.getGame().getDiamondTimeout() + 1;
-        }
-
-        this.diamondCounter--;
-    }
-
-    public void spawnEmerald(){
-
-        if(this.emeraldCounter == 1) {
-            List<String> emeralds = this.getGame().getPlugin().getEmeralds();
-            for (String cord : emeralds) {
-                Location loc = new Location(this.getGame().getPlugin().getServer().getWorld("world"), Double.parseDouble(cord.split(" ")[0]) + 0.5, Double.parseDouble(cord.split(" ")[1]) + 1.0, Double.parseDouble(cord.split(" ")[2]) + 0.5);
-                ItemStack emerald = new ItemStack(Material.EMERALD, 1);
-                ItemMeta emeta = emerald.getItemMeta();
-                emeta.setDisplayName("§eИзумруд");
-                emerald.setItemMeta(emeta);
-                Bukkit.getServer().getWorld("world").dropItem(loc, emerald);
-            }
-            this.emeraldCounter = this.getGame().getEmeraldTimeout() + 1;
-        }
-        this.emeraldCounter--;
-    }
-
     public Game getGame() {return this.game;}
-
-    public void resetCounters(){
-        this.emeraldCounter = 91;
-        this.diamondCounter = 61;
-    }
 
 }

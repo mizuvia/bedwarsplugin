@@ -16,24 +16,15 @@ public class Bows implements IGUI{
 
     @Override
     public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
-        switch (slot){
-            case 10: whoClicked.openInventory(this.getGame().getBlocksInventory()); break;
-            case 11: whoClicked.openInventory(this.getGame().getSwordsInventory()); break;
-            case 12: whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getArmorInventory()); break;
-            case 13: whoClicked.openInventory(this.getGame().getBowsInventory()); break;
-            case 14: whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getToolsInventory()); break;
-            case 15: whoClicked.openInventory(this.getGame().getPotionsInventory()); break;
-            case 16: whoClicked.openInventory(this.getGame().getOthersInventory()); break;
-
-            case 28:
-            case 29:
-            case 30:
-            case 32:
-            case 33:
-            case 34:
-            case 37:
-            case 38:
-                this.getInventory().makeTrade(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()), clickedItem);
+        switch (slot) {
+            case 10 -> whoClicked.openInventory(this.getGame().getBlocksInventory());
+            case 11 -> whoClicked.openInventory(this.getGame().getSwordsInventory());
+            case 12 -> whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getArmorInventory());
+            case 13 -> whoClicked.openInventory(this.getGame().getBowsInventory());
+            case 14 -> whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getToolsInventory());
+            case 15 -> whoClicked.openInventory(this.getGame().getPotionsInventory());
+            case 16 -> whoClicked.openInventory(this.getGame().getOthersInventory());
+            case 28, 29, 30, 32, 33, 34, 37, 38 -> this.getInventory().makeTrade(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()), clickedItem);
         }
     }
 

@@ -1,5 +1,6 @@
 package loading;
 
+import main.Config;
 import main.Plugin;
 
 public class Waiting{
@@ -12,7 +13,7 @@ public class Waiting{
         this.change = new ChangeTime(this.getPlugin());
         this.change.startTask();
         this.getPlugin().setLoading(true);
-        this.getPlugin().getSidebar().setForLoading();
+        this.getPlugin().getSidebar().fillWaitingList();
     }
 
     public void checkAmount(){
@@ -20,7 +21,7 @@ public class Waiting{
 
         if (amount > 1) this.getChange().setTime(30);
         else this.getChange().setTime(-1);
-        if (amount == this.getPlugin().getMaxPlayers()) this.getChange().setTime(10);
+        if (amount == Config.getMaxPlayers()) this.getChange().setTime(10);
     }
 
     public Plugin getPlugin() {return this.plugin; }

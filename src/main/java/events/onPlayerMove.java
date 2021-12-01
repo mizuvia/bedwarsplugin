@@ -2,6 +2,7 @@ package events;
 
 import game.Participant;
 import game.Team;
+import main.Config;
 import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -37,7 +38,7 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                 Location teamLoc = this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getSpawnLocation();
                 double distance = Math.sqrt(Math.pow(playerLoc.getX() - teamLoc.getX(), 2.0) + Math.pow(playerLoc.getZ() - teamLoc.getZ(), 2.0));
                 if (distance <= 25)
-                    e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100000, 0), false);
+                    e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100000, 0));
                 else e.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
             }
             for (Team team : this.getPlugin().getTeams().values()) {
@@ -114,16 +115,16 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
             }
         }
 
-        double distance = Math.sqrt(Math.pow(e.getPlayer().getLocation().getX() - this.getPlugin().getCenter().getX(), 2.0) + Math.pow(e.getPlayer().getLocation().getZ() - this.getPlugin().getCenter().getZ(), 2.0));
-        double k = (e.getPlayer().getLocation().getX() - this.getPlugin().getCenter().getX()) / (e.getPlayer().getLocation().getZ() - this.getPlugin().getCenter().getZ());
+        double distance = Math.sqrt(Math.pow(e.getPlayer().getLocation().getX() - Config.getCenter().getX(), 2.0) + Math.pow(e.getPlayer().getLocation().getZ() - Config.getCenter().getZ(), 2.0));
+        double k = (e.getPlayer().getLocation().getX() - Config.getCenter().getX()) / (e.getPlayer().getLocation().getZ() - Config.getCenter().getZ());
         if(distance >= 300) {
 
             if(k < 0) k = -k;
 
-            double x = (e.getPlayer().getLocation().getX() - this.getPlugin().getCenter().getX() < 0 ? -1 : 1) * (k * (distance - 1)) / Math.sqrt(Math.pow(k, 2.0) + 1);
-            double z = (e.getPlayer().getLocation().getZ() - this.getPlugin().getCenter().getZ() < 0 ? -1 : 1) * Math.abs(x) / k;
+            double x = (e.getPlayer().getLocation().getX() - Config.getCenter().getX() < 0 ? -1 : 1) * (k * (distance - 1)) / Math.sqrt(Math.pow(k, 2.0) + 1);
+            double z = (e.getPlayer().getLocation().getZ() - Config.getCenter().getZ() < 0 ? -1 : 1) * Math.abs(x) / k;
 
-            e.getPlayer().teleport(new Location(e.getPlayer().getLocation().getWorld(), this.getPlugin().getCenter().getX() + x, e.getPlayer().getLocation().getY(), this.getPlugin().getCenter().getZ() + z, e.getPlayer().getLocation().getYaw(), e.getPlayer().getLocation().getPitch()));
+            e.getPlayer().teleport(new Location(e.getPlayer().getLocation().getWorld(), Config.getCenter().getX() + x, e.getPlayer().getLocation().getY(), Config.getCenter().getZ() + z, e.getPlayer().getLocation().getYaw(), e.getPlayer().getLocation().getPitch()));
             e.getPlayer().sendMessage("§cПокидать границы карты запрещено!");
         }
     }

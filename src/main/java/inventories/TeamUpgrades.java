@@ -1,7 +1,6 @@
 package inventories;
 
-import game.Participant;
-import game.Team;
+import game.*;
 import main.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,581 +14,231 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import util.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.function.Function;
 
 public class TeamUpgrades implements IGUI{
     private final Team team;
+    private final Map<String, UpgradeInfo> upgrades = new HashMap<>();
+    private final static List<String> UPGRADES_NAMES = Arrays.asList("Sharpness", "Protection", "Haste", "Bedrock", "Forge", "Healing", "Traps");
+    private final static int BEDROCK_MAX_USAGES = 2;
 
     public TeamUpgrades(Team team){
         this.team = team;
+        upgrades.put("Sharpness", new UpgradeInfo(
+            "§bОстрота",
+            Arrays.asList(new LevelInfo(new ItemPrice(Material.DIAMOND, 2), 1), new LevelInfo(new ItemPrice(Material.DIAMOND, 20), 2)),
+            Enchantment.DAMAGE_ALL,
+            Arrays.asList(Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.DIAMOND_SWORD)
+        ));
+        upgrades.put("Protection", new UpgradeInfo(
+            "§bЗащита",
+            Arrays.asList(new LevelInfo(new ItemPrice(Material.DIAMOND, 2), 1), new LevelInfo(new ItemPrice(Material.DIAMOND, 4), 2), new LevelInfo(new ItemPrice(Material.DIAMOND, 6), 3), new LevelInfo(new ItemPrice(Material.DIAMOND, 10), 4)),
+            Enchantment.PROTECTION_ENVIRONMENTAL,
+            Arrays.asList(Material.LEATHER_BOOTS, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_HELMET, Material.DIAMOND_BOOTS, Material.DIAMOND_LEGGINGS, Material.IRON_BOOTS, Material.IRON_LEGGINGS)
+        ));
+        upgrades.put("Haste", new UpgradeInfo(
+            "§bЭффективность",
+            Arrays.asList(new LevelInfo(new ItemPrice(Material.DIAMOND, 2), 1), new LevelInfo(new ItemPrice(Material.DIAMOND, 4), 2)),
+            Enchantment.DIG_SPEED,
+            Arrays.asList(Material.WOODEN_AXE, Material.WOODEN_PICKAXE, Material.STONE_AXE, Material.STONE_PICKAXE, Material.IRON_AXE, Material.IRON_PICKAXE, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_AXE, Material.GOLDEN_PICKAXE)
+        ));
+        upgrades.put("Bedrock", new UpgradeInfo(
+            "§bНесокрушимость",
+            List.of(new LevelInfo(new ItemPrice(Material.DIAMOND, 6), 1), new LevelInfo(new ItemPrice(Material.DIAMOND, 6), 2))
+        ));
+        upgrades.put("Forge", new UpgradeInfo(
+            "§bКузня",
+            Arrays.asList(new LevelInfo(new ItemPrice(Material.DIAMOND, 2), 1), new LevelInfo(new ItemPrice(Material.DIAMOND, 6), 2), new LevelInfo(new ItemPrice(Material.DIAMOND, 10), 3))
+        ));
+        upgrades.put("Healing", new UpgradeInfo(
+            "§bИсцеление",
+            List.of(new LevelInfo(new ItemPrice(Material.DIAMOND, 2), 1))
+        ));
     }
 
     @Override
     public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
-        ItemMeta meta = clickedItem.getItemMeta();
-        List<String> lore = meta.getLore();
-        switch (slot){
-            case 10:
-                int lvl1 = this.getTeam().getTeamUpgrades().get("Sharpness");
-                switch (lvl1) {
-                    case 0:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 4)) {
 
-                            for(Participant p : this.getTeam().getTeammates().values()){
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bОстрота");
-
-                                for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
-                                    if(itemStack == null) continue;
-
-                                    ItemMeta swordMeta = itemStack.getItemMeta();
-
-                                    switch (itemStack.getType()) {
-                                        case WOODEN_SWORD:
-                                        case STONE_SWORD:
-                                        case IRON_SWORD:
-                                        case DIAMOND_SWORD:
-                                            swordMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-                                            break;
-                                        default: break;
-                                    }
-
-                                    itemStack.setItemMeta(swordMeta);
-                                }
-                            }
-
-                            int var0 = lore.indexOf("§7[Уровень: I]");
-                            lore.remove("§7[Уровень: I]");
-                            lore.add(var0, "§c[Уровень: I]");
-                            int var1 = lore.indexOf("§8Стоимость: §b4 алмаза");
-                            lore.remove("§8Стоимость: §b4 алмаза");
-                            lore.add(var1, "§8Стоимость: §b20 алмазов");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Sharpness", 1);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                    case 1:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 20)) {
-
-                            for (Participant p : this.getTeam().getTeammates().values()) {
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bОстрота");
-
-                                for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
-                                    if(itemStack == null) continue;
-
-                                    ItemMeta meta2 = itemStack.getItemMeta();
-
-                                    switch (itemStack.getType()) {
-                                        case WOODEN_SWORD:
-                                        case STONE_SWORD:
-                                        case IRON_SWORD:
-                                        case DIAMOND_SWORD:
-                                            meta2.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
-                                            break;
-                                        default: break;
-                                    }
-
-                                    itemStack.setItemMeta(meta2);
-                                }
-                            }
-
-                            int var0 = lore.indexOf("§7[Уровень: II]");
-                            lore.remove("§7[Уровень: II]");
-                            lore.add(var0, "§c[Уровень: II]");
-                            lore.add(" ");
-                            lore.add("§a§lКУПЛЕНО");
-
-                            lore.remove("§8Стоимость: §b20 алмазов");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Sharpness", 2);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                }
-                break;
-            case 11:
-                int lvl2 = this.getTeam().getTeamUpgrades().get("Protection");
-                switch (lvl2) {
-                    case 0:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 2)) {
-
-                            for(Participant p : this.getTeam().getTeammates().values()){
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bЗащита");
-
-                                for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
-                                    if(itemStack == null) continue;
-
-                                    ItemMeta meta2 = itemStack.getItemMeta();
-
-                                    switch (itemStack.getType()) {
-                                        case LEATHER_BOOTS:
-                                        case LEATHER_CHESTPLATE:
-                                        case LEATHER_HELMET:
-                                        case LEATHER_LEGGINGS:
-                                        case GOLDEN_BOOTS:
-                                        case GOLDEN_LEGGINGS:
-                                        case DIAMOND_BOOTS:
-                                        case DIAMOND_LEGGINGS:
-                                        case IRON_BOOTS:
-                                        case IRON_LEGGINGS:
-                                        case CHAINMAIL_BOOTS:
-                                        case CHAINMAIL_LEGGINGS:
-                                            meta2.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
-                                            break;
-                                        default: break;
-                                    }
-
-                                    itemStack.setItemMeta(meta2);
-                                }
-                            }
-
-                            int var0 = lore.indexOf("§7[Уровень: I]");
-                            lore.remove("§7[Уровень: I]");
-                            lore.add(var0, "§c[Уровень: I]");
-                            int var1 = lore.indexOf("§8Стоимость: §b2 алмаза");
-                            lore.remove("§8Стоимость: §b2 алмаза");
-                            lore.add(var1, "§8Стоимость: §b4 алмаза");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Protection", 1);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                    case 1:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 4)) {
-
-                            for (Participant p : this.getTeam().getTeammates().values()) {
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bЗащита");
-
-                                for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
-                                    if(itemStack == null) continue;
-
-                                    ItemMeta meta2 = itemStack.getItemMeta();
-
-                                    switch (itemStack.getType()) {
-                                        case LEATHER_BOOTS:
-                                        case LEATHER_CHESTPLATE:
-                                        case LEATHER_HELMET:
-                                        case LEATHER_LEGGINGS:
-                                        case GOLDEN_BOOTS:
-                                        case GOLDEN_LEGGINGS:
-                                        case DIAMOND_BOOTS:
-                                        case DIAMOND_LEGGINGS:
-                                        case IRON_BOOTS:
-                                        case IRON_LEGGINGS:
-                                        case CHAINMAIL_BOOTS:
-                                        case CHAINMAIL_LEGGINGS:
-                                            meta2.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2, true);
-                                            break;
-                                        default: break;
-                                    }
-
-                                    itemStack.setItemMeta(meta2);
-                                }
-                            }
-
-                            int var0 = lore.indexOf("§7[Уровень: II]");
-                            lore.remove("§7[Уровень: II]");
-                            lore.add(var0, "§c[Уровень: II]");
-                            int var1 = lore.indexOf("§8Стоимость: §b4 алмаза");
-                            lore.remove("§8Стоимость: §b4 алмаза");
-                            lore.add(var1, "§8Стоимость: §b6 алмазов");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Protection", 2);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                    case 2:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 6)) {
-
-                            for (Participant p : this.getTeam().getTeammates().values()) {
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bЗащита");
-
-                                for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
-                                    if(itemStack == null) continue;
-
-                                    ItemMeta meta2 = itemStack.getItemMeta();
-
-                                    switch (itemStack.getType()) {
-                                        case LEATHER_BOOTS:
-                                        case LEATHER_CHESTPLATE:
-                                        case LEATHER_HELMET:
-                                        case LEATHER_LEGGINGS:
-                                        case GOLDEN_BOOTS:
-                                        case GOLDEN_LEGGINGS:
-                                        case DIAMOND_BOOTS:
-                                        case DIAMOND_LEGGINGS:
-                                        case IRON_BOOTS:
-                                        case IRON_LEGGINGS:
-                                        case CHAINMAIL_BOOTS:
-                                        case CHAINMAIL_LEGGINGS:
-                                            meta2.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
-                                            break;
-                                        default: break;
-                                    }
-
-                                    itemStack.setItemMeta(meta2);
-                                }
-                            }
-
-                            int var0 = lore.indexOf("§7[Уровень: III]");
-                            lore.remove("§7[Уровень: III]");
-                            lore.add(var0, "§c[Уровень: III]");
-                            int var1 = lore.indexOf("§8Стоимость: §b6 алмазов");
-                            lore.remove("§8Стоимость: §b6 алмазов");
-                            lore.add(var1, "§8Стоимость: §b10 алмазов");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Protection", 3);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                    case 3:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 10)) {
-
-                            for (Participant p : this.getTeam().getTeammates().values()) {
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + "§7купил улучшение §bЗащита");
-
-                                for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
-                                    if(itemStack == null) continue;
-
-                                    ItemMeta meta2 = itemStack.getItemMeta();
-
-                                    switch (itemStack.getType()) {
-                                        case LEATHER_BOOTS:
-                                        case LEATHER_CHESTPLATE:
-                                        case LEATHER_HELMET:
-                                        case LEATHER_LEGGINGS:
-                                        case GOLDEN_BOOTS:
-                                        case GOLDEN_LEGGINGS:
-                                        case DIAMOND_BOOTS:
-                                        case DIAMOND_LEGGINGS:
-                                        case IRON_BOOTS:
-                                        case IRON_LEGGINGS:
-                                        case CHAINMAIL_BOOTS:
-                                        case CHAINMAIL_LEGGINGS:
-                                            meta2.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
-                                            break;
-                                        default: break;
-                                    }
-
-                                    itemStack.setItemMeta(meta2);
-                                }
-                            }
-
-                            int var1 = lore.indexOf("§7[Уровень: IV]");
-                            lore.remove("§7[Уровень: IV]");
-                            lore.add(var1, "§c[Уровень: IV]");
-                            lore.add(" ");
-                            lore.add("§a§lКУПЛЕНО");
-
-                            lore.remove("§8Стоимость: §b10 алмазов");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Protection", 4);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                }
-                break;
-            case 12:
-                int lvl3 = this.getTeam().getTeamUpgrades().get("Haste");
-                switch (lvl3) {
-                    case 0:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 2)) {
-
-                            for(Participant p : this.getTeam().getTeammates().values()){
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bЭффективность");
-
-                                for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
-                                    if(itemStack == null) continue;
-
-                                    ItemMeta meta2 = itemStack.getItemMeta();
-
-                                    switch (itemStack.getType()) {
-                                        case WOODEN_AXE:
-                                        case WOODEN_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 2, true);
-                                            break;
-                                        case STONE_AXE:
-                                        case STONE_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 3, true);
-                                            break;
-                                        case IRON_AXE:
-                                        case IRON_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 4, true);
-                                            break;
-                                        case DIAMOND_AXE:
-                                        case DIAMOND_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 5, true);
-                                            break;
-                                        case GOLDEN_AXE:
-                                        case GOLDEN_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 6, true);
-                                            break;
-                                        default: break;
-                                    }
-
-                                    itemStack.setItemMeta(meta2);
-                                }
-                            }
-
-                            int var0 = lore.indexOf("§7[Уровень: I]");
-                            lore.remove("§7[Уровень: I]");
-                            lore.add(var0, "§c[Уровень: I]");
-                            int var1 = lore.indexOf("§8Стоимость: §b2 алмаза");
-                            lore.remove("§8Стоимость: §b2 алмаза");
-                            lore.add(var1, "§8Стоимость: §b4 алмаза");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Haste", 1);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                    case 1:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 4)) {
-
-                            for (Participant p : this.getTeam().getTeammates().values()) {
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bЭффективность");
-
-                                for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
-                                    if(itemStack == null) continue;
-
-                                    ItemMeta meta2 = itemStack.getItemMeta();
-
-                                    switch (itemStack.getType()) {
-                                        case WOODEN_AXE:
-                                        case WOODEN_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 3, true);
-                                            break;
-                                        case STONE_AXE:
-                                        case STONE_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 4, true);
-                                            break;
-                                        case IRON_AXE:
-                                        case IRON_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 5, true);
-                                            break;
-                                        case DIAMOND_AXE:
-                                        case DIAMOND_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 6, true);
-                                            break;
-                                        case GOLDEN_AXE:
-                                        case GOLDEN_PICKAXE:
-                                            meta2.addEnchant(Enchantment.DIG_SPEED, 7, true);
-                                            break;
-                                        default: break;
-                                    }
-
-                                    itemStack.setItemMeta(meta2);
-                                }
-                            }
-
-                            int var0 = lore.indexOf("§7[Уровень: II]");
-                            lore.remove("§7[Уровень: II]");
-                            lore.add(var0, "§c[Уровень: II]");
-                            lore.add(" ");
-                            lore.add("§a§lКУПЛЕНО");
-
-                            lore.remove("§8Стоимость: §b4 алмаза");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Haste", 2);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                }
-                break;
-
-            case 13:
-                int lvl4 = this.getTeam().getTeamUpgrades().get("Bedrok");
-
-                for(String string : lore){
-                    if (string.matches("(.*)ОСТАЛОСЬ ВРЕМЕНИ(.*)")) {
-                        lvl4 = 0;
-                        break;
-                    }
-                }
-
-                if(lvl4 == 0) return;
-
-                if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 6)) {
-                    lore.remove("§7Количество использований: §b" + lvl4);
-                    lore.add("§7Количество использований: §b" + (lvl4 - 1));
-
-                    for(Participant p : this.getTeam().getTeammates().values()){
-                        p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bНесокрушимость");
-                    }
-
-                    this.getTeam().getTeamUpgrades().replace("Bedrok", lvl4 - 1);
-
-                    if(lvl4 == 1) lore.remove("§8Стоимость: §b6 алмазов");
-
-                    String cords_bottom = this.getTeam().getPlugin().getConfig().getString("teams." + this.getTeam().getColor() + ".bed_bottom");
-                    String cords_top = this.getTeam().getPlugin().getConfig().getString("teams." + this.getTeam().getColor() + ".bed_top");
-
-                    List<Block> bedrok = new ArrayList<>();
-
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).getRelative(BlockFace.EAST));
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).getRelative(BlockFace.WEST));
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).getRelative(BlockFace.NORTH));
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).getRelative(BlockFace.SOUTH));
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).getRelative(BlockFace.UP));
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).getRelative(BlockFace.EAST));
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).getRelative(BlockFace.WEST));
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).getRelative(BlockFace.NORTH));
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).getRelative(BlockFace.SOUTH));
-                    bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).getRelative(BlockFace.UP));
-
-                    for (Block b : bedrok) {
-                        if (b.getType().equals(Material.getMaterial(this.getTeam().getColor().toUpperCase(Locale.ROOT) + "_BED")))
-                            continue;
-                        b.setType(Material.BEDROCK);
-                    }
-
-                    int id = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this.getTeam().getPlugin(), new Runnable() {
-                        private int time = 90;
-
-                        @Override
-                        public void run() {
-                            if (time == 90) {
-                                lore.add("  ");
-                            } else {
-                                lore.remove("§7§lОСТАЛОСЬ ВРЕМЕНИ: §b§l" + Utils.getTime(time + 1));
-                            }
-                            lore.add("§7§lОСТАЛОСЬ ВРЕМЕНИ: §b§l" + Utils.getTime(time));
-
-                            meta.setLore(lore);
-                            clickedItem.setItemMeta(meta);
-
-                            time--;
-                        }
-                    }, 0L, 20L);
-
-                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getTeam().getPlugin(), () -> {
-                        Bukkit.getServer().getScheduler().cancelTask(id);
-
-                        for (Block b : bedrok) {
-                            if (b.getType().equals(Material.getMaterial(getTeam().getColor().toUpperCase(Locale.ROOT) + "_BED")))
-                                continue;
-                            b.setType(Material.AIR);
-                        }
-
-                        lore.remove("  ");
-                        lore.remove("§7§lОСТАЛОСЬ ВРЕМЕНИ: §b§l" + Utils.getTime(0));
-
-                        meta.setLore(lore);
-                        clickedItem.setItemMeta(meta);
-                    }, 1820L);
-
-                    meta.setLore(lore);
-
-                } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                break;
-            case 14:
-                int lvl5 = this.getTeam().getTeamUpgrades().get("Forge");
-                switch (lvl5) {
-                    case 0:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 2)) {
-
-                            for(Participant p : this.getTeam().getTeammates().values()){
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bКузня");
-                            }
-
-                            this.getTeam().setSilverTimeout(2);
-                            this.getTeam().setGoldTimeout(4);
-
-                            int var0 = lore.indexOf("§7[Уровень: I]");
-                            lore.remove("§7[Уровень: I]");
-                            lore.add(var0, "§c[Уровень: I]");
-                            int var1 = lore.indexOf("§8Стоимость: §b2 алмаза");
-                            lore.remove("§8Стоимость: §b2 алмаза");
-                            lore.add(var1, "§8Стоимость: §b6 алмаза");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Forge", 1);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                    case 1:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 6)) {
-
-                            for (Participant p : this.getTeam().getTeammates().values()) {
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bКузня");
-                            }
-
-                            this.getTeam().setSilverTimeout(1);
-                            this.getTeam().setGoldTimeout(2);
-
-                            int var0 = lore.indexOf("§7[Уровень: II]");
-                            lore.remove("§7[Уровень: II]");
-                            lore.add(var0, "§c[Уровень: II]");
-                            int var1 = lore.indexOf("§8Стоимость: §b6 алмаза");
-                            lore.remove("§8Стоимость: §b6 алмаза");
-                            lore.add(var1, "§8Стоимость: §b10 алмазов");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Forge", 2);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                    case 2:
-                        if(this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 10)) {
-
-                            for (Participant p : this.getTeam().getTeammates().values()) {
-                                p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bКузня");
-                            }
-
-                            this.getTeam().setGoldTimeout(1);
-
-                            int var0 = lore.indexOf("§7[Уровень: III]");
-                            lore.remove("§7[Уровень: III]");
-                            lore.add(var0, "§c[Уровень: III]");
-                            lore.add(" ");
-                            lore.add("§a§lКУПЛЕНО");
-
-                            lore.remove("§8Стоимость: §b10 алмазов");
-
-                            meta.setLore(lore);
-
-                            this.getTeam().getTeamUpgrades().replace("Forge", 3);
-                        } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                        break;
-                }
-                break;
-            case 15:
-                int lvl6 = this.getTeam().getTeamUpgrades().get("Healing");
-                if (lvl6 == 0) {
-                    if (this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(Material.DIAMOND, 2)) {
-
-                        for (Participant p : this.getTeam().getTeammates().values()) {
-                            p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение §bИсцеление");
-                        }
-
-                        int var0 = lore.indexOf("§7[Уровень: I]");
-                        lore.remove("§7[Уровень: I]");
-                        lore.add(var0, "§c[Уровень: I]");
-                        lore.remove("§8Стоимость: §b2 алмаза");
-                        lore.add(" ");
-                        lore.add("§a§lКУПЛЕНО");
-
-                        meta.setLore(lore);
-
-                        this.getTeam().getTeamUpgrades().replace("Healing", 1);
-                    } else whoClicked.sendMessage("§cНедостаточно ресурсов");
-                }
-                break;
-            case 16:
-                if(this.getTeam().getTraps().size() == 3) return;
-                whoClicked.openInventory(this.getTeam().getTrapsInventory());
+        if(isTrapsClicked(slot)){
+            if(this.getTeam().getTraps().size() == 3) return;
+            whoClicked.openInventory(this.getTeam().getTrapsInventory());
+            return;
         }
 
+        ItemMeta meta = clickedItem.getItemMeta();
+        List<String> lore = meta.getLore();
+        String name = UPGRADES_NAMES.get(slot - 10);
+        int level = this.getTeam().getTeamUpgrades().get(name);
+        if(name.equals("Bedrock")){
+            for (String string : lore) {
+                if (string.matches("(.*)ОСТАЛОСЬ ВРЕМЕНИ(.*)")) {
+                    level = 2;
+                    break;
+                }
+            }
+        }
+        if(level >= upgrades.get(name).getLevels().size()) return;
+
+        if(!takePrice(name, level, whoClicked)) return;
+
+        switch(slot){
+            case 10, 11, 12 -> updateEnchantment(name, level, whoClicked);
+            case 13 -> setBedrock(level, lore, clickedItem);
+            case 14 -> changeResourcesTimeout(level);
+        }
+
+        informPlayers(name, whoClicked);
+        if(!name.equals("Bedrock")) updateItem(name, level, meta);
+
+        this.getTeam().getTeamUpgrades().replace(name, level + 1);
+
         clickedItem.setItemMeta(meta);
+    }
+
+    private boolean isTrapsClicked(int slot) {
+        return slot == 16;
+    }
+
+    private boolean takePrice(String name, int level, Player whoClicked) {
+        ItemPrice itemPrice = upgrades.get(name).getLevels().get(level).getItemPrice();
+        boolean abil = this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(itemPrice.getMaterial(), itemPrice.getPrice());
+        if(!abil) whoClicked.sendMessage("§cНедостаточно ресурсов");
+        return abil;
+    }
+
+    private void updateEnchantment(String name, int level, Player whoClicked){
+        for(Participant p : this.getTeam().getTeammates().values()){
+            for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
+                if(itemStack == null) continue;
+                if(!upgrades.get(name).getTypes().contains(itemStack.getType())) continue;
+
+                ItemMeta meta = itemStack.getItemMeta();
+                if(!name.equals("Haste"))
+                    meta.addEnchant(upgrades.get(name).getEnchantment(), upgrades.get(name).getLevels().get(level).getEnchantmentLevel(), true);
+                else {
+                    switch (itemStack.getType()) {
+                        case WOODEN_AXE, WOODEN_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 3 + level, true);
+                        case STONE_AXE, STONE_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 4 + level, true);
+                        case IRON_AXE, IRON_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 5 + level, true);
+                        case DIAMOND_AXE, DIAMOND_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 6 + level, true);
+                        case GOLDEN_AXE, GOLDEN_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 7 + level, true);
+                        default -> {
+                        }
+                    }
+                }
+
+                itemStack.setItemMeta(meta);
+            }
+        }
+    }
+
+    private void setBedrock(int level, List<String> lore, ItemStack item) {
+        setAndDeleteBedrock();
+        updateBedrockItem(level, lore, item);
+    }
+
+    private void setAndDeleteBedrock() {
+        String cords_bottom = this.getTeam().getPlugin().getConfig().getString("teams." + this.getTeam().getColor() + ".bed_bottom");
+        String cords_top = this.getTeam().getPlugin().getConfig().getString("teams." + this.getTeam().getColor() + ".bed_top");
+
+        List<Block> bedrok = new ArrayList<>();
+
+        fillBlocks(cords_bottom, bedrok);
+        fillBlocks(cords_top, bedrok);
+
+        List<Material> previousBlocks = new ArrayList<>();
+
+        for (Block b : bedrok) {
+            if (b.getType().equals(Material.getMaterial(this.getTeam().getColor().toUpperCase(Locale.ROOT) + "_BED")))
+                continue;
+            previousBlocks.add(b.getType());
+            b.setType(Material.BEDROCK);
+        }
+
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getTeam().getPlugin(), () -> {
+            for (Block b : bedrok) {
+                if (b.getType().equals(Material.getMaterial(getTeam().getColor().toUpperCase(Locale.ROOT) + "_BED")))
+                    continue;
+                b.setType(previousBlocks.get(bedrok.indexOf(b)));
+            }
+        }, 1820L);
+    }
+
+    private void updateBedrockItem(int level, List<String> lore, ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        lore.remove("§7Количество использований: §b" + (BEDROCK_MAX_USAGES - level));
+        lore.add("§7Количество использований: §b" + (BEDROCK_MAX_USAGES - (level + 1)));
+        if (level == 1) lore.remove("§8Стоимость: §b6 алмазов");
+
+        meta.setLore(lore);
+
+        int id = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this.getTeam().getPlugin(), new Runnable() {
+            private int time = 90;
+
+            @Override
+            public void run() {
+                if (time == 90) {
+                    lore.add("  ");
+                } else {
+                    lore.remove("§7§lОСТАЛОСЬ ВРЕМЕНИ: §b§l" + Utils.getTime(time + 1));
+                }
+                lore.add("§7§lОСТАЛОСЬ ВРЕМЕНИ: §b§l" + Utils.getTime(time));
+
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+
+                time--;
+            }
+        }, 0L, 20L);
+
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getTeam().getPlugin(), () -> {
+            Bukkit.getServer().getScheduler().cancelTask(id);
+
+            lore.remove("  ");
+            lore.remove("§7§lОСТАЛОСЬ ВРЕМЕНИ: §b§l" + Utils.getTime(0));
+
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }, 1820L);
+    }
+
+    private void fillBlocks(String cords, List<Block> bedrok) {
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.EAST));
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.WEST));
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.NORTH));
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.SOUTH));
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.UP));
+    }
+
+    private void changeResourcesTimeout(int level) {
+    }
+
+    private void informPlayers(String name, Player whoClicked) {
+        for(Participant p : this.getTeam().getTeammates().values()){
+            p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение " + upgrades.get(name).getName());
+        }
+    }
+
+    private void updateItem(String name, int level, ItemMeta meta) {
+        List<String> lore = meta.getLore();
+
+        String levelStr = "[Уровень: " + Utils.getRomanNumeral(level + 1) + "]";
+
+        int var0 = lore.indexOf("§7" + levelStr);
+        lore.remove("§7" + levelStr);
+        lore.add(var0, "§c" + levelStr);
+
+        List<LevelInfo> lvls = upgrades.get(name).getLevels();
+
+        int var1 = lore.indexOf(lvls.get(level).getItemPrice().makeString());
+        lore.remove(lvls.get(level).getItemPrice().makeString());
+
+        if(level + 1 == lvls.size()){
+            lore.add(" ");
+            lore.add("§a§lКУПЛЕНО");
+        }
+        else lore.add(var1, lvls.get(level + 1).getItemPrice().makeString());
     }
 
     @NotNull
