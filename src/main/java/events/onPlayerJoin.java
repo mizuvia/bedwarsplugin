@@ -45,11 +45,11 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             this.getPlugin().getPlayers().put(e.getPlayer().getName(), p);
             PlayerInv.setWaitingInventory(p);
 
-            this.getPlugin().getSidebar().changePlayersAmount();
-
             e.getPlayer().setScoreboard(p.getScoreboard());
             this.getPlugin().getSidebar().fillPlayerSidebar(p);
             this.getPlugin().getTab().addPlayer(p);
+
+            this.getPlugin().getSidebar().changePlayersAmount();
 
             e.setJoinMessage(e.getPlayer().getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().online_players + "§f/§b" + Config.getMaxPlayers() + "§f]");
 
