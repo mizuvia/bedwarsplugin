@@ -113,28 +113,28 @@ public class ArmorStandsManager extends TaskGUI{
     public void changeStage(int stage) {
         switch(stage){
             case 0 -> {
-                this.getDiamondSpawner().setDiamondTimeout(30);
+                this.getDiamondSpawner().setDiamondTimeout(22);
                 for(ArmorStands arm : this.getDiamondArmorStands())
                     arm.getStage().setCustomName("§b§lАлмазы II");
                 for(Player p : Bukkit.getOnlinePlayers())
                     p.sendMessage("§7Генератор §b§lАлмазов §r§7улучшен до §b§lII §r§7уровня");
             }
             case 1 -> {
-                this.getEmeraldSpawner().setEmeraldTimeout(60);
+                this.getEmeraldSpawner().setEmeraldTimeout(45);
                 for(ArmorStands arm : this.getEmeraldArmorStands())
                     arm.getStage().setCustomName("§a§lИзумруды II");
                 for(Player p : Bukkit.getOnlinePlayers())
                     p.sendMessage("§7Генератор §a§lИзумрудов §r§7улучшен до §a§lII §r§7уровня");
             }
             case 2 -> {
-                this.getDiamondSpawner().setDiamondTimeout(25);
+                this.getDiamondSpawner().setDiamondTimeout(12);
                 for(ArmorStands arm : this.getDiamondArmorStands())
                     arm.getStage().setCustomName("§a§lАлмазы III");
                 for(Player p : Bukkit.getOnlinePlayers())
                     p.sendMessage("§7Генератор §b§lАлмазов §r§7улучшен до §b§lIII §r§7уровня");
             }
             case 3 -> {
-                this.getEmeraldSpawner().setEmeraldTimeout(55);
+                this.getEmeraldSpawner().setEmeraldTimeout(30);
                 for(ArmorStands arm : this.getEmeraldArmorStands())
                     arm.getStage().setCustomName("§a§lИзумруды III");
                 for(Player p : Bukkit.getOnlinePlayers())

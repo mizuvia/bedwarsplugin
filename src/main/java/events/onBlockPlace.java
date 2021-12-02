@@ -2,6 +2,7 @@ package events;
 
 import main.Plugin;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
@@ -22,6 +23,13 @@ public class onBlockPlace extends SimpleListener implements Listener, EventExecu
         BlockPlaceEvent e = (BlockPlaceEvent) event;
 
         if(this.getPlugin().isLoading()) e.setCancelled(true);
+        e.setBuild(true);
+
+        if(this.getPlugin().getGame().getInaccessibleBlocks().contains(e.getBlockPlaced().getLocation())){
+            e.getPlayer().sendMessage(ChatColor.RED + "Вам не разрешено здесь строить");
+            e.setCancelled(true);
+        }
+
         this.getPlugin().getGame().getBlockList().add(e.getBlockPlaced());
         if(e.getBlockPlaced().getType().equals(Material.TNT)){
             e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);

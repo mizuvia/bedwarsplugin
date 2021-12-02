@@ -3,6 +3,7 @@ package inventories;
 import game.*;
 import main.PlayerManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -139,13 +140,10 @@ public class TeamUpgrades implements IGUI{
     }
 
     private void setAndDeleteBedrock() {
-        String cords_bottom = this.getTeam().getPlugin().getConfig().getString("teams." + this.getTeam().getColor() + ".bed_bottom");
-        String cords_top = this.getTeam().getPlugin().getConfig().getString("teams." + this.getTeam().getColor() + ".bed_top");
-
         List<Block> bedrok = new ArrayList<>();
 
-        fillBlocks(cords_bottom, bedrok);
-        fillBlocks(cords_top, bedrok);
+        fillBlocks(this.getTeam().getBedBottomLocation(), bedrok);
+        fillBlocks(this.getTeam().getBedTopLocation(), bedrok);
 
         List<Material> previousBlocks = new ArrayList<>();
 
@@ -203,12 +201,12 @@ public class TeamUpgrades implements IGUI{
         }, 1820L);
     }
 
-    private void fillBlocks(String cords, List<Block> bedrok) {
-        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.EAST));
-        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.WEST));
-        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.NORTH));
-        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.SOUTH));
-        bedrok.add(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords)).getRelative(BlockFace.UP));
+    private void fillBlocks(Location loc, List<Block> bedrok) {
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(loc).getRelative(BlockFace.EAST));
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(loc).getRelative(BlockFace.WEST));
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(loc).getRelative(BlockFace.NORTH));
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(loc).getRelative(BlockFace.SOUTH));
+        bedrok.add(Bukkit.getWorld("world").getBlockAt(loc).getRelative(BlockFace.UP));
     }
 
     private void changeResourcesTimeout(int level) {

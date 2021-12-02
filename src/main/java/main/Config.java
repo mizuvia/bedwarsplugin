@@ -16,13 +16,14 @@ public class Config {
     private static Config instance;
     private static List<String> diamonds;
     private static List<String> emeralds;
-    public static List<String> teams_names;
-    public static String server_name;
-    public static String map_name;
-    public static int players_amount;
-    public static int teams_amount;
-    public static int players_per_team;
+    private static List<String> teams_names;
+    private static String server_name;
+    private static String map_name;
+    private static int players_amount;
+    private static int teams_amount;
+    private static int players_per_team;
     private static Location center;
+    private static YamlConfiguration config;
 
     public static void createInstance(Plugin plugin) {
         instance = new Config(plugin);
@@ -52,16 +53,16 @@ public class Config {
 
     public static String getServerName(){return server_name;}
 
-    public Config(Plugin plugin){
+    private Config(Plugin plugin){
         File configFile = this.loadConfig();
-        YamlConfiguration config = new YamlConfiguration();
+        config = new YamlConfiguration();
         try{
             config.load(configFile);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
 
-        this.loadTeams(plugin, config);
+        this.loadTeams(plugin);
         setDiamonds(config.getStringList("diamonds"));
         setEmeralds(config.getStringList("emeralds"));
 
@@ -86,28 +87,39 @@ public class Config {
         return configFile;
     }
 
-    private void loadTeams(Plugin plugin, YamlConfiguration config) {
+    private void loadTeams(Plugin plugin) {
         teams_names = config.getStringList("team_list");
         for(String color : getTeamsNames()){
             Team team = new Team(plugin, color);
 
             String name = config.getString("teams." + color + ".display_name");
-            String cord = config.getString("teams." + color + ".res_location");
-            String spawnCord = config.getString("teams." + color + ".spawn_location");
-            String cords_bottom = config.getString("teams." + color + ".bed_bottom");
-            String cords_top = config.getString("teams." + color + ".bed_top");
-            String shop_cord = config.getString("teams." + color + ".shop");
-            String upgrades_cord = config.getString("teams." + color + ".upgrades_shop");
-
             team.setName(name);
-            team.setResourceLocation(Utils.getLocation(cord));
-            team.setSpawnLocation(Utils.getLocation(spawnCord));
-            team.setBedBottom(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).getBlockData().clone());
-            team.setBedTop(Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).getBlockData().clone());
-            team.setShopVillager(Utils.getLocation(shop_cord));
-            team.setUpgradesVillager(Utils.getLocation(upgrades_cord));
+
+            Config.reloadTeam(team);
 
             plugin.getTeams().put(color, team);
         }
+    }
+
+    public static void reloadTeam(Team team){
+        String color = team.getColor();
+
+        String cord = config.getString("teams." + color + ".res_location");
+        String spawnCord = config.getString("teams." + color + ".spawn_location");
+        String cords_bottom = config.getString("teams." + color + ".bed_bottom");
+        String cords_top = config.getString("teams." + color + ".bed_top");
+        String shop_cord = config.getString("teams." + color + ".shop");
+        String upgrades_cord = config.getString("teams." + color + ".upgrades_shop");
+
+        team.setResourceLocation(Utils.getLocation(cord));
+        team.setSpawnLocation(Utils.getLocation(spawnCord));
+        team.setBedBottomLocation(Utils.getLocation(cords_bottom));
+        team.setBedTopLocation(Utils.getLocation(cords_top));
+        team.setShopVillager(Utils.getLocation(shop_cord));
+        team.setUpgradesVillager(Utils.getLocation(upgrades_cord));
+    }
+
+    public static void reloadValues(){
+        center = Utils.getLocation(config.getString("world_center"));
     }
 }

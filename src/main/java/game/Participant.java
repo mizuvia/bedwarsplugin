@@ -44,6 +44,7 @@ public class Participant {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.objective = this.getScoreboard().registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        this.getPlugin().getTab().createTab(this.getScoreboard());
     }
 
     public void increaseFinalKills() {

@@ -1,6 +1,7 @@
 package game;
 
 import inventories.*;
+import main.Config;
 import main.Plugin;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
@@ -36,6 +37,8 @@ public class Team {
     private Location shopVillager;
     private Location upgradesVillager;
     private SpawnResources spawnResources;
+    private Location bedBottomLocation;
+    private Location bedTopLocation;
 
     public void clearAfterGame(){
         this.silverTimeout = 4;
@@ -51,6 +54,7 @@ public class Team {
         this.teammates = new HashMap<>();
         this.bedDestroyer = null;
         this.golem = null;
+        Config.reloadTeam(this);
         this.teamUpgrades = new HashMap<>();
         this.teamUpgrades.put("Sharpness", 0);
         this.teamUpgrades.put("Protection", 0);
@@ -64,7 +68,8 @@ public class Team {
     public Team(Plugin plugin, String color) {
         this.plugin = plugin;
         this.color = color;
-        this.spawnResources = new SpawnResources(plugin.getGame());
+        this.spawnResources = new SpawnResources(this);
+        this.spawnResources.startTask();
         this.teamUpgrades.put("Sharpness", 0);
         this.teamUpgrades.put("Protection", 0);
         this.teamUpgrades.put("Haste", 0);
@@ -92,14 +97,6 @@ public class Team {
     }
 
     public boolean isBroken() {return this.isBroken; }
-
-    public BlockData getBedTop() {return this.bedTop; }
-
-    public BlockData getBedBottom() {return this.bedBottom; }
-
-    public void setBedTop(BlockData bedTop) { this.bedTop = bedTop; }
-
-    public void setBedBottom(BlockData bedBottom) { this.bedBottom = bedBottom; }
 
     public String getColor(){
         return this.color;
@@ -185,5 +182,35 @@ public class Team {
 
     public Location getUpgradesVillager() {
         return upgradesVillager;
+    }
+
+    public void addTeammate(Participant p) {
+        this.getTeammates().put(p.getPlayer().getName(), p);
+        this.increaseTeammatesAmount();
+    }
+
+    public void removeTeammate(Participant p) {
+        this.getTeammates().remove(p.getPlayer().getName());
+        this.decreaseTeammatesAmount();
+    }
+
+    public void setBedBottomLocation(Location location) {
+        this.bedBottomLocation = location;
+    }
+
+    public Location getBedBottomLocation() {
+        return bedBottomLocation;
+    }
+
+    public void setBedTopLocation(Location location) {
+        this.bedTopLocation = location;
+    }
+
+    public Location getBedTopLocation() {
+        return bedTopLocation;
+    }
+
+    public SpawnResources getSpawnResources() {
+        return spawnResources;
     }
 }

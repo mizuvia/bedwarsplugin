@@ -9,12 +9,13 @@ import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import util.Utils;
+import util.WorldManager;
 
 public class DiamondSpawner {
 
     private final Game game;
-    private int diamondTimeout = 35;
-    private int diamondTimeLeft = 35;
+    private int diamondTimeout = 28;
+    private int diamondTimeLeft = 22;
     private static final int MAX_AMOUNT_OF_DIAMONDS = 6;
 
     private void setDiamondTimeLeft(int diamondTimeLeft) { this.diamondTimeLeft = diamondTimeLeft; }
@@ -43,24 +44,11 @@ public class DiamondSpawner {
     public void spawnItem(){
         if(this.getDiamondTimeLeft() == 1) {
             for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getDiamondArmorStands()){
-                int diamondInTheArea = 0;
-                for(Entity entity : armorStands.getStage().getNearbyEntities(3, 3, 3)){
-                    if(entity instanceof Item && ((Item) entity).getItemStack().getType() == Material.DIAMOND) diamondInTheArea++;
-                }
-                if(diamondInTheArea >= MAX_AMOUNT_OF_DIAMONDS) return;
-
-                ItemStack diamond = createDiamond();
+                if(!WorldManager.canDropResource(armorStands.getStage(), Material.DIAMOND, MAX_AMOUNT_OF_DIAMONDS)) return;
+                ItemStack diamond = Utils.createItem(Material.DIAMOND, 1, "§eАлмаз");
                 Bukkit.getServer().getWorld("world").dropItem(armorStands.getStage().getLocation(), diamond);
             }
         }
-    }
-
-    private ItemStack createDiamond() {
-        ItemStack diamond = new ItemStack(Material.DIAMOND, 1);
-        ItemMeta meta = diamond.getItemMeta();
-        meta.setDisplayName("§eАлмаз");
-        diamond.setItemMeta(meta);
-        return diamond;
     }
 
     public Game getGame() {return this.game;}

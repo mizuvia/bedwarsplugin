@@ -9,6 +9,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import util.Utils;
+import util.WorldManager;
 
 public class EmeraldSpawner {
 
@@ -43,24 +44,11 @@ public class EmeraldSpawner {
     public void spawnItem(){
         if(this.getEmeraldTimeLeft() == 1) {
             for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getEmeraldArmorStands()){
-                int emeraldInTheArea = 0;
-                for(Entity entity : armorStands.getStage().getNearbyEntities(3, 3, 3)){
-                    if(entity instanceof Item && ((Item) entity).getItemStack().getType() == Material.EMERALD) emeraldInTheArea++;
-                }
-                if(emeraldInTheArea >= MAX_AMOUNT_OF_EMERALDS) return;
-
-                ItemStack emerald = createEmerald();
+                if(!WorldManager.canDropResource(armorStands.getStage(), Material.EMERALD, MAX_AMOUNT_OF_EMERALDS)) return;
+                ItemStack emerald = Utils.createItem(Material.EMERALD, 1, "§eИзумруд");
                 Bukkit.getServer().getWorld("world").dropItem(armorStands.getStage().getLocation(), emerald);
             }
         }
-    }
-
-    private ItemStack createEmerald() {
-        ItemStack emerald = new ItemStack(Material.EMERALD, 1);
-        ItemMeta meta = emerald.getItemMeta();
-        meta.setDisplayName("§eИзумруд");
-        emerald.setItemMeta(meta);
-        return emerald;
     }
 
     public Game getGame() { return this.game; }

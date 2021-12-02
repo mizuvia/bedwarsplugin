@@ -16,9 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
-import util.Colors;
-import util.PlayerInv;
-import util.Utils;
+import util.*;
 
 public class onPlayerJoin extends SimpleListener implements Listener, EventExecutor {
 
@@ -51,23 +49,17 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
 
             this.getPlugin().getSidebar().changePlayersAmount();
 
-            e.setJoinMessage(e.getPlayer().getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().online_players + "§f/§b" + Config.getMaxPlayers() + "§f]");
+            e.setJoinMessage(e.getPlayer().getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().getOnlinePlayers() + "§f/§b" + Config.getMaxPlayers() + "§f]");
 
-            this.getPlugin().getJedis().publish("bw", this.getPlugin().getConfig().getString("server_name") + " " + this.getPlugin().getOnlinePlayers());
+            this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());
 
-            Party party = MongoService.findOneParty("id", MongoService.findOnePlayer("uuid", e.getPlayer().getUniqueId().toString()).gen$party_id);
+            Party party = MongoService.findOneParty("id", MongoService.findByUUID(e.getPlayer().getUniqueId()).gen$party_id);
             if(party != null){
+                PartyManager.addPlayer(this.getPlugin(), party, MongoService.findByUUID(p.getPlayer().getUniqueId()));
+            } else {
                 for(Team team : this.getPlugin().getTeams().values()){
-                    for(Participant par : team.getTeammates().values()){
-                        if(party.members.contains(par.getPlayer().getUniqueId().toString()) && team.getTeammatesAmount() != Config.getPlayersPerTeam()) {
-                            TeamSelection.addPlayerToTeam(plugin, team, p);
-                            return;
-                        }
-                    }
-                }
-                for(Team team : this.getPlugin().getTeams().values()){
-                    if(Config.getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
-                        TeamSelection.addPlayerToTeam(plugin, team, p);
+                    if(team.getTeammatesAmount() != Config.getPlayersPerTeam()){
+                        TeamManager.addPlayerToTeam(this.getPlugin(), team, p);
                         return;
                     }
                 }

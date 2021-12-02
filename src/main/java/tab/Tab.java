@@ -44,4 +44,31 @@ public class Tab {
     }
 
     public Plugin getPlugin(){ return this.plugin; }
+
+    public void createTab(Scoreboard scoreboard) {
+        Objective objective = scoreboard.registerNewObjective("tab", "dummy", "§6§lMizuvia");
+        objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+
+        scoreboard.registerNewTeam("all");
+    }
+
+    public void addPlayerToTabs(Participant par){
+        for(Participant tabOwner : this.getPlugin().getPlayers().values()){
+            addPlayerToTab(tabOwner, par);
+        }
+    }
+
+    private void addPlayerToTab(Participant tabOwner, Participant par){
+        tabOwner.getScoreboard().getTeam("all").addEntry(par.getPlayer().getName());
+    }
+
+    public void removePlayerFromTabs(Participant par){
+        for(Participant tabOwner : this.getPlugin().getPlayers().values()){
+            removePlayerFromTab(tabOwner, par);
+        }
+    }
+
+    private void removePlayerFromTab(Participant tabOwner, Participant par){
+        tabOwner.getScoreboard().getTeam("all").removeEntry(par.getPlayer().getName());
+    }
 }

@@ -8,6 +8,7 @@ import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 import net.minecraft.server.v1_16_R3.PacketPlayOutCustomPayload;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -58,5 +59,13 @@ public class Utils {
 
     public static String getRomanNumeral(int number){
         return ROMAN_NUMERALS.get(number);
+    }
+
+    public static ItemStack createItem(Material material, int amount, String name){
+        ItemStack item = new ItemStack(material, amount);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(name);
+        item.setItemMeta(meta);
+        return item;
     }
 }

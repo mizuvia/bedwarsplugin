@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import util.TeamManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,10 +54,15 @@ public class TeamSelection implements IGUI{
                 return;
             }
 
-            TeamSelection.removePlayerFromTeam(plugin, participant);
+            TeamManager.removePlayerFromTeam(plugin, participant);
+            TeamSelection.removePlayerFromItem(plugin, participant);
         }
 
-        TeamSelection.addPlayerToTeam(plugin, team, participant);
+        TeamManager.addPlayerToTeam(plugin, team, participant);
+        TeamSelection.addPlayerToItem(plugin, team, participant.getPlayer());
+
+        participant.getPlayer().closeInventory();
+        participant.getPlayer().sendMessage("§eВы успешно присоединились к команде " + team.getName() + "§e!");
     }
 
     public static void addPlayerToTeam(Plugin plugin, Team team, Participant participant){
@@ -64,24 +70,10 @@ public class TeamSelection implements IGUI{
         participant.getPlayer().setPlayerListName("§8§l[" + team.getName() + "§8§l]§r§7 " + participant.getPlayer().getName());
         plugin.getTab().addPlayer(participant);
 
-        TeamSelection.addPlayerToItem(plugin, team, participant.getPlayer());
-
-        Logger.getLogger("").info("checking");
         participant.setTeam(team);
 
         team.getTeammates().put(participant.getPlayer().getName(), participant);
         team.increaseTeammatesAmount();
-        participant.getPlayer().closeInventory();
-        participant.getPlayer().sendMessage("§eВы успешно присоединились к команде " + team.getName() + "§e!");
-    }
-
-    public static void removePlayerFromTeam(Plugin plugin, Participant participant){
-        plugin.getTab().removePlayer(participant);
-
-        TeamSelection.removePlayerFromItem(plugin, participant);
-
-        participant.getTeam().getTeammates().remove(participant.getPlayer().getName());
-        participant.getTeam().decreaseTeammatesAmount();
     }
 
     public static void addPlayerToItem(Plugin plugin, Team team, Player player){

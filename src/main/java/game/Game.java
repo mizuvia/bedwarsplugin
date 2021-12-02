@@ -1,7 +1,5 @@
 package game;
 
-import com.hoshion.mongoapi.MongoService;
-import com.hoshion.mongoapi.docs.Party;
 import inventories.*;
 import main.Config;
 import main.PlayerManager;
@@ -11,14 +9,12 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import util.PlayerInv;
-import util.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +24,8 @@ public class Game {
 
     private int matchTime = 0;
     private List<Block> blockList = new ArrayList<>();
+    private List<Location> inaccessibleBlocks = new ArrayList<>();
     private final Plugin plugin;
-    private final SpawnResources spawnResources;
     private final Time time;
     private final ArmorStandsManager armorStandsManager;
     private final BlocksInventory blocksInventory = new BlocksInventory(new Blocks(this), 54, "Блоки");
@@ -41,8 +37,6 @@ public class Game {
     private HashMap<String, String> playersDamagers = new HashMap<>();
     private final List<Inventory> chests = new ArrayList<>();
     private int deadTeams = 0;
-
-    public SpawnResources getSpawnResources(){return this.spawnResources;}
 
     public List<Inventory> getChestsInventories() { return this.chests; }
 
@@ -80,6 +74,8 @@ public class Game {
 
     public List<Block> getBlockList(){ return this.blockList; }
 
+    public List<Location> getInaccessibleBlocks() { return this.inaccessibleBlocks; }
+
     public ArmorStandsManager getArmorStandsManager() {return this.armorStandsManager; }
 
     public Time getTime() {return this.time; }
@@ -89,12 +85,10 @@ public class Game {
     public Game(Plugin plugin){
         this.plugin = plugin;
 
-        this.spawnResources = new SpawnResources(this);
         this.time = new Time(this);
         this.armorStandsManager = new ArmorStandsManager(this);
 
         this.time.startTask();
-        this.spawnResources.startTask();
         this.armorStandsManager.startTask();
     }
 
@@ -103,46 +97,11 @@ public class Game {
         this.spawnShopEntity();
         this.getArmorStandsManager().createArmorStands();
 
-        this.checkPlayersWithoutTeams();
-
         this.getPlugin().getSidebar().fillPlayingList();
         this.checkEmptyTeams();
         this.teleportPlayers();
 
         this.getPlugin().setWorking(true);
-    }
-
-    private void checkPlayersWithoutTeams(){
-        for(Participant p : this.getPlugin().getPlayers().values()){
-            if(p.hasTeam()) continue;
-
-            Party party = MongoService.findOneParty("id", MongoService.findByUUID(p.getPlayer().getUniqueId()).gen$party_id);
-            if(party == null){
-                for(Team team : this.getPlugin().getTeams().values()){
-                        if(team.getTeammatesAmount() != Config.getPlayersPerTeam()){
-                            TeamSelection.addPlayerToTeam(this.getPlugin(), team, p);
-                            break;
-                        }
-                    }
-            } else {
-                for2: for(Team team : this.getPlugin().getTeams().values()){
-                    for(Participant par : team.getTeammates().values()){
-                        if(party.members.contains(par.getPlayer().getUniqueId().toString()) && team.getTeammatesAmount() != Config.getPlayersPerTeam()) {
-                            TeamSelection.addPlayerToTeam(plugin, team, p);
-                            break for2;
-                        }
-                    }
-                }
-                if(!p.hasTeam()){
-                    for(Team team : this.getPlugin().getTeams().values()){
-                        if(Config.getPlayersPerTeam() - team.getTeammatesAmount() >= party.members.size()){
-                            TeamSelection.addPlayerToTeam(plugin, team, p);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private void checkEmptyTeams() {
@@ -157,23 +116,20 @@ public class Game {
 
         this.getPlugin().setWorking(false);
 
-        this.returnBeds();
-        this.removeEntities();
+        this.getPlugin().reloadWorld();
+        Config.reloadValues();
         this.resetLists();
-        this.clearChests();
-        this.clearBlocks();
         this.resetMatchTime();
         this.resetTimeout();
         this.getArmorStandsManager().resetData();
         this.getTime().resetData();
-        this.returnBeds();
         this.clearTeams();
         this.getPlugin().resetTeamSelection();
         this.getPlugin().getSidebar().fillWaitingList();
         this.getPlugin().getWaiting().checkAmount();
 
         this.getPlugin().setLoading(true);
-        this.getPlugin().getJedis().publish("bw", this.getPlugin().getConfig().getString("server_name") + " " + this.getPlugin().getOnlinePlayers());
+        this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());
     }
 
     public void checkWin(){
@@ -185,6 +141,8 @@ public class Game {
     private void resetLists() {
         this.villagers = new ArrayList<>();
         this.playersDamagers = new HashMap<>();
+        this.inaccessibleBlocks = new ArrayList<>();
+        this.blockList = new ArrayList<>();
     }
 
     private void resetTimeout() {
@@ -197,39 +155,11 @@ public class Game {
         }
     }
 
-    private void clearChests() {
-        for(Inventory inventory : this.getChestsInventories()){
-            inventory.clear();
-        }
-        for(Participant participant : this.getPlugin().getPlayers().values()){
-            participant.getPlayer().getEnderChest().clear();
-        }
-    }
-
-    private void clearBlocks() {
-        for(Block block : this.getBlockList()){
-            block.setType(Material.AIR);
-        }
-
-        this.blockList = new ArrayList<>();
-    }
-
-    private void removeEntities() {
-        for(Entity ent : Bukkit.getServer().getWorld("world").getEntities()){
-            switch (ent.getType()) {
-                case DROPPED_ITEM:
-                case ARMOR_STAND:
-                case IRON_GOLEM:
-                case VILLAGER: ent.remove();
-                default: break;
-            }
-        }
-    }
-
     public void teleportPlayers(){
         for(Participant participant : this.getPlugin().getPlayers().values()) {
             participant.getPlayer().setGameMode(GameMode.SURVIVAL);
             participant.getPlayer().setPlayerListName(PlayerManager.getCodeColor(participant) + participant.getTeam().getName().charAt(4) + " | " + participant.getPlayer().getName());
+            participant.getPlayer().setDisplayName(PlayerManager.getCodeColor(participant) + participant.getTeam().getName().charAt(4) + " | " + participant.getPlayer().getName());
             participant.getPlayer().teleport(participant.getTeam().getSpawnLocation());
             PlayerInv.setPlayingInventory(participant);
 
@@ -287,6 +217,8 @@ public class Game {
     private Villager createVillager(Location loc) {
         Villager villager = (Villager) Bukkit.getWorld("world").spawnEntity(loc, EntityType.VILLAGER);
 
+        surroundVillager(loc);
+
         villager.setVillagerType(Villager.Type.DESERT);
         villager.setInvulnerable(true);
         villager.setCanPickupItems(false);
@@ -300,13 +232,13 @@ public class Game {
         return villager;
     }
 
-    public void returnBeds() {
-        for(String name : Config.getTeamsNames()){
-            String cords_bottom = this.getPlugin().getConfig().getString("teams." + name + ".bed_bottom");
-            String cords_top = this.getPlugin().getConfig().getString("teams." + name + ".bed_top");
-
-            Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).setBlockData(this.getPlugin().getTeams().get(name).getBedBottom());
-            Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).setBlockData(this.getPlugin().getTeams().get(name).getBedTop());
+    private void surroundVillager(Location loc) {
+        for(int x = -2; x <= 2; x++){
+            for(int z = -2; z <= 2; z++){
+                for(int y = -1; y <= 3; y++){
+                    inaccessibleBlocks.add(Bukkit.getWorld("world").getBlockAt(loc.getBlockX() + x, loc.getBlockY() + y, loc.getBlockZ() + z).getLocation());
+                }
+            }
         }
     }
 

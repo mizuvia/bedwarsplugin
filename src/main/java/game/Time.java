@@ -103,16 +103,12 @@ public class Time extends TaskGUI {
     }
 
     private void breakBeds() {
-        for(String name : Config.getTeamsNames()){
-            String cords_bottom = this.getGame().getPlugin().getConfig().getString("teams." + name + ".bed_bottom");
-            String cords_top = this.getGame().getPlugin().getConfig().getString("teams." + name + ".bed_top");
+        for(Team team : this.getGame().getPlugin().getTeams().values()){
+            Bukkit.getWorld("world").getBlockAt(team.getBedBottomLocation()).getDrops().clear();
+            Bukkit.getWorld("world").getBlockAt(team.getBedTopLocation()).getDrops().clear();
 
-            Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).getDrops().clear();
-            Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).getDrops().clear();
-
-            Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_bottom)).setType(Material.AIR, false);
-            Bukkit.getWorld("world").getBlockAt(Utils.getLocation(cords_top)).setType(Material.AIR, false);
-
+            Bukkit.getWorld("world").getBlockAt(team.getBedBottomLocation()).setType(Material.AIR, false);
+            Bukkit.getWorld("world").getBlockAt(team.getBedTopLocation()).setType(Material.AIR, false);
         }
     }
 
@@ -145,11 +141,11 @@ public class Time extends TaskGUI {
     }
 
     private void setStages(){
-        stages.add(new Stage(315, "§b§lАлмазы II"));
-        stages.add(new Stage(335, "§a§lИзумруды II"));
+        stages.add(new Stage(360, "§b§lАлмазы II"));
+        stages.add(new Stage(360, "§a§lИзумруды II"));
         stages.add(new Stage(360, "§b§lАлмазы III"));
         stages.add(new Stage(360, "§a§lИзумруды III"));
-        stages.add(new Stage(240, "§c§lПоломка кроватей"));
-        stages.add(new Stage(240, "§c§lКонец игры"));
+        stages.add(new Stage(360, "§c§lПоломка кроватей"));
+        stages.add(new Stage(600, "§c§lКонец игры"));
     }
 }
