@@ -29,9 +29,9 @@ public class EmeraldSpawner {
     public EmeraldSpawner(Game game){ this.game = game; }
 
     public void updateSpawner() {
+        spawnItem();
         if(this.getEmeraldTimeLeft() == 0) this.setEmeraldTimeLeft(this.getEmeraldTimeout());
         changeArmorTime();
-        spawnItem();
         this.emeraldTimeLeft--;
     }
 
@@ -42,7 +42,7 @@ public class EmeraldSpawner {
     }
 
     public void spawnItem(){
-        if(this.getEmeraldTimeLeft() == 1) {
+        if(this.getEmeraldTimeLeft() == 0) {
             for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getEmeraldArmorStands()){
                 if(!WorldManager.canDropResource(armorStands.getStage(), Material.EMERALD, MAX_AMOUNT_OF_EMERALDS)) return;
                 ItemStack emerald = Utils.createItem(Material.EMERALD, 1, "§eИзумруд");

@@ -65,9 +65,9 @@ public class Sidebar{
         for(String team : Config.getTeamsNames())
             putInList("TEAM_" + team.toUpperCase(Locale.ROOT), "§a✔ §7§l| §r" + this.getPlugin().getTeams().get(team).getName().replace("§l", ""));
         putInList("GAP2", "   ");
-        putInList("KILLS", ChatColor.GRAY + "Убийств: " + ChatColor.RED + "0");
-        putInList("BROKEN_BEDS", ChatColor.GRAY + "Разрушено кроватей: " + ChatColor.RED + "0");
-        putInList("FINAL_KILLS", ChatColor.GRAY + "Финальных убийств: " + ChatColor.RED + "0");
+        putInList("KILLS", ChatColor.WHITE + "Убийств: " + ChatColor.RED + "0");
+        putInList("BROKEN_BEDS", ChatColor.WHITE + "Разрушено кроватей: " + ChatColor.RED + "0");
+        putInList("FINAL_KILLS", ChatColor.WHITE + "Финальных убийств: " + ChatColor.RED + "0");
 
         fillPlayersSidebars();
 
@@ -151,7 +151,7 @@ public class Sidebar{
     }
 
     public void changeBrokenBeds(Participant p){
-        updatePlayerSidebar(p, "BROKEN_BEDS", ChatColor.GRAY + "Разрушено кроватей: " + ChatColor.RED + p.getBrokenBeds());
+        updatePlayerSidebar(p, "BROKEN_BEDS", ChatColor.WHITE + "Разрушено кроватей: " + ChatColor.RED + p.getBrokenBeds());
     }
 
     public Time getTime(){return this.timeClass;}
@@ -177,7 +177,7 @@ public class Sidebar{
     }
 
     public void changeFinalKills(Participant p) {
-        updatePlayerSidebar(p, "FINAL_KILLS", ChatColor.GRAY + "Финальных убийств: " + ChatColor.RED + p.getFinalKills());
+        updatePlayerSidebar(p, "FINAL_KILLS", ChatColor.WHITE + "Финальных убийств: " + ChatColor.RED + p.getFinalKills());
 
     }
 }

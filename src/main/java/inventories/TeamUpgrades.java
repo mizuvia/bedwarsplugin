@@ -147,20 +147,21 @@ public class TeamUpgrades implements IGUI{
         fillBlocks(this.getTeam().getBedTopLocation(), bedrok);
 
         List<Material> previousBlocks = new ArrayList<>();
+        Iterator<Block> it = bedrok.iterator();
 
-        for (Block b : bedrok) {
-            if (b.getType().equals(Material.getMaterial(this.getTeam().getColor().toUpperCase(Locale.ROOT) + "_BED")))
+        while(it.hasNext()){
+            Block b = it.next();
+            if (b.getType().equals(Material.getMaterial(this.getTeam().getColor().toUpperCase(Locale.ROOT) + "_BED"))) {
+                it.remove();
                 continue;
+            }
             previousBlocks.add(b.getType());
             b.setType(Material.BEDROCK);
         }
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getTeam().getPlugin(), () -> {
-            for (Block b : bedrok) {
-                if (b.getType().equals(Material.getMaterial(getTeam().getColor().toUpperCase(Locale.ROOT) + "_BED")))
-                    continue;
+            for (Block b : bedrok)
                 b.setType(previousBlocks.get(bedrok.indexOf(b)));
-            }
         }, 1820L);
     }
 

@@ -15,7 +15,7 @@ public class DiamondSpawner {
 
     private final Game game;
     private int diamondTimeout = 28;
-    private int diamondTimeLeft = 22;
+    private int diamondTimeLeft = 28;
     private static final int MAX_AMOUNT_OF_DIAMONDS = 6;
 
     private void setDiamondTimeLeft(int diamondTimeLeft) { this.diamondTimeLeft = diamondTimeLeft; }
@@ -29,9 +29,9 @@ public class DiamondSpawner {
     public DiamondSpawner(Game game){ this.game = game; }
 
     public void updateSpawner(){
+        spawnItem();
         if(this.getDiamondTimeLeft() == 0) this.setDiamondTimeLeft(this.getDiamondTimeout());
         changeArmorTime();
-        spawnItem();
         this.diamondTimeLeft--;
     }
 
@@ -42,7 +42,7 @@ public class DiamondSpawner {
     }
 
     public void spawnItem(){
-        if(this.getDiamondTimeLeft() == 1) {
+        if(this.getDiamondTimeLeft() == 0) {
             for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getDiamondArmorStands()){
                 if(!WorldManager.canDropResource(armorStands.getStage(), Material.DIAMOND, MAX_AMOUNT_OF_DIAMONDS)) return;
                 ItemStack diamond = Utils.createItem(Material.DIAMOND, 1, "§eАлмаз");
