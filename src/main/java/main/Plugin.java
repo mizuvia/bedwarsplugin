@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventException;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -108,22 +109,20 @@ public class Plugin extends JavaPlugin {
         this.tab = new Tab(this);
 
         this.loadEvents();
-
-        for(Player player : this.getServer().getOnlinePlayers()){
-            Participant p = new Participant(player, this);
-
-            player.setDisplayName(PlayerManager.getGroupDisplayName(p) + player.getName());
-            player.setPlayerListName(player.getDisplayName());
-
-            this.getPlayers().put(player.getName(), p);
-            PlayerInv.setWaitingInventory(p);
-
-            player.setScoreboard(this.getScoreboard());
-            this.getTab().addPlayer(p);
-        }
-
         MongoService.createInstance();
         this.loadJedis();
+
+        for(Player player : this.getServer().getOnlinePlayers()){
+
+            PlayerJoinEvent event = new PlayerJoinEvent(player, "wow");
+            onPlayerJoin executor = new onPlayerJoin(this);
+
+            try {
+                executor.execute(executor, event);
+            } catch (EventException e) {
+                e.printStackTrace();
+            }
+        }
 
         getLogger().info("enabled!");
     }

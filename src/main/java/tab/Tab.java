@@ -10,38 +10,9 @@ import org.bukkit.scoreboard.*;
 public class Tab {
 
     private final Plugin plugin;
-    public final Scoreboard scoreboard;
+    private static final String ANOTHER_TEAM_NAME = "zwithout";
 
-    public Tab(Plugin plugin){
-        this.plugin = plugin;
-        this.scoreboard = this.plugin.getScoreboard();
-        Objective objective = this.scoreboard.registerNewObjective("scoreboard", "dummy", "§6§lMizu§5§lCraft");
-
-        objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-
-        for(game.Team team : this.getPlugin().getTeams().values()){
-            this.scoreboard.registerNewTeam(team.getColor());
-        }
-
-        this.scoreboard.registerNewTeam("zwithout");
-
-        for(Player p : this.plugin.getServer().getOnlinePlayers()){
-            String serverName = "§6§lMizu§5§lCraft";
-            p.setPlayerListHeader("§e§l》— ⚝ —《\n\n" + serverName + "\n ");
-            p.setPlayerListFooter("\n§e§lСайт: §6§lmizucraft.konch\n\n§e§l》— ⚝ —《");
-        }
-    }
-
-    public void addPlayer(Participant p){
-        if(!p.hasTeam()) this.scoreboard.getTeam("zwithout").addEntry(p.getPlayer().getName());
-        else this.scoreboard.getTeam(p.getTeam().getColor()).addEntry(p.getPlayer().getName());
-
-    }
-
-    public void removePlayer(Participant p){
-        if(!p.hasTeam()) this.scoreboard.getTeam("zwithout").removeEntry(p.getPlayer().getName());
-        else this.scoreboard.getTeam(p.getTeam().getColor()).removeEntry(p.getPlayer().getName());
-    }
+    public Tab(Plugin plugin){ this.plugin = plugin; }
 
     public Plugin getPlugin(){ return this.plugin; }
 
@@ -49,7 +20,11 @@ public class Tab {
         Objective objective = scoreboard.registerNewObjective("tab", "dummy", "§6§lMizuvia");
         objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 
-        scoreboard.registerNewTeam("all");
+        for(game.Team team : this.getPlugin().getTeams().values()){
+            scoreboard.registerNewTeam(team.getColor());
+        }
+
+        scoreboard.registerNewTeam(ANOTHER_TEAM_NAME);
     }
 
     public void addPlayerToTabs(Participant par){
@@ -59,7 +34,8 @@ public class Tab {
     }
 
     private void addPlayerToTab(Participant tabOwner, Participant par){
-        tabOwner.getScoreboard().getTeam("all").addEntry(par.getPlayer().getName());
+        if(!par.hasTeam()) tabOwner.getScoreboard().getTeam(ANOTHER_TEAM_NAME).addEntry(par.getPlayer().getName());
+        else tabOwner.getScoreboard().getTeam(par.getTeam().getColor()).addEntry(par.getPlayer().getName());
     }
 
     public void removePlayerFromTabs(Participant par){
@@ -69,6 +45,7 @@ public class Tab {
     }
 
     private void removePlayerFromTab(Participant tabOwner, Participant par){
-        tabOwner.getScoreboard().getTeam("all").removeEntry(par.getPlayer().getName());
+        if(!par.hasTeam()) tabOwner.getScoreboard().getTeam(ANOTHER_TEAM_NAME).removeEntry(par.getPlayer().getName());
+        else tabOwner.getScoreboard().getTeam(par.getTeam().getColor()).removeEntry(par.getPlayer().getName());
     }
 }

@@ -153,8 +153,10 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
                         ((Player) e.getEntity()).setHealth(20.0);
 
-                        if (this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().isBroken()) {
-                            this.getPlugin().getTab().removePlayer(this.getPlugin().getPlayers().get(e.getEntity().getName()));
+                        Participant p = getPlugin().getPlayers().get(e.getEntity().getName());
+
+                        if (p.getTeam().isBroken()) {
+                            this.getPlugin().getTab().removePlayerFromTabs(p);
                             ((Player) e.getEntity()).setPlayerListName("§7Наблюдатель " + e.getEntity().getName());
                             e.getEntity().teleport(Config.getCenter());
                         } else {
@@ -162,8 +164,8 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
                             ((Player) e.getEntity()).sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
 
                             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
-                                e.getEntity().teleport(this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getSpawnLocation());
-                                PlayerInv.setPlayingInventory(this.getPlugin().getPlayers().get(e.getEntity().getName()));
+                                e.getEntity().teleport(p.getTeam().getSpawnLocation());
+                                PlayerInv.setPlayingInventory(p);
                                 ((Player) e.getEntity()).setGameMode(GameMode.SURVIVAL);
                             }, 100);
                         }

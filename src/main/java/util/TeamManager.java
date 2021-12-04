@@ -2,6 +2,7 @@ package util;
 
 import game.Participant;
 import game.Team;
+import inventories.TeamSelection;
 import main.Plugin;
 import org.bukkit.ChatColor;
 
@@ -9,6 +10,8 @@ public class TeamManager{
 
     public static void addPlayerToTeam(Plugin plugin, Team team, Participant participant){
         plugin.getTab().addPlayerToTabs(participant);
+
+        TeamSelection.addPlayerToItem(plugin, team, participant.getPlayer());
 
         participant.setTeam(team);
 
@@ -21,6 +24,8 @@ public class TeamManager{
 
     public static void removePlayerFromTeam(Plugin plugin, Participant participant){
         plugin.getTab().removePlayerFromTabs(participant);
+
+        TeamSelection.removePlayerFromItem(plugin, participant);
 
         participant.getTeam().removeTeammate(participant);
     }

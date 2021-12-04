@@ -9,6 +9,7 @@ import main.Config;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
@@ -45,7 +46,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
 
             e.getPlayer().setScoreboard(p.getScoreboard());
             this.getPlugin().getSidebar().fillPlayerSidebar(p);
-            this.getPlugin().getTab().addPlayer(p);
+            this.getPlugin().getTab().addPlayerToTabs(p);
 
             this.getPlugin().getSidebar().changePlayersAmount();
 
@@ -74,9 +75,10 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
         }
 
         e.getPlayer().setHealth(20.0);
+        e.getPlayer().setFoodLevel(20);
 
-        String serverName = "§6§lMizu§5§lCraft";
-        e.getPlayer().setPlayerListHeader("§e§l》— ⚝ —《\n\n" + serverName + "\n ");
-        e.getPlayer().setPlayerListFooter("\n§e§lСайт: §6§lmizucraft.konch\n\n§e§l》— ⚝ —《");
+        String serverName = ChatColor.GOLD + "" + ChatColor.BOLD + "Mizuvia";
+        e.getPlayer().setPlayerListHeader(serverName + "\n ");
+        e.getPlayer().setPlayerListFooter("\n§e§lСайт: §6§mizuvia.fun");
     }
 }

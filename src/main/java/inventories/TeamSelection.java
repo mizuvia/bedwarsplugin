@@ -55,25 +55,12 @@ public class TeamSelection implements IGUI{
             }
 
             TeamManager.removePlayerFromTeam(plugin, participant);
-            TeamSelection.removePlayerFromItem(plugin, participant);
         }
 
         TeamManager.addPlayerToTeam(plugin, team, participant);
-        TeamSelection.addPlayerToItem(plugin, team, participant.getPlayer());
 
         participant.getPlayer().closeInventory();
         participant.getPlayer().sendMessage("§eВы успешно присоединились к команде " + team.getName() + "§e!");
-    }
-
-    public static void addPlayerToTeam(Plugin plugin, Team team, Participant participant){
-
-        participant.getPlayer().setPlayerListName("§8§l[" + team.getName() + "§8§l]§r§7 " + participant.getPlayer().getName());
-        plugin.getTab().addPlayer(participant);
-
-        participant.setTeam(team);
-
-        team.getTeammates().put(participant.getPlayer().getName(), participant);
-        team.increaseTeammatesAmount();
     }
 
     public static void addPlayerToItem(Plugin plugin, Team team, Player player){
