@@ -84,6 +84,6 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
         p.getPlayer().setPlayerListName(p.getPlayer().getDisplayName());
         String serverName = ChatColor.GOLD + "" + ChatColor.BOLD + "Mizuvia";
         p.getPlayer().setPlayerListHeader(serverName + "\n ");
-        p.getPlayer().setPlayerListFooter("\n§e§lСайт: §6§mizuvia.fun");
+        p.getPlayer().setPlayerListFooter("\n§e§lСайт: §6§lmizuvia.fun");
     }
 }

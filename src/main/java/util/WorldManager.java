@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class WorldManager {
     public static boolean canDropResource(Location location, Material material, int maxAmount){
-        Entity ent = Bukkit.getWorld("world").spawnEntity(location, EntityType.UNKNOWN);
+        Entity ent = Bukkit.getWorld("world").spawnEntity(location, EntityType.EGG);
         int itemsInArea = 0;
         for(Entity entity : ent.getNearbyEntities(3, 3, 3)){
             if(entity instanceof Item && ((Item) entity).getItemStack().getType() == material) itemsInArea++;
