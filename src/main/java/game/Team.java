@@ -19,12 +19,8 @@ public class Team {
     private Location spawnLocation;
     private Location resourceLocation;
     private HashMap<String, Integer> teamUpgrades = new HashMap<>();
-    private BlockData bedTop;
-    private BlockData bedBottom;
-    public int silverTimeout = 4;
-    public int silverCounter = 0;
-    public int goldTimeout = 8;
-    public int goldCounter = 0;
+    public int silverTimeout = (int) (1.5 * 20);
+    public int goldTimeout = 6 * 20;
     private boolean isBroken = false;
     private boolean isDead = false;
     private TeamUpgradesInventory upgradesInventory = new TeamUpgradesInventory(new TeamUpgrades(this), 27, "Улучшение команды");
@@ -36,15 +32,13 @@ public class Team {
     private Participant bedDestroyer;
     private Location shopVillager;
     private Location upgradesVillager;
-    private SpawnResources spawnResources;
+    private final SpawnResources spawnResources;
     private Location bedBottomLocation;
     private Location bedTopLocation;
 
     public void clearAfterGame(){
-        this.silverTimeout = 4;
-        this.silverCounter = 0;
-        this.goldTimeout = 8;
-        this.goldCounter = 0;
+        this.silverTimeout = (int) (1.5 * 20);
+        this.goldTimeout = 6 * 20;
         this.isBroken = false;
         this.isDead = false;
         this.trapsInventory = new TrapsInventory(new Traps(this), 27, "Ловушки");

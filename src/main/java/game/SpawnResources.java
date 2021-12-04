@@ -13,8 +13,10 @@ import util.WorldManager;
 
 public class SpawnResources extends TaskGUI {
 
-    private int silverCounter = (int) (1.5 * 20);
-    private int goldCounter = 6 * 20;
+    private static final int START_TIMEOUT_OF_SILVER = 30;
+    private static final int START_TIMEOUT_OF_GOLD = 120;
+    private int silverCounter = START_TIMEOUT_OF_SILVER;
+    private int goldCounter = START_TIMEOUT_OF_GOLD;
     private static final int MAX_AMOUNT_OF_SILVER = 52;
     private static final int MAX_AMOUNT_OF_GOLD = 6;
     private final Team team;
@@ -33,23 +35,30 @@ public class SpawnResources extends TaskGUI {
     }
 
     public void spawnSilver(){
-        if(team.silverCounter <= 0) {
-            if(!WorldManager.canDropResource(team.getResourceLocation(), Material.IRON_INGOT, MAX_AMOUNT_OF_SILVER)) return;
-            ItemStack silver = Utils.createItem(Material.IRON_INGOT, 1, "§eЖелезо");
-            Bukkit.getServer().getWorld("world").dropItem(team.getResourceLocation(), silver);
-            team.silverCounter = team.silverTimeout;
+        if(silverCounter <= 0) {
+            if(WorldManager.canDropResource(team.getResourceLocation(), Material.IRON_INGOT, MAX_AMOUNT_OF_SILVER)) {
+                ItemStack silver = Utils.createItem(Material.IRON_INGOT, 1, "§eЖелезо");
+                WorldManager.dropItem(team.getResourceLocation(), silver);
+            }
+            silverCounter = team.silverTimeout;
         }
-        team.silverCounter--;
+        silverCounter--;
     }
 
     public void spawnGold(){
-        if(team.goldCounter <= 0) {
-            if(!WorldManager.canDropResource(team.getResourceLocation(), Material.GOLD_INGOT, MAX_AMOUNT_OF_GOLD)) return;
-            ItemStack gold = Utils.createItem(Material.GOLD_INGOT, 1, "§eЗолото");
-            Bukkit.getServer().getWorld("world").dropItem(team.getResourceLocation(), gold);
-            team.goldCounter = team.goldTimeout;
+        if(goldCounter <= 0) {
+            if(WorldManager.canDropResource(team.getResourceLocation(), Material.GOLD_INGOT, MAX_AMOUNT_OF_GOLD)) {
+                ItemStack gold = Utils.createItem(Material.GOLD_INGOT, 1, "§eЗолото");
+                WorldManager.dropItem(team.getResourceLocation(), gold);
+            }
+            goldCounter = team.goldTimeout;
         }
-        team.goldCounter--;
+        goldCounter--;
+    }
+
+    public void resetCounter(){
+        this.silverCounter = START_TIMEOUT_OF_SILVER;
+        this.goldCounter = START_TIMEOUT_OF_GOLD;
     }
 
 }

@@ -11,6 +11,7 @@ import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -38,11 +39,11 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
 
             Participant p = new Participant(e.getPlayer(), this.getPlugin());
 
-            e.getPlayer().setDisplayName(Colors.replaceHex(PlayerManager.getGroupDisplayName(p)) + e.getPlayer().getName());
-            e.getPlayer().setPlayerListName(e.getPlayer().getDisplayName());
+            this.setNames(p);
 
             this.getPlugin().getPlayers().put(e.getPlayer().getName(), p);
             PlayerInv.setWaitingInventory(p);
+
 
             e.getPlayer().setScoreboard(p.getScoreboard());
             this.getPlugin().getSidebar().fillPlayerSidebar(p);
@@ -76,9 +77,13 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
 
         e.getPlayer().setHealth(20.0);
         e.getPlayer().setFoodLevel(20);
+    }
 
+    private void setNames(Participant p){
+        p.getPlayer().setDisplayName(Colors.replaceHex(PlayerManager.getGroupDisplayName(p)) + p.getPlayer().getName());
+        p.getPlayer().setPlayerListName(p.getPlayer().getDisplayName());
         String serverName = ChatColor.GOLD + "" + ChatColor.BOLD + "Mizuvia";
-        e.getPlayer().setPlayerListHeader(serverName + "\n ");
-        e.getPlayer().setPlayerListFooter("\n§e§lСайт: §6§mizuvia.fun");
+        p.getPlayer().setPlayerListHeader(serverName + "\n ");
+        p.getPlayer().setPlayerListFooter("\n§e§lСайт: §6§mizuvia.fun");
     }
 }
