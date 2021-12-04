@@ -78,7 +78,7 @@ public class ItemPrice {
         String word = getWord();
 
         String ending = "";
-        if(word.equals("железо") && word.equals("золото")){
+        if(word.equals("железо") || word.equals("золото")){
             word = word.substring(0, word.length() - 2);
             if(price > 10 && price < 20) ending = "а";
             else {
@@ -86,7 +86,7 @@ public class ItemPrice {
                 if(price % 10 == 0 || price % 10 > 4) ending = "а";
                 if(price % 10 == 1) ending = "о";
             }
-        } else if(word.equals("изумруд") && word.equals("алмаз")){
+        } else if(word.equals("изумруд") || word.equals("алмаз")){
             if(price > 10 && price < 20) ending = "ов";
             else {
                 if(price % 10 < 5 && price % 10 > 1) ending = "ов";
