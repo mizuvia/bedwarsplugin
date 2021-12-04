@@ -10,6 +10,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import tasks.TaskGUI;
+import util.Colors;
 import util.Utils;
 
 import java.util.ArrayList;
@@ -141,10 +142,10 @@ public class Time extends TaskGUI {
     }
 
     private void setStages(){
-        stages.add(new Stage(360, "§b§lАлмазы II"));
-        stages.add(new Stage(360, "§a§lИзумруды II"));
-        stages.add(new Stage(360, "§b§lАлмазы III"));
-        stages.add(new Stage(360, "§a§lИзумруды III"));
+        stages.add(new Stage(360, ArmorStandsManager.DIAMOND_COLOR + "§lАлмазы II"));
+        stages.add(new Stage(360, ArmorStandsManager.EMERALD_COLOR + "§lИзумруды II"));
+        stages.add(new Stage(360, ArmorStandsManager.DIAMOND_COLOR + "§lАлмазы III"));
+        stages.add(new Stage(360, ArmorStandsManager.EMERALD_COLOR + "§lИзумруды III"));
         stages.add(new Stage(360, "§c§lПоломка кроватей"));
         stages.add(new Stage(600, "§c§lКонец игры"));
     }

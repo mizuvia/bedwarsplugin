@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import tasks.DiamondSpawner;
 import tasks.EmeraldSpawner;
 import tasks.TaskGUI;
+import util.Colors;
 import util.Utils;
 import util.WorldManager;
 
@@ -25,6 +26,8 @@ public class ArmorStandsManager extends TaskGUI{
     private List<ArmorStands> emeraldArmorStands = new ArrayList<>();
     private final DiamondSpawner diamondSpawner;
     private final EmeraldSpawner emeraldSpawner;
+    public static final String DIAMOND_COLOR = Colors.fromHex("4beddb");
+    public static final String EMERALD_COLOR = Colors.fromHex("17dd61");
 
     public EmeraldSpawner getEmeraldSpawner() { return emeraldSpawner; }
 
@@ -55,7 +58,7 @@ public class ArmorStandsManager extends TaskGUI{
             Location loc = WorldManager.getLocation(cord);
             ArmorStands armorStands = new ArmorStands(loc);
 
-            armorStands.getStage().setCustomName("§b§lАлмазы I");
+            armorStands.getStage().setCustomName(DIAMOND_COLOR + "§lАлмазы I");
             armorStands.getTime().setCustomName("§e§lДо появления: " + Utils.getTime(DiamondSpawner.DIAMONDS_PHASES.get(0)));
             armorStands.getBlock().getEquipment().setHelmet(new ItemStack(Material.DIAMOND_BLOCK, 1));
 
@@ -66,7 +69,7 @@ public class ArmorStandsManager extends TaskGUI{
             Location loc = WorldManager.getLocation(cord);
             ArmorStands armorStands = new ArmorStands(loc);
 
-            armorStands.getStage().setCustomName("§a§lИзумруды I");
+            armorStands.getStage().setCustomName(EMERALD_COLOR + "§lИзумруды I");
             armorStands.getTime().setCustomName("§e§lДо появления: " + Utils.getTime(EmeraldSpawner.EMERALD_PHASES.get(0)));
             armorStands.getBlock().getEquipment().setHelmet(new ItemStack(Material.EMERALD_BLOCK, 1));
 
@@ -116,14 +119,14 @@ public class ArmorStandsManager extends TaskGUI{
         if(stage % 2 == 0){
             this.getDiamondSpawner().setDiamondTimeout(DiamondSpawner.DIAMONDS_PHASES.get(phase + 1));
             for(ArmorStands arm : this.getDiamondArmorStands())
-                arm.getStage().setCustomName("§a§lАлмазы " + roman);
+                arm.getStage().setCustomName(DIAMOND_COLOR + "§lАлмазы " + roman);
         } else {
             this.getEmeraldSpawner().setEmeraldTimeout(EmeraldSpawner.EMERALD_PHASES.get(phase + 1));
             for(ArmorStands arm : this.getEmeraldArmorStands())
-                arm.getStage().setCustomName("§a§lИзумруды " + roman);
+                arm.getStage().setCustomName(EMERALD_COLOR + "§lИзумруды " + roman);
         }
         for(Player p : Bukkit.getOnlinePlayers()){
-            p.sendMessage("§7Генератор" + (stage % 2 == 0 ? "§b§lАлмазов" : "§a§lИзумрудов") + "§r§7улучшен до §a§l" + roman + "§r§7уровня");
+            p.sendMessage("§7Генератор " + (stage % 2 == 0 ? DIAMOND_COLOR + "§lАлмазов" : EMERALD_COLOR + "§lИзумрудов") + " §r§7улучшен до " + (stage % 2 == 0 ? DIAMOND_COLOR : EMERALD_COLOR) + "§l" + roman + " §r§7уровня");
 
         }
     }
