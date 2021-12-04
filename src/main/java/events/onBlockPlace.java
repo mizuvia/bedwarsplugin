@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 import util.Utils;
+import util.WorldManager;
 
 public class onBlockPlace extends SimpleListener implements Listener, EventExecutor {
     public onBlockPlace(Plugin plugin) {
@@ -33,7 +34,7 @@ public class onBlockPlace extends SimpleListener implements Listener, EventExecu
         this.getPlugin().getGame().getBlockList().add(e.getBlockPlaced());
         if(e.getBlockPlaced().getType().equals(Material.TNT)){
             e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
-            Bukkit.getWorld("world").spawnEntity(Utils.centralizeLocation(e.getBlockPlaced().getLocation()), EntityType.PRIMED_TNT);
+            Bukkit.getWorld("world").spawnEntity(WorldManager.centralizeLocation(e.getBlockPlaced().getLocation()), EntityType.PRIMED_TNT);
             e.setCancelled(true);
         }
     }

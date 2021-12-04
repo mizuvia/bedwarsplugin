@@ -2,21 +2,23 @@ package tasks;
 
 import game.ArmorStands;
 import game.Game;
+import main.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import util.Utils;
 import util.WorldManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmeraldSpawner {
 
     private final Game game;
-    private int emeraldTimeout = 65;
-    private int emeraldTimeLeft = 65;
+    private int emeraldTimeout = EMERALD_PHASES.get(0);
+    private int emeraldTimeLeft = EMERALD_PHASES.get(0);
     private static final int MAX_AMOUNT_OF_EMERALDS = 3;
+    public static final List<Integer> EMERALD_PHASES = new ArrayList<>();
 
     public void setEmeraldTimeLeft(int emeraldTimeLeft) { this.emeraldTimeLeft = emeraldTimeLeft; }
 
@@ -26,7 +28,13 @@ public class EmeraldSpawner {
 
     public void setEmeraldTimeout(int emeraldTimeout){ this.emeraldTimeout = emeraldTimeout; }
 
-    public EmeraldSpawner(Game game){ this.game = game; }
+    public EmeraldSpawner(Game game){
+        this.game = game;
+        if(Config.getPlayersPerTeam() == 1 || Config.getPlayersPerTeam() == 2)
+            EMERALD_PHASES.addAll(List.of(65, 45, 30));
+        if(Config.getPlayersPerTeam() == 3 || Config.getPlayersPerTeam() == 4 || Config.getPlayersPerTeam() == 8)
+            EMERALD_PHASES.addAll(List.of(56, 40, 28));
+    }
 
     public void updateSpawner() {
         spawnItem();
@@ -53,4 +61,8 @@ public class EmeraldSpawner {
 
     public Game getGame() { return this.game; }
 
+    public void resetData() {
+        this.setEmeraldTimeLeft(EMERALD_PHASES.get(0));
+        this.setEmeraldTimeout(EMERALD_PHASES.get(0));
+    }
 }

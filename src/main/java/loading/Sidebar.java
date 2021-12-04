@@ -60,7 +60,7 @@ public class Sidebar{
         keyList.clear();
 
         putInList("SERVER_NAME", "   " + ChatColor.DARK_GRAY + Config.getServerName());
-        putInList("STAGE", ChatColor.AQUA + "" + ChatColor.BOLD + "Алмазы II: " + ChatColor.GRAY + Utils.getTime(getTime().getStage().getTime()));
+        putInList("STAGE", ChatColor.AQUA + "" + ChatColor.BOLD + "Алмазы II: " + ChatColor.WHITE + Utils.getTime(getTime().getStage().getTime()));
         putInList("GAP1", "  ");
         for(String team : Config.getTeamsNames())
             putInList("TEAM_" + team.toUpperCase(Locale.ROOT), "§a✔ §7§l| §r" + this.getPlugin().getTeams().get(team).getName().replace("§l", ""));

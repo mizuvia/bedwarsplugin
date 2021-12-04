@@ -20,6 +20,7 @@ import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 import util.PlayerInv;
 import util.Utils;
+import util.WorldManager;
 
 public class onEntityDamage extends SimpleListener implements Listener, EventExecutor {
 
@@ -37,7 +38,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
                 e.setCancelled(true);
                 if(this.getPlugin().isLoading()) {
                     if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getEntity().getName()));
-                    e.getEntity().teleport(Utils.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
+                    e.getEntity().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
                 } else {
                     boolean isFinal = this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().isBroken();
 

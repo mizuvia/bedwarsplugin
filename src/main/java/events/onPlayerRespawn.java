@@ -10,6 +10,7 @@ import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 import util.PlayerInv;
 import util.Utils;
+import util.WorldManager;
 
 public class onPlayerRespawn extends SimpleListener implements Listener, EventExecutor {
 
@@ -23,7 +24,7 @@ public class onPlayerRespawn extends SimpleListener implements Listener, EventEx
 
         if(this.getPlugin().isLoading()) {
             if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getPlayer().getName()));
-            e.setRespawnLocation(Utils.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
+            e.setRespawnLocation(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
         }
 //        if (this.getPlugin().isWorking()) {
 //            ((Player) e.getEntity()).setGameMode(GameMode.SPECTATOR);

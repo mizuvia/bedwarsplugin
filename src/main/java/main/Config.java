@@ -1,11 +1,10 @@
 package main;
 
 import game.Team;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import util.Utils;
+import util.WorldManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +71,7 @@ public class Config {
         server_name = config.getString("server_name");
         map_name = config.getString("map_name");
 
-        center = Utils.getLocation(config.getString("world_center"));
+        center = WorldManager.getLocation(config.getString("world_center"));
     }
 
     private File loadConfig(){
@@ -111,15 +110,15 @@ public class Config {
         String shop_cord = config.getString("teams." + color + ".shop");
         String upgrades_cord = config.getString("teams." + color + ".upgrades_shop");
 
-        team.setResourceLocation(Utils.getLocation(cord));
-        team.setSpawnLocation(Utils.getLocation(spawnCord));
-        team.setBedBottomLocation(Utils.getLocation(cords_bottom));
-        team.setBedTopLocation(Utils.getLocation(cords_top));
-        team.setShopVillager(Utils.getLocation(shop_cord));
-        team.setUpgradesVillager(Utils.getLocation(upgrades_cord));
+        team.setResourceLocation(WorldManager.getLocation(cord));
+        team.setSpawnLocation(WorldManager.getLocation(spawnCord));
+        team.setBedBottomLocation(WorldManager.getLocation(cords_bottom));
+        team.setBedTopLocation(WorldManager.getLocation(cords_top));
+        team.setShopVillager(WorldManager.getLocation(shop_cord));
+        team.setUpgradesVillager(WorldManager.getLocation(upgrades_cord));
     }
 
     public static void reloadValues(){
-        center = Utils.getLocation(config.getString("world_center"));
+        center = WorldManager.getLocation(config.getString("world_center"));
     }
 }

@@ -11,12 +11,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import util.Utils;
 import util.WorldManager;
 
+import java.util.List;
+
 public class DiamondSpawner {
 
     private final Game game;
-    private int diamondTimeout = 28;
-    private int diamondTimeLeft = 28;
+    private int diamondTimeout = DIAMONDS_PHASES.get(0);
+    private int diamondTimeLeft = DIAMONDS_PHASES.get(0);
     private static final int MAX_AMOUNT_OF_DIAMONDS = 6;
+    public static final List<Integer> DIAMONDS_PHASES = List.of(28, 22, 12);
 
     private void setDiamondTimeLeft(int diamondTimeLeft) { this.diamondTimeLeft = diamondTimeLeft; }
 
@@ -52,4 +55,9 @@ public class DiamondSpawner {
     }
 
     public Game getGame() {return this.game;}
+
+    public void resetData() {
+        this.setDiamondTimeout(DIAMONDS_PHASES.get(0));
+        this.setDiamondTimeLeft(DIAMONDS_PHASES.get(0));
+    }
 }

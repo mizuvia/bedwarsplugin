@@ -15,7 +15,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
-import util.Utils;
+import util.WorldManager;
 
 import java.util.Locale;
 
@@ -57,7 +57,7 @@ public class onBlockBreak extends SimpleListener implements Listener, EventExecu
         }
         if(e.getBlock().getType().equals(Material.REDSTONE_ORE)){
             e.setDropItems(false);
-            Bukkit.getWorld("world").dropItem(Utils.getLocation(e.getBlock().getLocation().getBlockX() + " " + e.getBlock().getLocation().getBlockY() + " " + e.getBlock().getLocation().getBlockZ()), new ItemStack(Material.REDSTONE_ORE, 1));
+            Bukkit.getWorld("world").dropItem(WorldManager.getLocation(e.getBlock().getLocation().getBlockX() + " " + e.getBlock().getLocation().getBlockY() + " " + e.getBlock().getLocation().getBlockZ()), new ItemStack(Material.REDSTONE_ORE, 1));
         }
         if(!this.getPlugin().getGame().getBlockList().contains(e.getBlock())) e.setCancelled(true);
 
