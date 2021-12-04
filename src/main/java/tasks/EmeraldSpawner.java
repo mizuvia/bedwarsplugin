@@ -15,8 +15,8 @@ import java.util.List;
 public class EmeraldSpawner {
 
     private final Game game;
-    private int emeraldTimeout = EMERALD_PHASES.get(0);
-    private int emeraldTimeLeft = EMERALD_PHASES.get(0);
+    private int emeraldTimeout;
+    private int emeraldTimeLeft;
     private static final int MAX_AMOUNT_OF_EMERALDS = 3;
     public static final List<Integer> EMERALD_PHASES = new ArrayList<>();
 
@@ -34,6 +34,8 @@ public class EmeraldSpawner {
             EMERALD_PHASES.addAll(List.of(65, 45, 30));
         if(Config.getPlayersPerTeam() == 3 || Config.getPlayersPerTeam() == 4 || Config.getPlayersPerTeam() == 8)
             EMERALD_PHASES.addAll(List.of(56, 40, 28));
+        this.emeraldTimeLeft = EMERALD_PHASES.get(0);
+        this.emeraldTimeout = EMERALD_PHASES.get(0);
     }
 
     public void updateSpawner() {
