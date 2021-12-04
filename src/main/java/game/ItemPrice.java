@@ -33,6 +33,7 @@ public class ItemPrice {
         }
     }
 
+    @Override
     public String toString(){
         return "§8Стоимость: " + getColor() + price + " " + makeEnding();
     }
@@ -75,7 +76,6 @@ public class ItemPrice {
 
     private String makeEnding(){
         String word = getWord();
-        char lastLetter = word.toLowerCase(Locale.ROOT).charAt(word.length() - 1);
 
         String ending = "";
         if(word.equals("железо") && word.equals("золото")){

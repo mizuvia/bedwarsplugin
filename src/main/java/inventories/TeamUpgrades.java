@@ -17,6 +17,7 @@ import util.Utils;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.logging.Logger;
 
 public class TeamUpgrades implements IGUI{
     private final Team team;
@@ -237,6 +238,7 @@ public class TeamUpgrades implements IGUI{
             lore.add("§a§lКУПЛЕНО");
         }
         else lore.add(var1, lvls.get(level + 1).getItemPrice().toString());
+        Logger.getLogger("").info(lvls.get(level).getItemPrice().toString());
     }
 
     @NotNull
