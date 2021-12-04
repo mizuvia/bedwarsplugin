@@ -29,7 +29,7 @@ public class TeamUpgrades implements IGUI{
         this.team = team;
         upgrades.put("Sharpness", new UpgradeInfo(
             "§bОстрота",
-            Arrays.asList(new LevelInfo(new ItemPrice(Material.DIAMOND, 2), 1), new LevelInfo(new ItemPrice(Material.DIAMOND, 20), 2)),
+            Arrays.asList(new LevelInfo(new ItemPrice(Material.DIAMOND, 4), 1), new LevelInfo(new ItemPrice(Material.DIAMOND, 20), 2)),
             Enchantment.DAMAGE_ALL,
             Arrays.asList(Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.DIAMOND_SWORD)
         ));
@@ -229,6 +229,7 @@ public class TeamUpgrades implements IGUI{
         lore.add(var0, "§c" + levelStr);
 
         List<LevelInfo> lvls = upgrades.get(name).getLevels();
+        Logger.getLogger("").info(lvls.get(level).getItemPrice().toString());
 
         int var1 = lore.indexOf(lvls.get(level).getItemPrice().toString());
         lore.remove(lvls.get(level).getItemPrice().toString());
@@ -238,7 +239,6 @@ public class TeamUpgrades implements IGUI{
             lore.add("§a§lКУПЛЕНО");
         }
         else lore.add(var1, lvls.get(level + 1).getItemPrice().toString());
-        Logger.getLogger("").info(lvls.get(level).getItemPrice().toString());
     }
 
     @NotNull
