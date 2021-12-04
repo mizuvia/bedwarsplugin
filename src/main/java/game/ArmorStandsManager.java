@@ -27,7 +27,7 @@ public class ArmorStandsManager extends TaskGUI{
     private final DiamondSpawner diamondSpawner;
     private final EmeraldSpawner emeraldSpawner;
     public static final String DIAMOND_COLOR = Colors.fromHex("4beddb");
-    public static final String EMERALD_COLOR = Colors.fromHex("41f385");
+    public static final String EMERALD_COLOR = Colors.fromHex("00f25c");
 
     public EmeraldSpawner getEmeraldSpawner() { return emeraldSpawner; }
 
