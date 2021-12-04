@@ -239,6 +239,8 @@ public class TeamUpgrades implements IGUI{
             lore.add("§a§lКУПЛЕНО");
         }
         else lore.add(var1, lvls.get(level + 1).getItemPrice().toString());
+
+        meta.setLore(lore);
     }
 
     @NotNull
