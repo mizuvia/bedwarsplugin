@@ -13,7 +13,7 @@ public class WorldManager {
         Entity ent = Bukkit.getWorld("world").spawnEntity(location, EntityType.EGG);
         int itemsInArea = 0;
         for(Entity entity : ent.getNearbyEntities(3, 3, 3)){
-            if(entity instanceof Item && ((Item) entity).getItemStack().getType() == material) itemsInArea++;
+            if(entity instanceof Item && ((Item) entity).getItemStack().getType() == material) itemsInArea += ((Item) entity).getItemStack().getAmount();
         }
         ent.remove();
         return itemsInArea < maxAmount;
@@ -22,7 +22,7 @@ public class WorldManager {
     public static boolean canDropResource(Entity ent, Material material, int maxAmount){
         int itemsInArea = 0;
         for(Entity entity : ent.getNearbyEntities(3, 3, 3)){
-            if(entity instanceof Item && ((Item) entity).getItemStack().getType() == material) itemsInArea++;
+            if(entity instanceof Item && ((Item) entity).getItemStack().getType() == material) itemsInArea += ((Item) entity).getItemStack().getAmount();
         }
         return itemsInArea < maxAmount;
     }
