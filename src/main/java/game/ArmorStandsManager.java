@@ -21,8 +21,8 @@ public class ArmorStandsManager extends TaskGUI{
     private final Game game;
     private float angle = 0;
     private int direction = 1;
-    private List<ArmorStands> diamondArmorStands;
-    private List<ArmorStands> emeraldArmorStands;
+    private List<ArmorStands> diamondArmorStands = new ArrayList<>();
+    private List<ArmorStands> emeraldArmorStands = new ArrayList<>();
     private final DiamondSpawner diamondSpawner;
     private final EmeraldSpawner emeraldSpawner;
 
