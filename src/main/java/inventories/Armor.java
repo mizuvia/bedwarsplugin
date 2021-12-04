@@ -26,22 +26,22 @@ public class Armor implements IGUI{
             case 29 -> {
                 if (clickedItem.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)) break;
                 if (this.getInventory().makeTrade(player, clickedItem)) {
-                    this.getInventory().setItem(29, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
+                    this.getInventory().setItem(28, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
                 }
             }
             case 30 -> {
                 if (clickedItem.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)) break;
                 if (this.getInventory().makeTrade(player, clickedItem)) {
+                    this.getInventory().setItem(28, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
                     this.getInventory().setItem(29, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
-                    this.getInventory().setItem(30, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
                 }
             }
             case 32 -> {
                 if (clickedItem.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)) break;
                 if (this.getInventory().makeTrade(player, clickedItem)) {
+                    this.getInventory().setItem(28, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
                     this.getInventory().setItem(29, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
                     this.getInventory().setItem(30, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
-                    this.getInventory().setItem(32, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
                 }
             }
         }
