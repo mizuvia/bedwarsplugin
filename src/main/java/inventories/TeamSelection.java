@@ -85,7 +85,7 @@ public class TeamSelection implements IGUI{
         ItemStack item = plugin.getTeamSelectionInventory().getItem(index);
         ItemMeta meta = item.getItemMeta();
         List<String> lore = meta.getLore();
-        lore.remove("§r" + PlayerManager.getCodeColor(color) + participant.getPlayer().getName());
+        lore.remove(PlayerManager.getCodeColor(color) + participant.getPlayer().getName());
         meta.setLore(lore);
         item.setItemMeta(meta);
 

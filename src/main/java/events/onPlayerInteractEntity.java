@@ -1,6 +1,8 @@
 package events;
 
 import main.Plugin;
+
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
@@ -27,6 +29,28 @@ public class onPlayerInteractEntity extends SimpleListener implements Listener, 
                 if(this.getPlugin().getPlayers().get(e.getPlayer().getName()).hasTeam()) e.getPlayer().openInventory(this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getUpgradesInventory());
                 else e.getPlayer().sendMessage("§cВы не находитесь в команде!");
             }
+        }else if (e.getRightClicked() instanceof IronGolem) {
+        	e.setCancelled(true);
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
         }
     }
 }

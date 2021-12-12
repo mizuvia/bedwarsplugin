@@ -86,7 +86,6 @@ public class Plugin extends JavaPlugin {
 
     @Override
     public void onEnable(){
-
         File worlds = new File("./", "worlds");
         for(int i = 0; i < worlds.list().length; i++){
             File w = new File("./worlds/", worlds.list()[i]);
@@ -151,7 +150,7 @@ public class Plugin extends JavaPlugin {
 
         this.getGame().stop();
     }
-
+    
     private void loadJedis(){
         Jedis subJedis = new Jedis("127.0.0.1", 6379);
         this.jedis = new Jedis("127.0.0.1", 6379);
