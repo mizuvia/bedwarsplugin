@@ -29,7 +29,9 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         PlayerJoinEvent e = (PlayerJoinEvent) event;
-
+        if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+        	e.getPlayer().getWorld().getPlayers().forEach(p -> p.showPlayer(e.getPlayer()));
+        }
         if(this.getPlugin().isLoading()){
             this.getPlugin().increaseOnlinePlayers();
             this.getPlugin().getWaiting().checkAmount();
