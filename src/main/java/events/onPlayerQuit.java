@@ -26,7 +26,9 @@ public class onPlayerQuit extends SimpleListener implements Listener, EventExecu
 
         this.getPlugin().getTab().removePlayerFromTabs(p);
         this.getPlugin().decreaseOnlinePlayers();
-
+        if (p.inInvis()) {
+        	p.show();
+        }
         if(p.hasTeam()){
             this.getPlugin().getTeamSelectionInventory().removePlayer(p);
             TeamManager.removePlayerFromTeam(this.getPlugin(), p);

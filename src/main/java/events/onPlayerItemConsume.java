@@ -34,8 +34,8 @@ public class onPlayerItemConsume extends SimpleListener implements Listener, Eve
 
         if(e.getItem().getType().equals(Material.POTION)){
         	//e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
+        	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> {e.getPlayer().getInventory().setItemInMainHand(null);});
         	if (((PotionMeta)e.getItem().getItemMeta()).hasCustomEffect(PotionEffectType.INVISIBILITY)) {
-        		Bukkit.broadcastMessage("has invis");
         		getPlugin().getPlayers().get(e.getPlayer().getName()).hide();
         	}
         	

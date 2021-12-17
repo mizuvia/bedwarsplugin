@@ -5,7 +5,10 @@ import game.Game;
 import main.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
+
 import util.Utils;
 import util.WorldManager;
 
@@ -56,7 +59,8 @@ public class EmeraldSpawner {
             for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getEmeraldArmorStands()){
                 if(!WorldManager.canDropResource(armorStands.getStage(), Material.EMERALD, MAX_AMOUNT_OF_EMERALDS)) return;
                 ItemStack emerald = Utils.createItem(Material.EMERALD, 1, "§eИзумруд");
-                Bukkit.getServer().getWorld("world").dropItem(armorStands.getStage().getLocation(), emerald);
+                Item item = Bukkit.getServer().getWorld("world").dropItem(armorStands.getStage().getLocation(), emerald);
+                item.setVelocity(new Vector());
             }
         }
     }

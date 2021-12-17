@@ -30,6 +30,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import redis.clients.jedis.Jedis;
 import tab.Tab;
 import util.PlayerInv;
+import util.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -154,7 +155,7 @@ public class Plugin extends JavaPlugin {
 
     public void onDisable(){
         getLogger().info("disabled!");
-
+        Bukkit.getOnlinePlayers().forEach(p -> Utils.connectToHub(p));
         this.getGame().stop();
     }
     

@@ -34,6 +34,13 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         EntityDamageEvent e = (EntityDamageEvent) event;
 
         if(e.getEntity() instanceof Player){
+        	Player pl = (Player) e.getEntity();
+        	if (e.getFinalDamage() >= pl.getHealth()) {
+        		Participant partic = getPlugin().getPlayers().get(pl.getName());
+        		if (partic.inInvis()) {
+        			partic.show();
+        		}
+        	}
             if(((Player) e.getEntity()).getHealth() - e.getDamage() <= 0) {
                 e.setCancelled(true);
                 if(this.getPlugin().isLoading()) {

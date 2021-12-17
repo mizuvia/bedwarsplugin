@@ -8,6 +8,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
+
 import util.Utils;
 import util.WorldManager;
 
@@ -49,7 +51,8 @@ public class DiamondSpawner {
             for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getDiamondArmorStands()){
                 if(!WorldManager.canDropResource(armorStands.getStage(), Material.DIAMOND, MAX_AMOUNT_OF_DIAMONDS)) return;
                 ItemStack diamond = Utils.createItem(Material.DIAMOND, 1, "§eАлмаз");
-                Bukkit.getServer().getWorld("world").dropItem(armorStands.getStage().getLocation(), diamond);
+                Item item = Bukkit.getServer().getWorld("world").dropItem(armorStands.getStage().getLocation(), diamond);
+                item.setVelocity(new Vector());
             }
         }
     }

@@ -63,12 +63,20 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             if(party != null){
                 PartyManager.addPlayer(this.getPlugin(), party, MongoService.findByUUID(p.getPlayer().getUniqueId()));
             } else {
+            	Team freeTeam = null;
                 for(Team team : this.getPlugin().getTeams().values()){
                     if(team.getTeammatesAmount() != Config.getPlayersPerTeam()){
-                        TeamManager.addPlayerToTeam(this.getPlugin(), team, p);
-                        return;
+                    	if (freeTeam == null) {
+                    		freeTeam = team;
+                    	}else {
+                    		if (freeTeam.getTeammatesAmount() > team.getTeammatesAmount()) {
+                    			freeTeam = team;
+                    		}
+                    	}
                     }
                 }
+              TeamManager.addPlayerToTeam(this.getPlugin(), freeTeam, p);
+              return;
             }
         }
         if(this.getPlugin().isWorking()){
