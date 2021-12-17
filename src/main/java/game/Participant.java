@@ -278,6 +278,7 @@ public class Participant {
     		showTask.cancel();
     	}
 		hidenArmor = bukkitPlayer.getInventory().getArmorContents();
+		bukkitPlayer.getInventory().setArmorContents(null);
 		showTask = new BukkitRunnable() {
 			@Override
 			public void run() {

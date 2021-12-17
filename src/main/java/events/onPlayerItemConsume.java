@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.EventExecutor;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -33,9 +34,12 @@ public class onPlayerItemConsume extends SimpleListener implements Listener, Eve
 
         if(e.getItem().getType().equals(Material.POTION)){
         	//e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
-
+        	if (((PotionMeta)e.getItem().getItemMeta()).hasCustomEffect(PotionEffectType.INVISIBILITY)) {
+        		Bukkit.broadcastMessage("has invis");
+        		getPlugin().getPlayers().get(e.getPlayer().getName()).hide();
+        	}
+        	
             if(((PotionMeta) e.getItem().getItemMeta()).getBasePotionData().getType().equals(PotionType.INVISIBILITY)) {
-            	getPlugin().getPlayers().get(e.getPlayer().getName()).hide();
 //                ItemStack helmet = e.getPlayer().getInventory().getHelmet().clone();
 //                ItemStack chestplate = e.getPlayer().getInventory().getChestplate().clone();
 //                ItemStack leggings = e.getPlayer().getInventory().getLeggings().clone();
