@@ -10,6 +10,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -17,6 +19,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class Participant {
 
@@ -36,7 +40,9 @@ public class Participant {
     private final Scoreboard scoreboard;
     private final Objective objective;
     private final HashMap<String, String> sidebarStrings = new HashMap<>();
-
+    private BukkitTask showTask;
+    private ItemStack[] hidenArmor;
+    
     public Participant(Player player, Plugin plugin){
         this.player = player;
         this.plugin = plugin;
@@ -258,4 +264,40 @@ public class Participant {
 
         this.getPlayer().getInventory().addItem(item);
     }
+    
+    public boolean inInvis() {
+    	return showTask != null;
+    }
+    
+    public void hide() {
+    	Player bukkitPlayer = getPlayer();
+    	if (bukkitPlayer == null || !bukkitPlayer.isOnline()) {
+    		return;
+    	}
+    	if (inInvis()) {
+    		showTask.cancel();
+    	}
+		hidenArmor = bukkitPlayer.getInventory().getArmorContents();
+		showTask = new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (bukkitPlayer.isOnline()) {
+					bukkitPlayer.getInventory().setArmorContents(hidenArmor);
+				}
+				showTask = null;
+			}
+		}.runTaskLater(getPlugin(), 600);
+    }
+    
+    public void show() {
+    	Player bukkitPlayer = getPlayer();
+    	if (bukkitPlayer == null || !bukkitPlayer.isOnline()) {
+    		return;
+    	}
+    	if (inInvis()) {
+    		showTask.cancel();
+    		bukkitPlayer.getInventory().setArmorContents(hidenArmor);
+    	}
+    }
+    
 }

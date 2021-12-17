@@ -11,6 +11,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 
+import game.Participant;
+
 public class onEntityDamageByEntity extends SimpleListener implements Listener, EventExecutor {
     public onEntityDamageByEntity(Plugin plugin) {
         super(plugin);
@@ -40,6 +42,11 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
             e.setDamage(8.0);
         }
         if(e.getDamager() instanceof Player){
+        	Player damager = (Player) e.getDamager();
+        	Participant p = getPlugin().getPlayers().get(damager.getName());
+        	if (p.inInvis()) {
+        		p.show();
+        	}
             if(e.getEntity() instanceof IronGolem){
                 if(this.getPlugin().getPlayers().get(e.getDamager().getName()).getTeam().getIronGolem() == null) return;
                 if(this.getPlugin().getPlayers().get(e.getDamager().getName()).getTeam().getIronGolem().equals(e.getEntity())) e.setCancelled(true);
