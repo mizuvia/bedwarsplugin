@@ -11,7 +11,9 @@ import loading.Sidebar;
 import loading.Waiting;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftItem;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventPriority;
@@ -92,8 +94,13 @@ public class Plugin extends JavaPlugin {
             if(w.isFile()) continue;
             Bukkit.unloadWorld(worlds.list()[i], false);
             WorldCreator world = new WorldCreator(worlds.list()[i]);
-
-            Bukkit.getServer().createWorld(world).setAutoSave(false);
+            World wrld =  Bukkit.getServer().createWorld(world);
+            wrld.setAutoSave(false);
+            wrld.getEntities().forEach(ent -> {
+            	if (ent instanceof LivingEntity || ent instanceof CraftItem) {
+            		ent.remove();
+            	}
+            });
         }
 
         this.reloadWorld();

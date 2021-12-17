@@ -38,7 +38,6 @@ public class Utils {
         ByteArrayDataOutput hub = ByteStreams.newDataOutput();
         hub.writeUTF("Connect");
         hub.writeUTF("hub");
-
         PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload(new MinecraftKey("bungeecord:main"), new PacketDataSerializer(Unpooled.wrappedBuffer(hub.toByteArray())));
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }

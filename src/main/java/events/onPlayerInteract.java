@@ -121,9 +121,6 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
 
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> getPlugin().getPlayers().get(e.getPlayer().getName()).setUnderMilk(false), 1200L);
         }
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-        	Bukkit.broadcastMessage(e.getClickedBlock().getType().name());
-        }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().name().endsWith("_BED")) {
         	e.setCancelled(true);
         }
