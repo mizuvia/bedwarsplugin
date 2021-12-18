@@ -47,6 +47,7 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
                 		break;
                 	}
                 }
+                Bukkit.broadcastMessage(golemTeam + "");
                 if (golemTeam != null) {
                 	getPlugin().getPlayers().get(e.getDamager().getName()).getLastDamager().put("големом команды " + golemTeam.getColor() + golemTeam.getName());
                 }

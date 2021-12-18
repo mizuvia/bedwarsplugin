@@ -8,15 +8,20 @@ import inventories.TeamSelection;
 import main.Config;
 import main.PlayerManager;
 import main.Plugin;
+
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.EventExecutor;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import util.*;
 
@@ -29,8 +34,8 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         PlayerJoinEvent e = (PlayerJoinEvent) event;
-        if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-        	e.getPlayer().getWorld().getPlayers().forEach(p -> p.showPlayer(e.getPlayer()));
+        if (e.getPlayer().getGameMode() == GameMode.SURVIVAL || e.getPlayer().getGameMode() == GameMode.ADVENTURE) {
+        	e.getPlayer().getWorld().getPlayers().forEach(p -> p.showPlayer(getPlugin(), e.getPlayer()));
         }
         if(this.getPlugin().isLoading()){
             this.getPlugin().increaseOnlinePlayers();
@@ -44,6 +49,13 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             this.setNames(p);
             if (!this.plugin.getPlayers().containsKey(e.getPlayer().getName())) {
             	e.getPlayer().getEnderChest().clear();
+            	for (PotionEffect eff : new ArrayList<>(e.getPlayer().getActivePotionEffects())) {
+            		e.getPlayer().removePotionEffect(eff.getType());
+            	}
+            	e.getPlayer().setFoodLevel(20);
+            	e.getPlayer().setLevel(0);
+            	e.getPlayer().setExp(0);
+            	e.getPlayer().setHealth(e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
             }
             this.getPlugin().getPlayers().put(e.getPlayer().getName(), p);
             PlayerInv.setWaitingInventory(p);
