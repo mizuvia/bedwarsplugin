@@ -34,13 +34,10 @@ public class Game {
     private final BowsInventory bowsInventory = new BowsInventory(new Bows(this), 54, "Луки");
     private final PotionsInventory potionsInventory = new PotionsInventory(new Potions(this), 54, "Зелья");
     private List<Villager> villagers = new ArrayList<>();
-    private HashMap<String, String> playersDamagers = new HashMap<>();
     private final List<Inventory> chests = new ArrayList<>();
     private int deadTeams = 0;
 
     public List<Inventory> getChestsInventories() { return this.chests; }
-
-    public HashMap<String, String> getPlayersDamagers() { return this.playersDamagers; }
 
     public BlocksInventory getBlocksInventory(){
         return this.blocksInventory;
@@ -140,7 +137,6 @@ public class Game {
 
     private void resetLists() {
         this.villagers = new ArrayList<>();
-        this.playersDamagers = new HashMap<>();
         this.inaccessibleBlocks = new ArrayList<>();
         this.blockList = new ArrayList<>();
     }

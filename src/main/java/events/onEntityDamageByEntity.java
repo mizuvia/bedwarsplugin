@@ -12,6 +12,7 @@ import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import game.Participant;
+import game.Team;
 
 public class onEntityDamageByEntity extends SimpleListener implements Listener, EventExecutor {
     public onEntityDamageByEntity(Plugin plugin) {
@@ -32,14 +33,24 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
             if(e.getDamager() instanceof Player){
                 if(this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getColor().equals(this.getPlugin().getPlayers().get(e.getDamager().getName()).getTeam().getColor())) e.setCancelled(true);
                 if(!e.getEntity().getUniqueId().equals(e.getDamager().getUniqueId())){
-                    this.getPlugin().getGame().getPlayersDamagers().remove(e.getEntity().getName());
-                    this.getPlugin().getGame().getPlayersDamagers().put(e.getEntity().getName(), e.getDamager().getName());
-                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> this.getPlugin().getGame().getPlayersDamagers().remove(e.getEntity().getName()), 400);
+                	getPlugin().getPlayers().get(e.getEntity().getName()).getLastDamager().put(e.getDamager().getName());
                 }
             }
         }
         if(e.getDamager() instanceof IronGolem){
             e.setDamage(8.0);
+            if (e.getEntity() instanceof Player) {
+                Team golemTeam = null;
+                for (Team team : getPlugin().getTeams().values()) {
+                	if (e.getEntity().equals(team.getIronGolem())) {
+                		golemTeam = team;
+                		break;
+                	}
+                }
+                if (golemTeam != null) {
+                	getPlugin().getPlayers().get(e.getDamager().getName()).getLastDamager().put("големом команды " + golemTeam.getColor() + golemTeam.getName());
+                }
+            }
         }
         if(e.getDamager() instanceof Player){
         	Player damager = (Player) e.getDamager();

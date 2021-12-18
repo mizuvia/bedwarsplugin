@@ -14,6 +14,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.EventExecutor;
@@ -35,81 +36,108 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
         if(e.getEntity() instanceof Player){
         	Player pl = (Player) e.getEntity();
-        	if (e.getFinalDamage() >= pl.getHealth()) {
+            if(e.getFinalDamage() >= pl.getHealth()) {
+                e.setCancelled(true);
         		Participant partic = getPlugin().getPlayers().get(pl.getName());
         		if (partic.inInvis()) {
         			partic.show();
         		}
-        	}
-            if(((Player) e.getEntity()).getHealth() - e.getDamage() <= 0) {
-                e.setCancelled(true);
                 if(this.getPlugin().isLoading()) {
                     if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getEntity().getName()));
                     e.getEntity().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
                 } else {
                     boolean isFinal = this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().isBroken();
-
-                    if (!this.getPlugin().getGame().getPlayersDamagers().containsKey(e.getEntity().getName())) {
-                        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                            player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getEntity().getName())) + e.getEntity().getName() + "§7 упал в бездну." + " " + (isFinal ? "§b§lФинальное убийство!" : ""));
-                        }
+                    if (partic.getLastDamager().get() != null) {
+                    	if (getPlugin().getPlayers().containsKey(partic.getLastDamager().get())) {
+                    		Participant killer = getPlugin().getPlayers().get(partic.getLastDamager().get());
+                    		killer.increaseKilledPlayers();
+                    		if (isFinal) {
+                    			killer.increaseFinalKills();
+                    		}
+                    		Player bukkitKiller = killer.getPlayer();
+                    		if (bukkitKiller != null && bukkitKiller.isOnline()) {
+                    			pl.getInventory().all(Material.BRICK).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
+                    			pl.getInventory().all(Material.IRON_INGOT).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
+                    			pl.getInventory().all(Material.GOLD_INGOT).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
+                    			pl.getInventory().all(Material.DIAMOND).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
+                    			pl.getInventory().all(Material.EMERALD).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
+                    		}
+                        	Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 был зверски убит " + PlayerManager.getCodeColor(killer) + partic.getLastDamager().get() + (isFinal ? " §b§lФинальное убийство!" : "")));
+                    	}else {
+                        	Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 был зверски убит " + partic.getLastDamager().get() + (isFinal ? " §b§lФинальное убийство!" : "")));
+                    	}
+                    }else {
                         if (isFinal) {
-                            this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getBedDestroyer().increaseFinalKills();
-                            this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getBedDestroyer().increaseKilledPlayers();
+                            partic.getTeam().getBedDestroyer().increaseFinalKills();
+                            partic.getTeam().getBedDestroyer().increaseKilledPlayers();
                         }
-                    } else {
-                        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                            player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getEntity().getName())) + e.getEntity().getName() + "§7 был зверски убит " + PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName()))) + this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName()) + " " + (isFinal ? "§b§lФинальное убийство!" : ""));
-                        }
-                        if (isFinal)
-                            this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getBedDestroyer().increaseFinalKills();
-                        this.getPlugin().getPlayers().get(this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName())).increaseKilledPlayers();
-
-                        for (ItemStack item : ((Player) e.getEntity()).getInventory().getContents()) {
-                            if(item == null) continue;
-
-                            int amount = item.getAmount();
-                            ItemStack resource;
-                            ItemMeta meta;
-
-                            switch(item.getType()){
-                                case BRICK -> {
-                                    resource = new ItemStack(Material.BRICK, amount);
-                                    meta = resource.getItemMeta();
-                                    meta.setDisplayName("§eБронза");
-                                }
-                                case IRON_INGOT -> {
-                                    resource = new ItemStack(Material.IRON_INGOT, amount);
-                                    meta = resource.getItemMeta();
-                                    meta.setDisplayName("§eЖелезо");
-                                }
-                                case GOLD_INGOT -> {
-                                    resource = new ItemStack(Material.GOLD_INGOT, amount);
-                                    meta = resource.getItemMeta();
-                                    meta.setDisplayName("§eЗолото");
-                                }
-                                case DIAMOND -> {
-                                    resource = new ItemStack(Material.DIAMOND, amount);
-                                    meta = resource.getItemMeta();
-                                    meta.setDisplayName("§eАлмаз");
-                                }
-                                case EMERALD -> {
-                                    resource = new ItemStack(Material.EMERALD, amount);
-                                    meta = resource.getItemMeta();
-                                    meta.setDisplayName("§eИзумруд");
-                                }
-                                default -> {
-                                    continue;
-                                }
-                            }
-
-                            resource.setItemMeta(meta);
-
-                            this.getPlugin().getPlayers().get(this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName())).giveItem(resource);
-                        }
-
-                        this.getPlugin().getGame().getPlayersDamagers().remove(e.getEntity().getName());
+                    	switch (e.getCause()) {
+						case VOID -> Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 упал в бездну " + (isFinal ? " §b§lФинальное убийство!" : "")));
+						case FALL -> Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 разбился " + (isFinal ? " §b§lФинальное убийство!" : "")));
+						default -> Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 умер " + (isFinal ? " §b§lФинальное убийство!" : "")));
+						}
                     }
+//                    if (!this.getPlugin().getGame().getPlayersDamagers().containsKey(e.getEntity().getName())) {
+//                        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+//                            player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getEntity().getName())) + e.getEntity().getName() + "§7 упал в бездну." + " " + (isFinal ? "§b§lФинальное убийство!" : ""));
+//                        }
+//                        if (isFinal) {
+//                            this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getBedDestroyer().increaseFinalKills();
+//                            this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getBedDestroyer().increaseKilledPlayers();
+//                        }
+//                    } else {
+//                        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+//                            player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getEntity().getName())) + e.getEntity().getName() + "§7 был зверски убит " + PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName()))) + this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName()) + " " + (isFinal ? "§b§lФинальное убийство!" : ""));
+//                        }
+//                        if (isFinal)
+//                            this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getBedDestroyer().increaseFinalKills();
+//                        this.getPlugin().getPlayers().get(this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName())).increaseKilledPlayers();
+//
+//                        for (ItemStack item : ((Player) e.getEntity()).getInventory().getContents()) {
+//                            if(item == null) continue;
+//
+//                            int amount = item.getAmount();
+//                            ItemStack resource;
+//                            ItemMeta meta;
+//
+//                            switch(item.getType()){
+//                                case BRICK -> {
+//                                    resource = new ItemStack(Material.BRICK, amount);
+//                                    meta = resource.getItemMeta();
+//                                    meta.setDisplayName("§eБронза");
+//                                }
+//                                case IRON_INGOT -> {
+//                                    resource = new ItemStack(Material.IRON_INGOT, amount);
+//                                    meta = resource.getItemMeta();
+//                                    meta.setDisplayName("§eЖелезо");
+//                                }
+//                                case GOLD_INGOT -> {
+//                                    resource = new ItemStack(Material.GOLD_INGOT, amount);
+//                                    meta = resource.getItemMeta();
+//                                    meta.setDisplayName("§eЗолото");
+//                                }
+//                                case DIAMOND -> {
+//                                    resource = new ItemStack(Material.DIAMOND, amount);
+//                                    meta = resource.getItemMeta();
+//                                    meta.setDisplayName("§eАлмаз");
+//                                }
+//                                case EMERALD -> {
+//                                    resource = new ItemStack(Material.EMERALD, amount);
+//                                    meta = resource.getItemMeta();
+//                                    meta.setDisplayName("§eИзумруд");
+//                                }
+//                                default -> {
+//                                    continue;
+//                                }
+//                            }
+//
+//                            resource.setItemMeta(meta);
+//
+//                            this.getPlugin().getPlayers().get(this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName())).giveItem(resource);
+//                        }
+//
+//                        this.getPlugin().getGame().getPlayersDamagers().remove(e.getEntity().getName());
+//                    }
 
                     if (isFinal) this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().decreaseTeammatesAmount();
 

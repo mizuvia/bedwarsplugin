@@ -4,6 +4,8 @@ import inventories.*;
 import loading.Sidebar;
 import main.PlayerManager;
 import main.Plugin;
+import util.LastDamager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -42,6 +44,7 @@ public class Participant {
     private final HashMap<String, String> sidebarStrings = new HashMap<>();
     private BukkitTask showTask;
     private ItemStack[] hidenArmor;
+    private LastDamager lastDamager;
     
     public Participant(Player player, Plugin plugin){
         this.player = player;
@@ -51,6 +54,7 @@ public class Participant {
         this.objective = this.getScoreboard().registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.getPlugin().getTab().createTab(this.getScoreboard());
+        this.lastDamager = new LastDamager();
     }
 
     public void increaseFinalKills() {
@@ -121,6 +125,8 @@ public class Participant {
 
     public int getKilledPlayers() {return this.killedPlayers;}
 
+    public LastDamager getLastDamager() {return lastDamager;}
+    
     public void increaseBrokenBeds(){
         this.brokenBeds++;
         this.getPlugin().getSidebar().changeBrokenBeds(this);
