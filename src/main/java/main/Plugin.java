@@ -112,8 +112,9 @@ public class Plugin extends JavaPlugin {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
         this.sidebar = new Sidebar(this);
-        Bukkit.getLogger().info("SERVER ONLINE " + getServer().getOnlinePlayers().size());
-        Bukkit.getLogger().info("BUKKIT ONLINE " + Bukkit.getOnlinePlayers().size());
+        for (Player p : Bukkit.getOnlinePlayers()) {
+        	Bukkit.getLogger().info(p.getName());
+        }
         this.online_players = this.getServer().getOnlinePlayers().size();
         this.waiting = new Waiting(this);
         this.tab = new Tab(this);
