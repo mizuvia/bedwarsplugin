@@ -42,14 +42,13 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
             if (e.getEntity() instanceof Player) {
                 Team golemTeam = null;
                 for (Team team : getPlugin().getTeams().values()) {
-                	if (e.getEntity().equals(team.getIronGolem())) {
+                	if (e.getDamager().equals(team.getIronGolem())) {
                 		golemTeam = team;
                 		break;
                 	}
                 }
-                Bukkit.broadcastMessage(golemTeam + "");
                 if (golemTeam != null) {
-                	getPlugin().getPlayers().get(e.getDamager().getName()).getLastDamager().put("големом команды " + golemTeam.getColor() + golemTeam.getName());
+                	getPlugin().getPlayers().get(e.getEntity().getName()).getLastDamager().put("големом команды " + golemTeam.getColor() + golemTeam.getName());
                 }
             }
         }
