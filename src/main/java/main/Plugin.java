@@ -26,6 +26,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import redis.clients.jedis.Jedis;
 import tab.Tab;
@@ -111,6 +112,8 @@ public class Plugin extends JavaPlugin {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
         this.sidebar = new Sidebar(this);
+        Bukkit.getLogger().info("SERVER ONLINE " + getServer().getOnlinePlayers().size());
+        Bukkit.getLogger().info("BUKKIT ONLINE " + Bukkit.getOnlinePlayers().size());
         this.online_players = this.getServer().getOnlinePlayers().size();
         this.waiting = new Waiting(this);
         this.tab = new Tab(this);
