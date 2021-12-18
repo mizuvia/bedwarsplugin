@@ -11,7 +11,7 @@ public class LastDamager {
 	}
 	
 	public String get() {
-		return time + 10000 < System.currentTimeMillis() ? name : null;
+		return time + 10000 > System.currentTimeMillis() ? name : null;
 	}
 	
 	public void put(String name) {
