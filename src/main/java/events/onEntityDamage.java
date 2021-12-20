@@ -65,7 +65,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
                     			pl.getInventory().all(Material.DIAMOND).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
                     			pl.getInventory().all(Material.EMERALD).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
                     		}
-                        	Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 был зверски убит " + PlayerManager.getCodeColor(killer) + partic.getLastDamager().get() + (isFinal ? " §b§lФинальное убийство!" : "")));
+                        	Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 был зверски убит " + PlayerManager.getCodeColor(killer) + killer.getPlayer().getName() + (isFinal ? " §b§lФинальное убийство!" : "")));
                     	}else {
                         	Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 был зверски убит " + partic.getLastDamager().get() + (isFinal ? " §b§lФинальное убийство!" : "")));
                     	}
@@ -192,7 +192,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
                         ((Player) e.getEntity()).setHealth(20.0);
 
-                        Participant p = getPlugin().getPlayers().get(e.getEntity().getName());
+                        Participant p = getPlugin().getPlayers().get(e.getEntity().getUniqueId());
 
                         if (p.getTeam().isBroken()) {
 //                            this.getPlugin().getTab().removePlayerFromTabs(p);
