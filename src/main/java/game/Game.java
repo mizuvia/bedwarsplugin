@@ -123,7 +123,6 @@ public class Game {
         this.clearTeams();
         this.getPlugin().resetTeamSelection();
   //      this.getPlugin().getSidebar().fillWaitingList();
-        this.getPlugin().getWaiting().checkAmount();
 
         this.getPlugin().setLoading(true);
         this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());
