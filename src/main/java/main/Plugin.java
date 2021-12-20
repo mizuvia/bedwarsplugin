@@ -54,7 +54,7 @@ public class Plugin extends JavaPlugin {
     public int online_players;
     public TeamSelectionInventory choose_team;
     public HashMap<String, Team> teams = new HashMap<>();
-    public HashMap<UUID, Participant> players = new HashMap<>();
+    public HashMap<UUID, Participant> players;
     private Jedis jedis;
 
     public boolean isLoading() {return this.isLoading;}
@@ -93,6 +93,7 @@ public class Plugin extends JavaPlugin {
 
     @Override
     public void onEnable(){
+    	this.players = new HashMap<>();
         File worlds = new File("./", "worlds");
         for(int i = 0; i < worlds.list().length; i++){
             File w = new File("./worlds/", worlds.list()[i]);
