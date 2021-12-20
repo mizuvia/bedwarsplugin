@@ -23,10 +23,10 @@ public class onPlayerInteractEntity extends SimpleListener implements Listener, 
 
         if(e.getRightClicked() instanceof Villager) {
             e.setCancelled(true);
-            if(e.getRightClicked().getCustomName().equals("§e§lМАГАЗИН")) e.getPlayer().openInventory(this.getPlugin().getPlayers().get(e.getPlayer().getName()).getShopInventory());
+            if(e.getRightClicked().getCustomName().equals("§e§lМАГАЗИН")) e.getPlayer().openInventory(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getShopInventory());
             if(e.getRightClicked().getCustomName().equals("§e§lУЛУЧШЕНИЯ")) {
 
-                if(this.getPlugin().getPlayers().get(e.getPlayer().getName()).hasTeam()) e.getPlayer().openInventory(this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getUpgradesInventory());
+                if(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).hasTeam()) e.getPlayer().openInventory(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getUpgradesInventory());
                 else e.getPlayer().sendMessage("§cВы не находитесь в команде!");
             }
         }else if (e.getRightClicked() instanceof IronGolem) {

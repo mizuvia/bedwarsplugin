@@ -31,9 +31,9 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
         }
         if(e.getEntity() instanceof Player){
             if(e.getDamager() instanceof Player){
-                if(this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getColor().equals(this.getPlugin().getPlayers().get(e.getDamager().getName()).getTeam().getColor())) e.setCancelled(true);
+                if(this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getTeam().getColor().equals(this.getPlugin().getPlayers().get(e.getDamager().getUniqueId()).getTeam().getColor())) e.setCancelled(true);
                 if(!e.getEntity().getUniqueId().equals(e.getDamager().getUniqueId())){
-                	getPlugin().getPlayers().get(e.getEntity().getName()).getLastDamager().put(e.getDamager().getName());
+                	getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getLastDamager().put(e.getDamager().getName());
                 }
             }
         }
@@ -48,19 +48,19 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
                 	}
                 }
                 if (golemTeam != null) {
-                	getPlugin().getPlayers().get(e.getEntity().getName()).getLastDamager().put("големом команды " + golemTeam.getColor() + golemTeam.getName());
+                	getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getLastDamager().put("големом команды " + golemTeam.getName());
                 }
             }
         }
         if(e.getDamager() instanceof Player){
         	Player damager = (Player) e.getDamager();
-        	Participant p = getPlugin().getPlayers().get(damager.getName());
+        	Participant p = getPlugin().getPlayers().get(damager.getUniqueId());
         	if (p.inInvis()) {
         		p.show();
         	}
             if(e.getEntity() instanceof IronGolem){
-                if(this.getPlugin().getPlayers().get(e.getDamager().getName()).getTeam().getIronGolem() == null) return;
-                if(this.getPlugin().getPlayers().get(e.getDamager().getName()).getTeam().getIronGolem().equals(e.getEntity())) e.setCancelled(true);
+                if(this.getPlugin().getPlayers().get(e.getDamager().getUniqueId()).getTeam().getIronGolem() == null) return;
+                if(this.getPlugin().getPlayers().get(e.getDamager().getUniqueId()).getTeam().getIronGolem().equals(e.getEntity())) e.setCancelled(true);
             }
         }
     }

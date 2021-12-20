@@ -23,7 +23,7 @@ public class onPlayerRespawn extends SimpleListener implements Listener, EventEx
         PlayerRespawnEvent e = (PlayerRespawnEvent) event;
 
         if(this.getPlugin().isLoading()) {
-            if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getPlayer().getName()));
+            if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()));
             e.setRespawnLocation(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
         }
 //        if (this.getPlugin().isWorking()) {

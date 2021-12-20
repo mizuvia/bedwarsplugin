@@ -1,6 +1,7 @@
 package game;
 
 import inventories.*;
+import loading.PlayerSidebar;
 import loading.Sidebar;
 import main.PlayerManager;
 import main.Plugin;
@@ -39,9 +40,10 @@ public class Participant {
     private int brokenBeds = 0;
     private int killedPlayers = 0;
     private int finalKills = 0;
-    private final Scoreboard scoreboard;
-    private final Objective objective;
-    private final HashMap<String, String> sidebarStrings = new HashMap<>();
+   // private final Scoreboard scoreboard;
+    private PlayerSidebar sidebar;
+//    private final Objective objective;
+//    private final HashMap<String, String> sidebarStrings = new HashMap<>();
     private BukkitTask showTask;
     private ItemStack[] hidenArmor;
     private LastDamager lastDamager;
@@ -50,24 +52,29 @@ public class Participant {
         this.player = player;
         this.plugin = plugin;
         this.setGroup();
-        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        this.objective = this.getScoreboard().registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
-        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        this.getPlugin().getTab().createTab(this.getScoreboard());
+        this.sidebar = new PlayerSidebar(plugin, player.getUniqueId());
+//        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+//        this.objective = this.getScoreboard().registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
+//        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+//        this.getPlugin().getTab().createTab(this.getScoreboard());
         this.lastDamager = new LastDamager();
     }
 
     public void increaseFinalKills() {
         this.finalKills++;
-        this.getPlugin().getSidebar().changeFinalKills(this);
+//        this.getPlugin().getSidebar().changeFinalKills(this);
     }
 
-    public Scoreboard getScoreboard(){ return this.scoreboard; }
+//    public Scoreboard getScoreboard(){ return this.scoreboard; }
 
-    public Objective getObjective(){ return this.objective; }
+//    public Objective getObjective(){ return this.objective; }
 
-    public HashMap<String, String> getSidebarStrings(){ return sidebarStrings; }
+//    public HashMap<String, String> getSidebarStrings(){ return sidebarStrings; }
 
+    public PlayerSidebar getSidebar() {
+    	return sidebar;
+    }
+    
     public int getFinalKills() { return this.finalKills; }
 
     public ArmorInventory getArmorInventory(){ return this.armor; }
@@ -89,7 +96,11 @@ public class Participant {
     }
 
     public void setTeam(Team team){
+    	if (this.team != null) {
+    		plugin.getPlayers().values().forEach(partic -> partic.getSidebar().leaveTeam(getPlayer().getName(), this.team));
+    	}
         this.team = team;
+        plugin.getPlayers().values().forEach(partic -> partic.getSidebar().joinTeam(getPlayer().getName(), team));
     }
 
     public String getGroup(){
@@ -120,7 +131,7 @@ public class Participant {
 
     public void increaseKilledPlayers(){
         this.killedPlayers++;
-        this.getPlugin().getSidebar().changeKilled(this);
+//        this.getPlugin().getSidebar().changeKilled(this);
     }
 
     public int getKilledPlayers() {return this.killedPlayers;}
@@ -129,7 +140,7 @@ public class Participant {
     
     public void increaseBrokenBeds(){
         this.brokenBeds++;
-        this.getPlugin().getSidebar().changeBrokenBeds(this);
+//        this.getPlugin().getSidebar().changeBrokenBeds(this);
     }
 
     public int getBrokenBeds(){return this.brokenBeds;}

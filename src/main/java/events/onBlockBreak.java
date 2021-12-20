@@ -31,7 +31,7 @@ public class onBlockBreak extends SimpleListener implements Listener, EventExecu
         if(e.getBlock().getType().name().matches("(.*)BED")){
             String color = e.getBlock().getType().name().replace("_BED", "").toLowerCase(Locale.ROOT);
 
-            if(color.equals(this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getColor())) {
+            if(color.equals(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getColor())) {
                 e.setCancelled(true);
                 return;
             }
@@ -42,16 +42,16 @@ public class onBlockBreak extends SimpleListener implements Listener, EventExecu
             if(team.isBroken()) return;
             team.setBroken(true);
 
-            for(Player p : Bukkit.getOnlinePlayers()) p.sendMessage("§7Кровать команды " + team.getName() + "§r§7 была разрушена игроком " + PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getPlayer().getName())) + e.getPlayer().getName());
+            for(Player p : Bukkit.getOnlinePlayers()) p.sendMessage("§7Кровать команды " + team.getName() + "§r§7 была разрушена игроком " + PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId())) + e.getPlayer().getName());
 
             for(Participant participant : team.getTeammates().values()){
                 participant.getPlayer().sendTitle("§4Ваша кровать разрушена!", "§cВы больше не возродитесь!", 10, 70, 20);
                 participant.getPlayer().playSound(participant.getPlayer().getLocation(), Sound.ENTITY_WITHER_DEATH, 10F, 1F);
             }
 
-            this.getPlugin().getPlayers().get(e.getPlayer().getName()).increaseBrokenBeds();
+            this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).increaseBrokenBeds();
 
-            team.setBedDestroyer(this.getPlugin().getPlayers().get(e.getPlayer().getName()));
+            team.setBedDestroyer(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()));
 
             return;
         }

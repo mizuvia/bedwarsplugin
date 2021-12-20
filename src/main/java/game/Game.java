@@ -94,7 +94,7 @@ public class Game {
         this.spawnShopEntity();
         this.getArmorStandsManager().createArmorStands();
 
-        this.getPlugin().getSidebar().fillPlayingList();
+//        this.getPlugin().getSidebar().fillPlayingList();
         this.checkEmptyTeams();
         this.teleportPlayers();
 
@@ -122,7 +122,7 @@ public class Game {
         this.getTime().resetData();
         this.clearTeams();
         this.getPlugin().resetTeamSelection();
-        this.getPlugin().getSidebar().fillWaitingList();
+  //      this.getPlugin().getSidebar().fillWaitingList();
         this.getPlugin().getWaiting().checkAmount();
 
         this.getPlugin().setLoading(true);

@@ -6,6 +6,9 @@ import inventories.ShopItems;
 import main.Config;
 import main.PlayerManager;
 import main.Plugin;
+
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -38,18 +41,18 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         	Player pl = (Player) e.getEntity();
             if(e.getFinalDamage() >= pl.getHealth()) {
                 e.setCancelled(true);
-        		Participant partic = getPlugin().getPlayers().get(pl.getName());
+        		Participant partic = getPlugin().getPlayers().get(pl.getUniqueId());
         		if (partic.inInvis()) {
         			partic.show();
         		}
                 if(this.getPlugin().isLoading()) {
-                    if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getEntity().getName()));
+                    if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()));
                     e.getEntity().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
                 } else {
-                    boolean isFinal = this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().isBroken();
+                    boolean isFinal = this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getTeam().isBroken();
                     if (partic.getLastDamager().get() != null) {
-                    	if (getPlugin().getPlayers().containsKey(partic.getLastDamager().get())) {
-                    		Participant killer = getPlugin().getPlayers().get(partic.getLastDamager().get());
+                    	if (getPlugin().getPlayers().containsKey(UUID.fromString(partic.getLastDamager().get()))) {
+                    		Participant killer = getPlugin().getPlayers().get(UUID.fromString(partic.getLastDamager().get()));
                     		killer.increaseKilledPlayers();
                     		if (isFinal) {
                     			killer.increaseFinalKills();
@@ -139,9 +142,9 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 //                        this.getPlugin().getGame().getPlayersDamagers().remove(e.getEntity().getName());
 //                    }
 
-                    if (isFinal) this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().decreaseTeammatesAmount();
+                    if (isFinal) this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getTeam().decreaseTeammatesAmount();
 
-                    Participant participant = this.getPlugin().getPlayers().get(e.getEntity().getName());
+                    Participant participant = this.getPlugin().getPlayers().get(e.getEntity().getUniqueId());
 
                     for (ItemStack item : ((Player) e.getEntity()).getInventory().getContents()) {
                         if (item == null) continue;
@@ -192,7 +195,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
                         Participant p = getPlugin().getPlayers().get(e.getEntity().getName());
 
                         if (p.getTeam().isBroken()) {
-                            this.getPlugin().getTab().removePlayerFromTabs(p);
+//                            this.getPlugin().getTab().removePlayerFromTabs(p);
                             ((Player) e.getEntity()).setPlayerListName("§7Наблюдатель " + e.getEntity().getName());
                             e.getEntity().teleport(Config.getCenter());
                         } else {

@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
 public class TeamManager{
 
     public static void addPlayerToTeam(Plugin plugin, Team team, Participant participant){
-        plugin.getTab().addPlayerToTabs(participant);
+       // plugin.getTab().addPlayerToTabs(participant);
 
         TeamSelection.addPlayerToItem(plugin, team, participant.getPlayer());
 
@@ -23,7 +23,7 @@ public class TeamManager{
     }
 
     public static void removePlayerFromTeam(Plugin plugin, Participant participant){
-        plugin.getTab().removePlayerFromTabs(participant);
+       // plugin.getTab().removePlayerFromTabs(participant);
 
         TeamSelection.removePlayerFromItem(plugin, participant);
 

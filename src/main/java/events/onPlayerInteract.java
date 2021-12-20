@@ -45,13 +45,13 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
 
             if(!e.getAction().equals(Action.RIGHT_CLICK_AIR) && !e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
 
-            if(this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getIronGolem() != null) return;
+            if(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getIronGolem() != null) return;
 
             IronGolem golem = (IronGolem) Bukkit.getWorld("world").spawnEntity(new Location(e.getClickedBlock().getLocation().getWorld(), e.getClickedBlock().getLocation().getX() + 0.5, e.getClickedBlock().getLocation().getY() + 1, e.getClickedBlock().getLocation().getZ() + 0.5), EntityType.IRON_GOLEM);
-            golem.setCustomName(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getPlayer().getName())) + "§lСтраж команды " + this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getName());
+            golem.setCustomName(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId())) + "§lСтраж команды " + this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getName());
             golem.setCustomNameVisible(true);
 
-            this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().setIronGolem(golem);
+            this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().setIronGolem(golem);
 
             e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getItem().getAmount() - 1);
         }
@@ -60,9 +60,9 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
 
             if(!e.getAction().equals(Action.RIGHT_CLICK_AIR) && !e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
 
-            if(this.getPlugin().getPlayers().get(e.getPlayer().getName()).isTeleporting()) return;
+            if(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).isTeleporting()) return;
 
-            this.getPlugin().getPlayers().get(e.getPlayer().getName()).setTeleporting(true);
+            this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setTeleporting(true);
 
             e.getPlayer().sendMessage("§eНе двигайтесь! Телепортация через:");
 
@@ -79,7 +79,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                         if(oldLoc != 0 && location != oldLoc){
                             e.getPlayer().sendMessage("§cТелепортация отменена!");
                             shouldTeleport[0] = false;
-                            getPlugin().getPlayers().get(e.getPlayer().getName()).setTeleporting(false);
+                            getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setTeleporting(false);
                         } else if(time % 20 == 0) e.getPlayer().sendMessage("§e" + time / 20);
                     }
                     oldLoc = location;
@@ -89,9 +89,9 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
 
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
                 if(shouldTeleport[0]) {
-                    e.getPlayer().teleport(getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getSpawnLocation());
+                    e.getPlayer().teleport(getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getSpawnLocation());
                     e.getPlayer().getInventory().getItem(e.getPlayer().getInventory().first(Material.GUNPOWDER)).setAmount(e.getItem().getAmount() - 1);
-                    getPlugin().getPlayers().get(e.getPlayer().getName()).setTeleporting(false);
+                    getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setTeleporting(false);
                 }
                 Bukkit.getServer().getScheduler().cancelTask(id);
             }, 79L);
@@ -112,14 +112,14 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
 
             if(!e.getAction().equals(Action.RIGHT_CLICK_AIR) && !e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
 
-            if(this.getPlugin().getPlayers().get(e.getPlayer().getName()).isUnderMilk()) return;
+            if(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).isUnderMilk()) return;
 
-            this.getPlugin().getPlayers().get(e.getPlayer().getName()).setUnderMilk(true);
+            this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setUnderMilk(true);
 
             e.getItem().setAmount(e.getItem().getAmount() - 1);
             e.getPlayer().sendMessage("§cТеперь ловушки не действуют на вас в течении 60 секунд!");
 
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> getPlugin().getPlayers().get(e.getPlayer().getName()).setUnderMilk(false), 1200L);
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setUnderMilk(false), 1200L);
         }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().name().endsWith("_BED")) {
         	e.setCancelled(true);

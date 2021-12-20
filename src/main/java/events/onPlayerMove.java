@@ -32,10 +32,10 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
         PlayerMoveEvent e = (PlayerMoveEvent) event;
 
         if(!e.getPlayer().getGameMode().equals(GameMode.SPECTATOR)){
-            if (!this.getPlugin().getPlayers().get(e.getPlayer().getName()).hasTeam()) return;
-            if (this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getTeamUpgrades().get("Healing") != 0) {
+            if (!this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).hasTeam()) return;
+            if (this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getTeamUpgrades().get("Healing") != 0) {
                 Location playerLoc = e.getPlayer().getLocation();
-                Location teamLoc = this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getSpawnLocation();
+                Location teamLoc = this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getSpawnLocation();
                 double distance = Math.sqrt(Math.pow(playerLoc.getX() - teamLoc.getX(), 2.0) + Math.pow(playerLoc.getZ() - teamLoc.getZ(), 2.0));
                 if (distance <= 25)
                     e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100000, 0));
@@ -45,7 +45,7 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                 Location playerLoc = e.getPlayer().getLocation();
 
                 if (team.getIronGolem() != null) {
-                    if (this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getColor().equals(team.getColor()))
+                    if (this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getColor().equals(team.getColor()))
                         continue;
                     Location golemLoc = team.getIronGolem().getLocation();
                     double distance = Math.sqrt(Math.pow(playerLoc.getX() - golemLoc.getX(), 2.0) + Math.pow(playerLoc.getZ() - golemLoc.getZ(), 2.0));
@@ -60,8 +60,8 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                 }
 
                 if (team.getTraps().size() != 0) {
-                    if (this.getPlugin().getPlayers().get(e.getPlayer().getName()).isUnderMilk()) return;
-                    if (team.getColor().equals(this.getPlugin().getPlayers().get(e.getPlayer().getName()).getTeam().getColor()))
+                    if (this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).isUnderMilk()) return;
+                    if (team.getColor().equals(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getColor()))
                         continue;
 
                     double distance = Math.sqrt(Math.pow(playerLoc.getX() - team.getSpawnLocation().getX(), 2.0) + Math.pow(playerLoc.getZ() - team.getSpawnLocation().getZ(), 2.0));

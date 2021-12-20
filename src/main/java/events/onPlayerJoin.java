@@ -39,7 +39,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
         }
         if(this.getPlugin().isLoading()){
             this.getPlugin().increaseOnlinePlayers();
-            this.getPlugin().getWaiting().	checkAmount();
+            this.getPlugin().getWaiting().checkAmount();
 
             e.getPlayer().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
             e.getPlayer().setGameMode(GameMode.ADVENTURE);
@@ -47,7 +47,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             Participant p = new Participant(e.getPlayer(), this.getPlugin());
 
             this.setNames(p);
-            if (!this.plugin.getPlayers().containsKey(e.getPlayer().getName())) {
+            if (!this.plugin.getPlayers().containsKey(e.getPlayer().getUniqueId())) {
             	e.getPlayer().getEnderChest().clear();
             	for (PotionEffect eff : new ArrayList<>(e.getPlayer().getActivePotionEffects())) {
             		e.getPlayer().removePotionEffect(eff.getType());
@@ -57,15 +57,15 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             	e.getPlayer().setExp(0);
             	e.getPlayer().setHealth(e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
             }
-            this.getPlugin().getPlayers().put(e.getPlayer().getName(), p);
+            this.getPlugin().getPlayers().put(e.getPlayer().getUniqueId(), p);
             PlayerInv.setWaitingInventory(p);
 
 
-            e.getPlayer().setScoreboard(p.getScoreboard());
-            this.getPlugin().getSidebar().fillPlayerSidebar(p);
-            this.getPlugin().getTab().addPlayerToTabs(p);
+            e.getPlayer().setScoreboard(p.getSidebar().getScoreboard());
+            //this.getPlugin().getSidebar().fillPlayerSidebar(p);
+           // this.getPlugin().getTab().addPlayerToTabs(p);
 
-            this.getPlugin().getSidebar().changePlayersAmount();
+            //this.getPlugin().getSidebar().changePlayersAmount();
 
             e.setJoinMessage(e.getPlayer().getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().getOnlinePlayers() + "§f/§b" + Config.getMaxPlayers() + "§f]");
 

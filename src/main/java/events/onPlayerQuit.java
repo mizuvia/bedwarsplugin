@@ -22,9 +22,9 @@ public class onPlayerQuit extends SimpleListener implements Listener, EventExecu
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         PlayerQuitEvent e = (PlayerQuitEvent) event;
 
-        Participant p = this.getPlugin().getPlayers().get(e.getPlayer().getName());
+        Participant p = this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId());
 
-        this.getPlugin().getTab().removePlayerFromTabs(p);
+//        this.getPlugin().getTab().removePlayerFromTabs(p);
         this.getPlugin().decreaseOnlinePlayers();
         if (p.inInvis()) {
         	p.show();
@@ -34,11 +34,11 @@ public class onPlayerQuit extends SimpleListener implements Listener, EventExecu
             TeamManager.removePlayerFromTeam(this.getPlugin(), p);
         }
 
-        this.getPlugin().getPlayers().remove(e.getPlayer().getName());
+        this.getPlugin().getPlayers().remove(e.getPlayer().getUniqueId());
 
         if(this.getPlugin().isLoading()){
 
-            this.getPlugin().getSidebar().changePlayersAmount();
+//            this.getPlugin().getSidebar().changePlayersAmount();
             this.getPlugin().getWaiting().checkAmount();
             e.setQuitMessage(e.getPlayer().getDisplayName() + " §eпокинул игру §f[§b" + this.getPlugin().getOnlinePlayers() + "§f/§b" + Config.getMaxPlayers() + "§f]");
 

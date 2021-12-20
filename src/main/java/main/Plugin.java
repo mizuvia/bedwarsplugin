@@ -7,6 +7,8 @@ import game.Participant;
 import game.Team;
 import inventories.*;
 import jedis.RedisThread;
+import loading.PlayerSidebar;
+import loading.PlayerSidebar.Timer;
 import loading.Sidebar;
 import loading.Waiting;
 import org.apache.commons.io.FileUtils;
@@ -36,6 +38,7 @@ import util.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Plugin extends JavaPlugin {
 
@@ -43,7 +46,7 @@ public class Plugin extends JavaPlugin {
     public static final String PluginName = "BedWarsPlugin";
     private Tab tab;
     private Scoreboard scoreboard;
-    private Sidebar sidebar;
+    //private Sidebar sidebar;
     private Game game;
     public Waiting waiting;
     private boolean isLoading = false;
@@ -51,7 +54,7 @@ public class Plugin extends JavaPlugin {
     public int online_players;
     public TeamSelectionInventory choose_team;
     public HashMap<String, Team> teams = new HashMap<>();
-    public HashMap<String, Participant> players = new HashMap<>();
+    public HashMap<UUID, Participant> players = new HashMap<>();
     private Jedis jedis;
 
     public boolean isLoading() {return this.isLoading;}
@@ -62,13 +65,13 @@ public class Plugin extends JavaPlugin {
 
     public void setWorking(boolean isWorking) {this.isWorking = isWorking;}
 
-    public Sidebar getSidebar() { return this.sidebar; }
+    //public Sidebar getSidebar() { return this.sidebar; }
 
     public Scoreboard getScoreboard() { return this.scoreboard; }
 
     public HashMap<String, Team> getTeams() {return this.teams; }
 
-    public HashMap<String, Participant> getPlayers(){ return this.players; }
+    public HashMap<UUID, Participant> getPlayers(){ return this.players; }
 
     public Game getGame(){ return this.game; }
 
@@ -104,14 +107,14 @@ public class Plugin extends JavaPlugin {
             	}
             });
         }
-
+        
         this.reloadWorld();
         Config.createInstance(this);
-
+        PlayerSidebar.setTimer(new Timer(this));
         this.game = new Game(this);
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
-        this.sidebar = new Sidebar(this);
+        //this.sidebar = new Sidebar(this);
         for (Player p : Bukkit.getOnlinePlayers()) {
         	Bukkit.getLogger().info(p.getName());
         }
@@ -134,7 +137,7 @@ public class Plugin extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-
+        runSidebarUpdater();
         getLogger().info("enabled!");
     }
 
@@ -243,6 +246,16 @@ public class Plugin extends JavaPlugin {
         onPrepareItemCraft onPrepareItemCraft = new onPrepareItemCraft(this);
         Bukkit.getPluginManager().registerEvent(PrepareItemCraftEvent.class, onPrepareItemCraft, EventPriority.NORMAL, onPrepareItemCraft, this);
     }
+    
+    private void runSidebarUpdater() {
+    	new BukkitRunnable() {
+			@Override
+			public void run() {
+				Bukkit.getOnlinePlayers().forEach(p -> getPlayers().get(p.getUniqueId()).getSidebar().update());
+			}
+		}.runTaskTimer(this, 0, 10);
+    }
+    
 }
 
 //     MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
