@@ -22,7 +22,7 @@ public class Traps implements IGUI{
     @Override
     public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
         int price = (int) Math.pow(2, this.getTeam().getTraps().size());
-        if(this.getTeam().getPlugin().getPlayers().get(whoClicked.getName()).takeItem(Material.DIAMOND, price)) {
+        if(this.getTeam().getPlugin().getPlayers().get(whoClicked.getUniqueId()).takeItem(Material.DIAMOND, price)) {
             String name;
 
             switch (slot){
@@ -33,7 +33,7 @@ public class Traps implements IGUI{
                 default: return;
             }
 
-            Participant p = this.getTeam().getPlugin().getPlayers().get(whoClicked.getName());
+            Participant p = this.getTeam().getPlugin().getPlayers().get(whoClicked.getUniqueId());
 
             for(Participant participant : this.getTeam().getTeammates().values()){
                 participant.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил ловушку §b" + name);

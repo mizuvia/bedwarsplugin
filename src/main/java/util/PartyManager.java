@@ -15,7 +15,7 @@ public class PartyManager{
         for(Team team : plugin.getTeams().values()){
             if(team.getTeammatesAmount() == Config.getPlayersPerTeam()) continue;
             if(checkPlayerInTeam(party, team.getTeammates().values())){
-                TeamManager.addPlayerToTeam(plugin, team, plugin.getPlayers().get(player.username));
+                TeamManager.addPlayerToTeam(plugin, team, plugin.getPlayers().get(player.uuid));
                 return;
             }
         }
@@ -25,7 +25,7 @@ public class PartyManager{
     private static void addToEmptyTeam(Plugin plugin, Party party, Player player){
         for(Team team : plugin.getTeams().values()){
             if(team.getTeammatesAmount() != 0) continue;
-            TeamManager.addPlayerToTeam(plugin, team, plugin.getPlayers().get(player.username));
+            TeamManager.addPlayerToTeam(plugin, team, plugin.getPlayers().get(player.uuid));
             return;
         }
         addToRandomTeam(plugin, party, player);
@@ -36,7 +36,7 @@ public class PartyManager{
         for(Team team : plugin.getTeams().values())
             if(plugin.getTeams().get(teamColor).getTeammatesAmount() > team.getTeammatesAmount())
                 teamColor = team.getColor();
-        TeamManager.addPlayerToTeam(plugin, plugin.getTeams().get(teamColor), plugin.getPlayers().get(player.username));
+        TeamManager.addPlayerToTeam(plugin, plugin.getTeams().get(teamColor), plugin.getPlayers().get(player.uuid));
     }
 
     private static boolean checkPlayerInTeam(Party party, Collection<Participant> participants){

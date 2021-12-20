@@ -19,12 +19,12 @@ public class Swords implements IGUI{
         switch (slot) {
             case 10 -> whoClicked.openInventory(this.getGame().getBlocksInventory());
             case 11 -> whoClicked.openInventory(this.getGame().getSwordsInventory());
-            case 12 -> whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getArmorInventory());
+            case 12 -> whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getUniqueId()).getArmorInventory());
             case 13 -> whoClicked.openInventory(this.getGame().getBowsInventory());
-            case 14 -> whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()).getToolsInventory());
+            case 14 -> whoClicked.openInventory(this.getGame().getPlugin().getPlayers().get(whoClicked.getUniqueId()).getToolsInventory());
             case 15 -> whoClicked.openInventory(this.getGame().getPotionsInventory());
             case 16 -> whoClicked.openInventory(this.getGame().getOthersInventory());
-            case 28, 30, 31, 32, 33 -> this.getInventory().makeTrade(this.getGame().getPlugin().getPlayers().get(whoClicked.getName()), clickedItem);
+            case 28, 30, 31, 32, 33 -> this.getInventory().makeTrade(this.getGame().getPlugin().getPlayers().get(whoClicked.getUniqueId()), clickedItem);
         }
     }
 

@@ -37,7 +37,7 @@ public class TeamSelection implements IGUI{
 
         String color = clickedItem.getType().name().replace("_WOOL", "").toLowerCase(Locale.ROOT);
         Team team = this.getPlugin().getTeams().get(color);
-        Participant participant = this.getPlugin().getPlayers().get(whoClicked.getName());
+        Participant participant = this.getPlugin().getPlayers().get(whoClicked.getUniqueId());
 
         if(team.getTeammatesAmount() == Config.getPlayersPerTeam()){
             whoClicked.closeInventory();
