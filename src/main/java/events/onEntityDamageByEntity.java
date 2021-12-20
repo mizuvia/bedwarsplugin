@@ -33,7 +33,7 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
             if(e.getDamager() instanceof Player){
                 if(this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getTeam().getColor().equals(this.getPlugin().getPlayers().get(e.getDamager().getUniqueId()).getTeam().getColor())) e.setCancelled(true);
                 if(!e.getEntity().getUniqueId().equals(e.getDamager().getUniqueId())){
-                	getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getLastDamager().put(e.getDamager().getName());
+                	getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getLastDamager().put(e.getDamager().getUniqueId().toString());
                 }
             }
         }
