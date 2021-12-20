@@ -35,6 +35,7 @@ public class PlayerSidebar {
 		this.owner = owner;
 		this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 		this.o = scoreboard.registerNewObjective("SideBar", "", "");
+		this.o.setDisplayName("Test");
 		this.o.setDisplaySlot(DisplaySlot.SIDEBAR);
 		for (int i = 1; i < 16; i++) {
 			Team team = scoreboard.registerNewTeam(String.valueOf(i));
