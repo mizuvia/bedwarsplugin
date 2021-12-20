@@ -87,7 +87,9 @@ public class Plugin extends JavaPlugin {
 
     public void increaseOnlinePlayers() { this.online_players++; }
 
-    public int getOnlinePlayers(){ return this.online_players; }
+    //public int getOnlinePlayers(){ return this.online_players; }
+    
+    public int getOnlinePlayers() {return Bukkit.getOnlinePlayers().size();}
 
     public Jedis getJedis(){return this.jedis;}
 
