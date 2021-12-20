@@ -172,6 +172,7 @@ public class PlayerSidebar {
 			if (bt != null && !plugin.isWorking()) {
 				bt.cancel();
 				time = -1;
+				bt = null;
 			}
 		}
 		
