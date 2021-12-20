@@ -1,5 +1,6 @@
 package loading;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -96,12 +97,13 @@ public class PlayerSidebar {
 		lines.add(ChatColor.YELLOW + "" + ChatColor.BOLD + "Времени:");
 		lines.add(space.repeat(2));
 		lines.add(ChatColor.AQUA + "" + Bukkit.getOnlinePlayers().size() + "/" + Config.getMaxPlayers());
-		lines.add(ChatColor.YELLOW + "" + ChatColor.BOLD + "Игроков: " + ChatColor.GREEN + Bukkit.getOnlinePlayers().size());
+		lines.add(ChatColor.YELLOW + "" + ChatColor.BOLD + "Игроков:");
 		lines.add(space.repeat(1));
 		lines.add(ChatColor.AQUA + Config.getMapName());
 		lines.add(ChatColor.YELLOW + "" + ChatColor.BOLD + "Карта:");
 		lines.add(space.repeat(0));
 		lines.add(ChatColor.DARK_GRAY + Config.getServerName());
+		lines.add(net.md_5.bungee.api.ChatColor.of(new Color(205, 133, 63)).toString() + "Te" + net.md_5.bungee.api.ChatColor.of(new Color(128, 128, 0)).toString() + "st");
 		return lines;
 	}
 	
@@ -120,7 +122,7 @@ public class PlayerSidebar {
 		}
 		lines.add(space.repeat(1));
 		Stage stage = plugin.getGame().getTime().getStage();
-		lines.add(ChatColor.AQUA + "" + ChatColor.BOLD + stage.getName() + ChatColor.WHITE + Utils.getTime(stage.getTime()));
+		lines.add(ChatColor.AQUA + "" + ChatColor.BOLD + stage.getName() + " " + ChatColor.WHITE + Utils.getTime(stage.getTime()));
 		lines.add(ChatColor.DARK_GRAY + Config.getServerName());
 		return lines;
 	}
