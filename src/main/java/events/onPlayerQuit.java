@@ -3,7 +3,6 @@ package events;
 import game.Participant;
 import main.Config;
 import main.Plugin;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Event;

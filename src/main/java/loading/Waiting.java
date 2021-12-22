@@ -1,9 +1,7 @@
 package loading;
 
-import org.bukkit.Bukkit;
-
-import main.Config;
 import main.Plugin;
+import org.bukkit.Bukkit;
 
 public class Waiting{
 

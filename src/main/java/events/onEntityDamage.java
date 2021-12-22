@@ -2,13 +2,9 @@ package events;
 
 import game.Participant;
 import inventories.ShopItem;
-import inventories.ShopItems;
 import main.Config;
 import main.PlayerManager;
 import main.Plugin;
-
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -17,14 +13,14 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 import util.PlayerInv;
 import util.Utils;
 import util.WorldManager;
+
+import java.util.UUID;
 
 public class onEntityDamage extends SimpleListener implements Listener, EventExecutor {
 

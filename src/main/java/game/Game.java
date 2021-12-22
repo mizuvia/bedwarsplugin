@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import util.PlayerInv;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Game {

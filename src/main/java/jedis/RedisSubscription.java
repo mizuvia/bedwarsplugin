@@ -7,8 +7,8 @@ import main.Config;
 import main.Plugin;
 import redis.clients.jedis.JedisPubSub;
 
-import java.util.*;
-import java.util.logging.Logger;
+import java.util.Arrays;
+import java.util.List;
 
 public class RedisSubscription extends JedisPubSub{
 

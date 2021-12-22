@@ -3,8 +3,6 @@ package game;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-import java.util.Locale;
-
 public class ItemPrice {
     private Material material;
     private int price;

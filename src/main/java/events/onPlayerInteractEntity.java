@@ -1,7 +1,6 @@
 package events;
 
 import main.Plugin;
-
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.Event;

@@ -4,7 +4,6 @@ import game.Participant;
 import game.Team;
 import inventories.TeamSelection;
 import main.Plugin;
-import org.bukkit.ChatColor;
 
 public class TeamManager{
 

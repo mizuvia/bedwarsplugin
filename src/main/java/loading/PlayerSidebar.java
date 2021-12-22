@@ -1,10 +1,9 @@
 package loading;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
+import game.Participant;
+import game.Time.Stage;
+import main.Config;
+import main.Plugin;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,12 +13,12 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-
-import game.Participant;
-import game.Time.Stage;
-import main.Config;
-import main.Plugin;
 import util.Utils;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class PlayerSidebar {
 	

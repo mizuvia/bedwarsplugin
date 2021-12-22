@@ -4,18 +4,13 @@ import com.hoshion.mongoapi.MongoService;
 import com.hoshion.mongoapi.docs.Party;
 import game.Participant;
 import game.Team;
-import inventories.TeamSelection;
 import main.Config;
 import main.PlayerManager;
 import main.Plugin;
-
-import java.util.ArrayList;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -24,6 +19,8 @@ import org.bukkit.plugin.EventExecutor;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import util.*;
+
+import java.util.ArrayList;
 
 public class onPlayerJoin extends SimpleListener implements Listener, EventExecutor {
 

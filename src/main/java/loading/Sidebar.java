@@ -1,19 +1,5 @@
 package loading;
 
-import game.Participant;
-import game.Team;
-import game.Time;
-import main.Config;
-import main.Plugin;
-import org.bukkit.ChatColor;
-import org.bukkit.scoreboard.Score;
-import util.Utils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
 public class Sidebar{
 
 //    public static final String SIDEBAR_NAME = ChatColor.GOLD + "" + ChatColor.BOLD + "BED" + ChatColor.DARK_PURPLE + ChatColor.BOLD + "WARS";

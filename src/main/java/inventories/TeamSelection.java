@@ -16,7 +16,6 @@ import util.TeamManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 public class TeamSelection implements IGUI{
     private final Plugin plugin;

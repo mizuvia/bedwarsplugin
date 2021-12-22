@@ -1,9 +1,5 @@
 package loading;
 
-import main.Config;
-import main.Plugin;
-import tasks.TaskGUI;
-
 public class ChangeTime /*extends TaskGUI*/{
 
 //    public int time = -1;
