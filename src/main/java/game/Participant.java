@@ -2,12 +2,10 @@ package game;
 
 import inventories.*;
 import loading.PlayerSidebar;
-import loading.Sidebar;
 import main.PlayerManager;
 import main.Plugin;
 import util.LastDamager;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -15,15 +13,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class Participant {
 
@@ -40,10 +32,7 @@ public class Participant {
     private int brokenBeds = 0;
     private int killedPlayers = 0;
     private int finalKills = 0;
-   // private final Scoreboard scoreboard;
     private PlayerSidebar sidebar;
-//    private final Objective objective;
-//    private final HashMap<String, String> sidebarStrings = new HashMap<>();
     private BukkitTask showTask;
     private ItemStack[] hidenArmor;
     private LastDamager lastDamager;
@@ -53,23 +42,12 @@ public class Participant {
         this.plugin = plugin;
         this.setGroup();
         this.sidebar = new PlayerSidebar(plugin, player.getUniqueId());
-//        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-//        this.objective = this.getScoreboard().registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
-//        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-//        this.getPlugin().getTab().createTab(this.getScoreboard());
         this.lastDamager = new LastDamager();
     }
 
     public void increaseFinalKills() {
         this.finalKills++;
-//        this.getPlugin().getSidebar().changeFinalKills(this);
     }
-
-//    public Scoreboard getScoreboard(){ return this.scoreboard; }
-
-//    public Objective getObjective(){ return this.objective; }
-
-//    public HashMap<String, String> getSidebarStrings(){ return sidebarStrings; }
 
     public PlayerSidebar getSidebar() {
     	return sidebar;
@@ -140,7 +118,6 @@ public class Participant {
     
     public void increaseBrokenBeds(){
         this.brokenBeds++;
-//        this.getPlugin().getSidebar().changeBrokenBeds(this);
     }
 
     public int getBrokenBeds(){return this.brokenBeds;}

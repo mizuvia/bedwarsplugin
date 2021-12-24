@@ -38,7 +38,6 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
         	e.getPlayer().getWorld().getPlayers().forEach(p -> p.showPlayer(getPlugin(), e.getPlayer()));
         }
         if(this.getPlugin().isLoading()){
-            this.getPlugin().increaseOnlinePlayers();
             Bukkit.getServer().getScheduler().runTaskLater(getPlugin(), () -> getPlugin().getWaiting().checkAmount(), 5);
             e.getPlayer().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
             e.getPlayer().setGameMode(GameMode.ADVENTURE);

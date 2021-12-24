@@ -26,8 +26,6 @@ public class onPlayerQuit extends SimpleListener implements Listener, EventExecu
 
         Participant p = this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId());
 
-//        this.getPlugin().getTab().removePlayerFromTabs(p);
-        this.getPlugin().decreaseOnlinePlayers();
         if (p != null) {
             if (p.inInvis()) {
             	p.show();
@@ -41,8 +39,6 @@ public class onPlayerQuit extends SimpleListener implements Listener, EventExecu
         this.getPlugin().getPlayers().remove(e.getPlayer().getUniqueId());
 
         if(this.getPlugin().isLoading()){
-
-//            this.getPlugin().getSidebar().changePlayersAmount();
             Bukkit.getServer().getScheduler().runTaskLater(getPlugin(), () -> getPlugin().getWaiting().checkAmount(), 5);
             e.setQuitMessage(e.getPlayer().getDisplayName() + " §eпокинул игру §f[§b" + this.getPlugin().getOnlinePlayers() + "§f/§b" + Config.getMaxPlayers() + "§f]");
 
