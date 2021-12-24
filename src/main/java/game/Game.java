@@ -92,8 +92,6 @@ public class Game {
         this.spawnUpgradeEntity();
         this.spawnShopEntity();
         this.getArmorStandsManager().createArmorStands();
-
-//        this.getPlugin().getSidebar().fillPlayingList();
         this.checkEmptyTeams();
         this.teleportPlayers();
 
@@ -111,7 +109,6 @@ public class Game {
     public void stop(){
 
         this.getPlugin().setWorking(false);
-
         this.getPlugin().reloadWorld();
         Config.reloadValues();
         this.resetLists();
@@ -121,8 +118,6 @@ public class Game {
         this.getTime().resetData();
         this.clearTeams();
         this.getPlugin().resetTeamSelection();
-  //      this.getPlugin().getSidebar().fillWaitingList();
-
         this.getPlugin().setLoading(true);
         this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());
     }
