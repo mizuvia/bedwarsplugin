@@ -1,7 +1,8 @@
 package events;
 
+import game.Participant;
+import game.Team;
 import main.Plugin;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -10,9 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
-
-import game.Participant;
-import game.Team;
 
 public class onEntityDamageByEntity extends SimpleListener implements Listener, EventExecutor {
     public onEntityDamageByEntity(Plugin plugin) {

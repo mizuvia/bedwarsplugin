@@ -1,10 +1,12 @@
 package game;
 
-import inventories.*;
+import inventories.TeamUpgrades;
+import inventories.TeamUpgradesInventory;
+import inventories.Traps;
+import inventories.TrapsInventory;
 import main.Config;
 import main.Plugin;
 import org.bukkit.Location;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.IronGolem;
 
 import java.util.ArrayList;

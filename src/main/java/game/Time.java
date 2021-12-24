@@ -1,6 +1,5 @@
 package game;
 
-import main.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -10,7 +9,6 @@ import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import tasks.TaskGUI;
-import util.Colors;
 import util.Utils;
 
 import java.util.ArrayList;
