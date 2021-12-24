@@ -240,10 +240,7 @@ public class Plugin extends JavaPlugin {
     	new BukkitRunnable() {
 			@Override
 			public void run() {
-				long start = System.currentTimeMillis();
 				Bukkit.getOnlinePlayers().forEach(p -> getPlayers().get(p.getUniqueId()).getSidebar().update());
-				long stop = System.currentTimeMillis();
-				Bukkit.broadcastMessage("Completed in " + ((stop - start) / 1000.0) + " sec ");
 			}
 		}.runTaskTimer(this, 0, 10);
     }

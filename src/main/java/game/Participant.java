@@ -9,6 +9,7 @@ import util.LastDamager;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -16,9 +17,14 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Participant {
 
+	private static Map<UUID, Participant> players = new ConcurrentHashMap<>();
+	
     private final Player player;
     private final Plugin plugin;
     private Team team;
@@ -293,6 +299,12 @@ public class Participant {
     		showTask.cancel();
     		bukkitPlayer.getInventory().setArmorContents(hidenArmor);
     	}
+    }
+    
+    private static class PlayerLoader implements Listener {
+    	
+    	
+    	
     }
     
 }
