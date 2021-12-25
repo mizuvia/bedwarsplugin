@@ -14,6 +14,8 @@ import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+
+import game.Messenger.Message;
 import util.PlayerInv;
 
 import java.util.ArrayList;
@@ -35,7 +37,8 @@ public class Game {
     private List<Villager> villagers = new ArrayList<>();
     private final List<Inventory> chests = new ArrayList<>();
     private int deadTeams = 0;
-
+    private Messenger messenger;
+    
     public List<Inventory> getChestsInventories() { return this.chests; }
 
     public BlocksInventory getBlocksInventory(){
@@ -94,8 +97,9 @@ public class Game {
         this.getArmorStandsManager().createArmorStands();
         this.checkEmptyTeams();
         this.teleportPlayers();
-
         this.getPlugin().setWorking(true);
+        this.messenger = new Messenger(getPlugin(), 3600);
+        this.messenger.addMessage(new Message(new String[] {"§c§lТимерство запрещено!", "§cНаказание: §d§lИЗНОСИЛОВАНИЕ!"}));
     }
 
     private void checkEmptyTeams() {
@@ -107,7 +111,6 @@ public class Game {
     }
 
     public void stop(){
-
         this.getPlugin().setWorking(false);
         this.getPlugin().reloadWorld();
         Config.reloadValues();
@@ -120,6 +123,7 @@ public class Game {
         this.getPlugin().resetTeamSelection();
         this.getPlugin().setLoading(true);
         this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());
+        this.messenger.stop();
     }
 
     public void checkWin(){
