@@ -301,10 +301,5 @@ public class Participant {
     	}
     }
     
-    private static class PlayerLoader implements Listener {
-    	
-    	
-    	
-    }
     
 }

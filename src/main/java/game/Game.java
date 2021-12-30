@@ -98,8 +98,8 @@ public class Game {
         this.checkEmptyTeams();
         this.teleportPlayers();
         this.getPlugin().setWorking(true);
-        this.messenger = new Messenger(getPlugin(), 3600);
-        this.messenger.addMessage(new Message(new String[] {"§c§lТимерство запрещено!", "§cНаказание: §d§lИЗНОСИЛОВАНИЕ!"}));
+        this.messenger = new Messenger(getPlugin(), 12000);
+        this.messenger.addMessage(new Message(new String[] {"§c§lТимерство запрещено!"}));
     }
 
     private void checkEmptyTeams() {
