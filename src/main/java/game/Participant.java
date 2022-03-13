@@ -1,30 +1,30 @@
 package game;
 
 import inventories.*;
-import loading.PlayerSidebar;
+import loading.Sidebar;
 import main.PlayerManager;
 import main.Plugin;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import tab.Tab;
 import util.LastDamager;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import util.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 public class Participant {
 
-	private static Map<UUID, Participant> players = new ConcurrentHashMap<>();
-	
     private final Player player;
     private final Plugin plugin;
     private Team team;
@@ -38,25 +38,44 @@ public class Participant {
     private int brokenBeds = 0;
     private int killedPlayers = 0;
     private int finalKills = 0;
-    private PlayerSidebar sidebar;
+    private final Scoreboard scoreboard;
+    private final Objective sidebarObjective;
+    private final List<org.bukkit.scoreboard.Team> sidebarTeams = new ArrayList<>();
     private BukkitTask showTask;
-    private ItemStack[] hidenArmor;
-    private LastDamager lastDamager;
+    private ItemStack[] hiddenArmor;
+    private final LastDamager lastDamager;
     
     public Participant(Player player, Plugin plugin){
         this.player = player;
         this.plugin = plugin;
         this.setGroup();
-        this.sidebar = new PlayerSidebar(plugin, player.getUniqueId());
+        this.clearParticles();
+        player.getEnderChest().clear();
+        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        this.sidebarObjective = scoreboard.registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
         this.lastDamager = new LastDamager();
+        this.getPlayer().setScoreboard(scoreboard);
+        plugin.getSidebar().fillPlayerSidebars(this);
+        plugin.getTab().addPlayerToTabs(this);
+        plugin.getPlayers().put(player.getUniqueId(), this);
+    }
+
+    public List<org.bukkit.scoreboard.Team> getSidebarTeams() {
+        return sidebarTeams;
     }
 
     public void increaseFinalKills() {
         this.finalKills++;
+        this.increaseKilledPlayers();
+        plugin.getSidebar().changeFinalKills(this);
     }
 
-    public PlayerSidebar getSidebar() {
-    	return sidebar;
+    public Scoreboard getScoreboard() {
+        return this.scoreboard;
+    }
+
+    public Objective getSidebarObjective() {
+        return sidebarObjective;
     }
     
     public int getFinalKills() { return this.finalKills; }
@@ -80,11 +99,26 @@ public class Participant {
     }
 
     public void setTeam(Team team){
+        Tab tab = this.plugin.getTab();
+
     	if (this.team != null) {
-    		plugin.getPlayers().values().forEach(partic -> partic.getSidebar().leaveTeam(getPlayer().getName(), this.team));
-    	}
+
+            TeamSelection.addPlayerToItem(plugin, team, this.getPlayer());
+            tab.addPlayerToTabs(this);
+
+            this.getPlayer().setDisplayName("§8§l[" + team.getName() + "§8§l]§r§7 " + this.getPlayer().getName());
+            this.getPlayer().setPlayerListName("§8§l[" + team.getName() + "§8§l]§r§7 " + this.getPlayer().getName());
+
+            team.addTeammate(this);
+        }
+    	else {
+            TeamSelection.removePlayerFromItem(plugin, this);
+
+            team.removeTeammate(this);
+            tab.removePlayerFromTabs(this);
+        }
+
         this.team = team;
-        plugin.getPlayers().values().forEach(partic -> partic.getSidebar().joinTeam(getPlayer().getName(), team));
     }
 
     public String getGroup(){
@@ -115,7 +149,7 @@ public class Participant {
 
     public void increaseKilledPlayers(){
         this.killedPlayers++;
-//        this.getPlugin().getSidebar().changeKilled(this);
+        plugin.getSidebar().changeKilled(this);
     }
 
     public int getKilledPlayers() {return this.killedPlayers;}
@@ -124,6 +158,7 @@ public class Participant {
     
     public void increaseBrokenBeds(){
         this.brokenBeds++;
+        plugin.getSidebar().changeBrokenBeds(this);
     }
 
     public int getBrokenBeds(){return this.brokenBeds;}
@@ -162,144 +197,117 @@ public class Participant {
         int elvl = this.getTeam().getTeamUpgrades().get("Haste");
         int plvl = this.getTeam().getTeamUpgrades().get("Protection");
 
+        Map<Material, Material> secondItem = Map.ofEntries(
+                Map.entry(Material.STONE_AXE, Material.WOODEN_AXE),
+                Map.entry(Material.IRON_AXE, Material.STONE_AXE),
+                Map.entry(Material.DIAMOND_AXE, Material.IRON_AXE),
+                Map.entry(Material.GOLDEN_AXE, Material.DIAMOND_AXE),
+                Map.entry(Material.STONE_PICKAXE, Material.WOODEN_PICKAXE),
+                Map.entry(Material.IRON_PICKAXE, Material.STONE_PICKAXE),
+                Map.entry(Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE),
+                Map.entry(Material.GOLDEN_PICKAXE, Material.DIAMOND_PICKAXE),
+                Map.entry(Material.GOLDEN_BOOTS, Material.GOLDEN_LEGGINGS),
+                Map.entry(Material.CHAINMAIL_BOOTS, Material.CHAINMAIL_LEGGINGS),
+                Map.entry(Material.IRON_BOOTS, Material.IRON_LEGGINGS),
+                Map.entry(Material.DIAMOND_BOOTS, Material.DIAMOND_LEGGINGS)
+        );
+
+        Map<Material, Integer> enchantmentLvl = Map.of(
+                Material.WOODEN_AXE, 1,
+                Material.WOODEN_PICKAXE, 1,
+                Material.STONE_AXE, 2,
+                Material.STONE_PICKAXE, 2,
+                Material.IRON_AXE, 3,
+                Material.IRON_PICKAXE, 3,
+                Material.DIAMOND_AXE, 4,
+                Material.DIAMOND_PICKAXE, 4,
+                Material.GOLDEN_AXE, 5,
+                Material.GOLDEN_PICKAXE, 5
+        );
+
+        PlayerInventory inv = player.getInventory();
+
         switch (item.getType()) {
-            case LEATHER_CHESTPLATE:
-                this.getPlayer().getInventory().setChestplate(item);
+            case LEATHER_CHESTPLATE, LEATHER_HELMET, LEATHER_BOOTS, LEATHER_LEGGINGS -> {
+                Utils.setArmor(inv, item);
                 return;
-            case LEATHER_HELMET:
-                this.getPlayer().getInventory().setHelmet(item);
-                return;
-            case LEATHER_LEGGINGS:
-                this.getPlayer().getInventory().setLeggings(item);
-                return;
-            case LEATHER_BOOTS:
-                this.getPlayer().getInventory().setBoots(item);
-                return;
-            case GOLDEN_BOOTS:
-                ItemStack golden_leggings = new ItemStack(Material.GOLDEN_LEGGINGS, 1);
-                ItemMeta gl_meta = golden_leggings.getItemMeta();
-                if(plvl != 0) gl_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
-                golden_leggings.setItemMeta(gl_meta);
-                if(plvl != 0) meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
+            }
+            case GOLDEN_BOOTS, CHAINMAIL_BOOTS, IRON_BOOTS, DIAMOND_BOOTS -> {
+                ItemStack leggings = new ItemStack(secondItem.get(item.getType()));
+                ItemMeta leggingsMeta = leggings.getItemMeta();
+                if (plvl != 0) {
+                    leggingsMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
+                    meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
+                }
+                leggings.setItemMeta(leggingsMeta);
                 item.setItemMeta(meta);
-                this.getPlayer().getInventory().setBoots(item);
-                this.getPlayer().getInventory().setLeggings(golden_leggings);
+                Utils.setArmor(inv, item);
+                Utils.setArmor(inv, leggings);
                 return;
-            case CHAINMAIL_BOOTS:
-                ItemStack chainmain_leggings = new ItemStack(Material.CHAINMAIL_LEGGINGS, 1);
-                ItemMeta cl_meta = chainmain_leggings.getItemMeta();
-                if(plvl != 0) cl_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
-                chainmain_leggings.setItemMeta(cl_meta);
-                if(plvl != 0) meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
-                item.setItemMeta(meta);
-                this.getPlayer().getInventory().setBoots(item);
-                this.getPlayer().getInventory().setLeggings(chainmain_leggings);
-                return;
-            case IRON_BOOTS:
-                ItemStack iron_leggings = new ItemStack(Material.IRON_LEGGINGS, 1);
-                ItemMeta il_meta = iron_leggings.getItemMeta();
-                if(plvl != 0) il_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
-                iron_leggings.setItemMeta(il_meta);
-                if(plvl != 0) meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
-                item.setItemMeta(meta);
-                this.getPlayer().getInventory().setBoots(item);
-                this.getPlayer().getInventory().setLeggings(iron_leggings);
-                return;
-            case DIAMOND_BOOTS:
-                ItemStack diamond_leggings = new ItemStack(Material.DIAMOND_LEGGINGS, 1);
-                ItemMeta dl_meta = diamond_leggings.getItemMeta();
-                if(plvl != 0) dl_meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
-                diamond_leggings.setItemMeta(dl_meta);
-                if(plvl != 0) meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
-                item.setItemMeta(meta);
-                this.getPlayer().getInventory().setBoots(item);
-                this.getPlayer().getInventory().setLeggings(diamond_leggings);
-                return;
-            case WOODEN_AXE:
-            case WOODEN_PICKAXE:
-                meta.addEnchant(Enchantment.DIG_SPEED, 1 + elvl, true);
-                break;
-            case STONE_AXE:
-                if(this.getPlayer().getInventory().first(Material.WOODEN_AXE) != -1) this.getPlayer().getInventory().clear(this.getPlayer().getInventory().first(Material.WOODEN_AXE));
-                meta.addEnchant(Enchantment.DIG_SPEED, 2 + elvl, true);
-                break;
-            case STONE_PICKAXE:
-                if(this.getPlayer().getInventory().first(Material.WOODEN_PICKAXE) != -1) this.getPlayer().getInventory().clear(this.getPlayer().getInventory().first(Material.WOODEN_PICKAXE));
-                meta.addEnchant(Enchantment.DIG_SPEED, 2 + elvl, true);
-                break;
-            case IRON_AXE:
-                if(this.getPlayer().getInventory().first(Material.STONE_AXE) != -1) this.getPlayer().getInventory().clear(this.getPlayer().getInventory().first(Material.STONE_AXE));
-                meta.addEnchant(Enchantment.DIG_SPEED, 3 + elvl, true);
-                break;
-            case IRON_PICKAXE:
-                if(this.getPlayer().getInventory().first(Material.STONE_PICKAXE) != -1) this.getPlayer().getInventory().clear(this.getPlayer().getInventory().first(Material.STONE_PICKAXE));
-                meta.addEnchant(Enchantment.DIG_SPEED, 3 + elvl, true);
-                break;
-            case DIAMOND_AXE:
-                if(this.getPlayer().getInventory().first(Material.IRON_AXE) != -1) this.getPlayer().getInventory().clear(this.getPlayer().getInventory().first(Material.IRON_AXE));
-                meta.addEnchant(Enchantment.DIG_SPEED, 4 + elvl, true);
-                break;
-            case DIAMOND_PICKAXE:
-                if(this.getPlayer().getInventory().first(Material.IRON_PICKAXE) != -1) this.getPlayer().getInventory().clear(this.getPlayer().getInventory().first(Material.IRON_PICKAXE));
-                meta.addEnchant(Enchantment.DIG_SPEED, 4 + elvl, true);
-                break;
-            case GOLDEN_AXE:
-                if(this.getPlayer().getInventory().first(Material.DIAMOND_AXE) != -1) this.getPlayer().getInventory().clear(this.getPlayer().getInventory().first(Material.DIAMOND_AXE));
-                meta.addEnchant(Enchantment.DIG_SPEED, 5 + elvl, true);
-                break;
-            case GOLDEN_PICKAXE:
-                if(this.getPlayer().getInventory().first(Material.DIAMOND_PICKAXE) != -1) this.getPlayer().getInventory().clear(this.getPlayer().getInventory().first(Material.DIAMOND_PICKAXE));
-                meta.addEnchant(Enchantment.DIG_SPEED, 5 + elvl, true);
-                break;
-            case WOODEN_SWORD:
-            case STONE_SWORD:
-            case IRON_SWORD:
-            case DIAMOND_SWORD:
-                if(slvl != 0) meta.addEnchant(Enchantment.DAMAGE_ALL, slvl, true);
-                break;
-            default: break;
+            }
+            case WOODEN_AXE, WOODEN_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 1 + elvl, true);
+            case STONE_AXE, STONE_PICKAXE, IRON_AXE, IRON_PICKAXE, DIAMOND_AXE, DIAMOND_PICKAXE, GOLDEN_AXE, GOLDEN_PICKAXE -> {
+                if (inv.first(secondItem.get(item.getType())) != -1)
+                    inv.clear(inv.first(secondItem.get(item.getType())));
+                meta.addEnchant(Enchantment.DIG_SPEED, enchantmentLvl.get(item.getType()) + elvl, true);
+            }
+            case WOODEN_SWORD, STONE_SWORD, IRON_SWORD, DIAMOND_SWORD -> {
+                if (slvl != 0)
+                    meta.addEnchant(Enchantment.DAMAGE_ALL, slvl, true);
+            }
         }
 
         item.setItemMeta(meta);
 
-        this.getPlayer().getInventory().addItem(item);
+        inv.addItem(item);
     }
     
-    public boolean inInvis() {
+    public boolean isInvisible() {
     	return showTask != null;
     }
     
-    public void hide() {
+    public void hideArmor() {
     	Player bukkitPlayer = getPlayer();
     	if (bukkitPlayer == null || !bukkitPlayer.isOnline()) {
     		return;
     	}
-    	if (inInvis()) {
+    	if (isInvisible()) {
     		showTask.cancel();
     	}
-		hidenArmor = bukkitPlayer.getInventory().getArmorContents();
+        hiddenArmor = bukkitPlayer.getInventory().getArmorContents();
 		bukkitPlayer.getInventory().setArmorContents(null);
 		showTask = new BukkitRunnable() {
 			@Override
 			public void run() {
 				if (bukkitPlayer.isOnline()) {
-					bukkitPlayer.getInventory().setArmorContents(hidenArmor);
+					bukkitPlayer.getInventory().setArmorContents(hiddenArmor);
 				}
 				showTask = null;
 			}
 		}.runTaskLater(getPlugin(), 600);
     }
     
-    public void show() {
+    public void showArmor() {
     	Player bukkitPlayer = getPlayer();
     	if (bukkitPlayer == null || !bukkitPlayer.isOnline()) {
     		return;
     	}
-    	if (inInvis()) {
+    	if (isInvisible()) {
     		showTask.cancel();
-    		bukkitPlayer.getInventory().setArmorContents(hidenArmor);
+    		bukkitPlayer.getInventory().setArmorContents(hiddenArmor);
     	}
     }
-    
-    
+
+    public void destroy() {
+        this.setTeam(null);
+        if (isInvisible()) showArmor();
+        plugin.getPlayers().remove(getPlayer().getUniqueId());
+    }
+
+    public void clearParticles() {
+        Collection<PotionEffect> effects = getPlayer().getActivePotionEffects();
+        for (PotionEffect effect : effects) {
+            getPlayer().removePotionEffect(effect.getType());
+        }
+    }
 }

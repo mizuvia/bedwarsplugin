@@ -6,10 +6,12 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 import net.minecraft.server.v1_16_R3.PacketPlayOutCustomPayload;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
@@ -55,4 +57,17 @@ public class Utils {
         item.setItemMeta(meta);
         return item;
     }
+
+    public static void sendToAll(String message) {
+        Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage(message));
+    }
+
+    public static void setArmor(PlayerInventory inv, ItemStack armor) {
+        String name = armor.getType().name();
+        if (name.matches(".+HELMET")) inv.setHelmet(armor);
+        if (name.matches(".+CHESTPLATE")) inv.setChestplate(armor);
+        if (name.matches(".+LEGGINGS")) inv.setLeggings(armor);
+        if (name.matches(".+BOOTS")) inv.setBoots(armor);
+    }
+
 }

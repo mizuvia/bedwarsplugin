@@ -2,6 +2,7 @@
 
 package tab;
 
+import game.Participant;
 import main.Plugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -27,25 +28,25 @@ public class Tab {
         scoreboard.registerNewTeam(ANOTHER_TEAM_NAME);
     }
 
-//    public void addPlayerToTabs(Participant par){
-//        for(Participant tabOwner : this.getPlugin().getPlayers().values()){
-//            addPlayerToTab(tabOwner, par);
-//        }
-//    }
-//
-//    private void addPlayerToTab(Participant tabOwner, Participant par){
-//        if(!par.hasTeam()) tabOwner.getScoreboard().getTeam(ANOTHER_TEAM_NAME).addEntry(par.getPlayer().getName());
-//        else tabOwner.getScoreboard().getTeam(par.getTeam().getColor()).addEntry(par.getPlayer().getName());
-//    }
-//
-//    public void removePlayerFromTabs(Participant par){
-//        for(Participant tabOwner : this.getPlugin().getPlayers().values()){
-//            removePlayerFromTab(tabOwner, par);
-//        }
-//    }
-//
-//    private void removePlayerFromTab(Participant tabOwner, Participant par){
-//        if(!par.hasTeam()) tabOwner.getScoreboard().getTeam(ANOTHER_TEAM_NAME).removeEntry(par.getPlayer().getName());
-//        else tabOwner.getScoreboard().getTeam(par.getTeam().getColor()).removeEntry(par.getPlayer().getName());
-//    }
+    public void addPlayerToTabs(Participant par){
+        for(Participant tabOwner : this.getPlugin().getPlayers().values()){
+            addPlayerToTab(tabOwner, par);
+        }
+    }
+
+    private void addPlayerToTab(Participant tabOwner, Participant par){
+        if(!par.hasTeam()) tabOwner.getScoreboard().getTeam(ANOTHER_TEAM_NAME).addEntry(par.getPlayer().getName());
+        else tabOwner.getScoreboard().getTeam(par.getTeam().getColor()).addEntry(par.getPlayer().getName());
+    }
+
+    public void removePlayerFromTabs(Participant par){
+        for(Participant tabOwner : this.getPlugin().getPlayers().values()){
+            removePlayerFromTab(tabOwner, par);
+        }
+    }
+
+    private void removePlayerFromTab(Participant tabOwner, Participant par){
+        if(!par.hasTeam()) tabOwner.getScoreboard().getTeam(ANOTHER_TEAM_NAME).removeEntry(par.getPlayer().getName());
+        else tabOwner.getScoreboard().getTeam(par.getTeam().getColor()).removeEntry(par.getPlayer().getName());
+    }
 }

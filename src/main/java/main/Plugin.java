@@ -7,8 +7,7 @@ import game.Participant;
 import game.Team;
 import inventories.*;
 import jedis.RedisThread;
-import loading.PlayerSidebar;
-import loading.PlayerSidebar.Timer;
+import loading.Sidebar;
 import loading.Waiting;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
@@ -27,7 +26,6 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import redis.clients.jedis.Jedis;
 import tab.Tab;
@@ -51,6 +49,7 @@ public class Plugin extends JavaPlugin {
     public TeamSelectionInventory choose_team;
     public HashMap<String, Team> teams = new HashMap<>();
     public HashMap<UUID, Participant> players;
+    private Sidebar sidebar;
     private Jedis jedis;
 
     public boolean isLoading() {return this.isLoading;}
@@ -101,13 +100,13 @@ public class Plugin extends JavaPlugin {
         
         this.reloadWorld();
         Config.createInstance(this);
-        PlayerSidebar.setTimer(new Timer(this));
         this.game = new Game(this);
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
         for (Player p : Bukkit.getOnlinePlayers()) {
         	Bukkit.getLogger().info(p.getName());
         }
+        this.sidebar = new Sidebar(this);
         this.waiting = new Waiting(this);
         this.tab = new Tab(this);
 
@@ -126,7 +125,6 @@ public class Plugin extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-        runSidebarUpdater();
         getLogger().info("enabled!");
     }
 
@@ -235,14 +233,8 @@ public class Plugin extends JavaPlugin {
         onPrepareItemCraft onPrepareItemCraft = new onPrepareItemCraft(this);
         Bukkit.getPluginManager().registerEvent(PrepareItemCraftEvent.class, onPrepareItemCraft, EventPriority.NORMAL, onPrepareItemCraft, this);
     }
-    
-    private void runSidebarUpdater() {
-    	new BukkitRunnable() {
-			@Override
-			public void run() {
-				Bukkit.getOnlinePlayers().forEach(p -> getPlayers().get(p.getUniqueId()).getSidebar().update());
-			}
-		}.runTaskTimer(this, 0, 10);
+
+    public Sidebar getSidebar() {
+        return sidebar;
     }
-    
 }

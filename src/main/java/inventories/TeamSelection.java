@@ -11,7 +11,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import util.TeamManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +37,13 @@ public class TeamSelection implements IGUI{
         Team team = this.getPlugin().getTeams().get(color);
         Participant participant = this.getPlugin().getPlayers().get(whoClicked.getUniqueId());
 
-        if(team.getTeammatesAmount() == Config.getPlayersPerTeam()){
+        if (team.getTeammatesAmount() == Config.getPlayersPerTeam()){
             whoClicked.closeInventory();
             whoClicked.sendMessage("§cКоманда заполнена!");
             return;
         }
 
-        if(participant.hasTeam()) {
+        if (participant.hasTeam()) {
             String oldColor = participant.getTeam().getColor();
 
             if(oldColor.equals(color)){
@@ -53,11 +52,10 @@ public class TeamSelection implements IGUI{
                 return;
             }
 
-            TeamManager.removePlayerFromTeam(plugin, participant);
+            participant.setTeam(null);
         }
 
-        TeamManager.addPlayerToTeam(plugin, team, participant);
-
+        participant.setTeam(team);
         participant.getPlayer().closeInventory();
         participant.getPlayer().sendMessage("§eВы успешно присоединились к команде " + team.getName() + "§e!");
     }

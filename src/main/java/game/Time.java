@@ -55,7 +55,8 @@ public class Time extends TaskGUI {
 
             nextStage();
         }
- //       getGame().getPlugin().getSidebar().updateStage(stage);
+
+        getGame().getPlugin().getSidebar().updateStage(stage);
         stage.decreaseTime();
     }
 

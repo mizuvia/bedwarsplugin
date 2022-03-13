@@ -139,7 +139,7 @@ public class Team {
     public void decreaseTeammatesAmount() {
         this.teammates_amount--;
         if(this.getPlugin().isWorking()){
-          //  if(this.isBroken()) this.getPlugin().getSidebar().decreaseTeammatesAmount(this);
+            if(this.isBroken()) this.getPlugin().getSidebar().decreaseTeammatesAmount(this);
             this.checkAlive();
         }
     }
@@ -148,7 +148,7 @@ public class Team {
 
     public void setDead(boolean isDead) {
         this.isDead = isDead;
- //       this.getPlugin().getSidebar().setDead(this);
+        this.getPlugin().getSidebar().setDead(this);
     }
 
     public boolean isDead() {return this.isDead;}

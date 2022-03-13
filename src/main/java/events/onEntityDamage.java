@@ -20,192 +20,158 @@ import util.PlayerInv;
 import util.Utils;
 import util.WorldManager;
 
-import java.util.UUID;
+import java.util.*;
 
 public class onEntityDamage extends SimpleListener implements Listener, EventExecutor {
 
     public onEntityDamage(Plugin plugin) {
         super(plugin);
     }
+    private EntityDamageEvent e;
+    private Player player;
+    private Participant p;
 
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
 
-        EntityDamageEvent e = (EntityDamageEvent) event;
+        this.e = (EntityDamageEvent) event;
 
-        if(e.getEntity() instanceof Player){
-        	Player pl = (Player) e.getEntity();
-            if(e.getFinalDamage() >= pl.getHealth()) {
-                e.setCancelled(true);
-        		Participant partic = getPlugin().getPlayers().get(pl.getUniqueId());
-        		if (partic.inInvis()) {
-        			partic.show();
-        		}
-                if(this.getPlugin().isLoading()) {
-                    if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()));
-                    e.getEntity().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
-                } else {
-                    boolean isFinal = this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getTeam().isBroken();
-                    if (partic.getLastDamager().get() != null) {
-                    	if (getPlugin().getPlayers().containsKey(UUID.fromString(partic.getLastDamager().get()))) {
-                    		Participant killer = getPlugin().getPlayers().get(UUID.fromString(partic.getLastDamager().get()));
-                    		killer.increaseKilledPlayers();
-                    		if (isFinal) {
-                    			killer.increaseFinalKills();
-                    		}
-                    		Player bukkitKiller = killer.getPlayer();
-                    		if (bukkitKiller != null && bukkitKiller.isOnline()) {
-                    			pl.getInventory().all(Material.BRICK).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
-                    			pl.getInventory().all(Material.IRON_INGOT).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
-                    			pl.getInventory().all(Material.GOLD_INGOT).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
-                    			pl.getInventory().all(Material.DIAMOND).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
-                    			pl.getInventory().all(Material.EMERALD).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
-                    		}
-                        	Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 был зверски убит " + PlayerManager.getCodeColor(killer) + killer.getPlayer().getName() + (isFinal ? " §b§lФинальное убийство!" : "")));
-                    	}else {
-                        	Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 был зверски убит " + partic.getLastDamager().get() + (isFinal ? " §b§lФинальное убийство!" : "")));
-                    	}
-                    }else {
-                        if (isFinal) {
-                            partic.getTeam().getBedDestroyer().increaseFinalKills();
-                            partic.getTeam().getBedDestroyer().increaseKilledPlayers();
-                        }
-                    	switch (e.getCause()) {
-						case VOID -> Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 упал в бездну " + (isFinal ? " §b§lФинальное убийство!" : "")));
-						case FALL -> Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 разбился " + (isFinal ? " §b§lФинальное убийство!" : "")));
-						default -> Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(PlayerManager.getCodeColor(partic) + e.getEntity().getName() + "§7 умер " + (isFinal ? " §b§lФинальное убийство!" : "")));
-						}
-                    }
-//                    if (!this.getPlugin().getGame().getPlayersDamagers().containsKey(e.getEntity().getName())) {
-//                        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-//                            player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getEntity().getName())) + e.getEntity().getName() + "§7 упал в бездну." + " " + (isFinal ? "§b§lФинальное убийство!" : ""));
-//                        }
-//                        if (isFinal) {
-//                            this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getBedDestroyer().increaseFinalKills();
-//                            this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getBedDestroyer().increaseKilledPlayers();
-//                        }
-//                    } else {
-//                        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-//                            player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getEntity().getName())) + e.getEntity().getName() + "§7 был зверски убит " + PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName()))) + this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName()) + " " + (isFinal ? "§b§lФинальное убийство!" : ""));
-//                        }
-//                        if (isFinal)
-//                            this.getPlugin().getPlayers().get(e.getEntity().getName()).getTeam().getBedDestroyer().increaseFinalKills();
-//                        this.getPlugin().getPlayers().get(this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName())).increaseKilledPlayers();
-//
-//                        for (ItemStack item : ((Player) e.getEntity()).getInventory().getContents()) {
-//                            if(item == null) continue;
-//
-//                            int amount = item.getAmount();
-//                            ItemStack resource;
-//                            ItemMeta meta;
-//
-//                            switch(item.getType()){
-//                                case BRICK -> {
-//                                    resource = new ItemStack(Material.BRICK, amount);
-//                                    meta = resource.getItemMeta();
-//                                    meta.setDisplayName("§eБронза");
-//                                }
-//                                case IRON_INGOT -> {
-//                                    resource = new ItemStack(Material.IRON_INGOT, amount);
-//                                    meta = resource.getItemMeta();
-//                                    meta.setDisplayName("§eЖелезо");
-//                                }
-//                                case GOLD_INGOT -> {
-//                                    resource = new ItemStack(Material.GOLD_INGOT, amount);
-//                                    meta = resource.getItemMeta();
-//                                    meta.setDisplayName("§eЗолото");
-//                                }
-//                                case DIAMOND -> {
-//                                    resource = new ItemStack(Material.DIAMOND, amount);
-//                                    meta = resource.getItemMeta();
-//                                    meta.setDisplayName("§eАлмаз");
-//                                }
-//                                case EMERALD -> {
-//                                    resource = new ItemStack(Material.EMERALD, amount);
-//                                    meta = resource.getItemMeta();
-//                                    meta.setDisplayName("§eИзумруд");
-//                                }
-//                                default -> {
-//                                    continue;
-//                                }
-//                            }
-//
-//                            resource.setItemMeta(meta);
-//
-//                            this.getPlugin().getPlayers().get(this.getPlugin().getGame().getPlayersDamagers().get(e.getEntity().getName())).giveItem(resource);
-//                        }
-//
-//                        this.getPlugin().getGame().getPlayersDamagers().remove(e.getEntity().getName());
-//                    }
+        if(!(e.getEntity() instanceof Player player)) return;
+        if(e.getFinalDamage() < player.getHealth()) return;
 
-                    if (isFinal) this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getTeam().decreaseTeammatesAmount();
+        e.setCancelled(true);
 
-                    Participant participant = this.getPlugin().getPlayers().get(e.getEntity().getUniqueId());
+        this.p = getPlugin().getPlayers().get(player.getUniqueId());
+        this.player = player;
 
-                    for (ItemStack item : ((Player) e.getEntity()).getInventory().getContents()) {
-                        if (item == null) continue;
-                        switch(item.getType()){
-                            case STONE_PICKAXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.WOODEN_PICKAXE.getItem()));
-                                participant.getToolsInventory().setItem(30, ShopItem.STONE_PICKAXE.getItem());
-                            }
-                            case STONE_AXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.WOODEN_AXE.getItem()));
-                                participant.getToolsInventory().setItem(31, ShopItem.STONE_AXE.getItem());
-                            }
-                            case IRON_PICKAXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.STONE_PICKAXE.getItem()));
-                                participant.getToolsInventory().setItem(30, ShopItem.IRON_PICKAXE.getItem());
-                            }
-                            case IRON_AXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.STONE_AXE.getItem()));
-                                participant.getToolsInventory().setItem(31, ShopItem.IRON_AXE.getItem());
-                            }
-                            case DIAMOND_PICKAXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.IRON_PICKAXE.getItem()));
-                                participant.getToolsInventory().setItem(30, ShopItem.DIAMOND_PICKAXE.getItem());
-                            }
-                            case DIAMOND_AXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.IRON_AXE.getItem()));
-                                participant.getToolsInventory().setItem(31, ShopItem.DIAMOND_AXE.getItem());
-                            }
-                            case GOLDEN_PICKAXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.DIAMOND_PICKAXE.getItem()));
-                                participant.getToolsInventory().setItem(30, ShopItem.GOLDEN_PICKAXE.getItem());
-                            }
-                            case GOLDEN_AXE -> {
-                                participant.getRespawnItems().add(Utils.clearItem(ShopItem.DIAMOND_AXE.getItem()));
-                                participant.getToolsInventory().setItem(31, ShopItem.GOLDEN_AXE.getItem());
-                            }
-                            case GOLDEN_BOOTS, CHAINMAIL_BOOTS, IRON_BOOTS, DIAMOND_BOOTS, FISHING_ROD, LEATHER_BOOTS,
-                                    LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_HELMET, SHEARS, WOODEN_PICKAXE, WOODEN_AXE -> participant.getRespawnItems().add(item);
-                        }
-                    }
+        if (p == null) return;
 
-                    if (this.getPlugin().isWorking()) {
-                        ((Player) e.getEntity()).setGameMode(GameMode.SPECTATOR);
-                        ((Player) e.getEntity()).getInventory().clear();
+        if (p.isInvisible()) {
+            p.showArmor();
+        }
 
-                        ((Player) e.getEntity()).setHealth(20.0);
+        if(this.getPlugin().isLoading()) {
+            if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()));
+            e.getEntity().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
+        } else {
+            killInGame();
+        }
+    }
 
-                        Participant p = getPlugin().getPlayers().get(e.getEntity().getUniqueId());
+    public void killInGame() {
+        boolean isFinal = p.getTeam().isBroken();
+        String finalMessage = isFinal ? " §b§lФинальное убийство!" : "";
+        String deathMessage = hasKiller() ? killWithKiller(isFinal) : killWithoutKiller(isFinal);
+        Utils.sendToAll(PlayerManager.getCodeColor(p) + player.getName() + deathMessage + finalMessage);
 
-                        if (p.getTeam().isBroken()) {
-//                            this.getPlugin().getTab().removePlayerFromTabs(p);
-                            ((Player) e.getEntity()).setPlayerListName("§7Наблюдатель " + e.getEntity().getName());
-                            e.getEntity().teleport(Config.getCenter());
-                        } else {
-                            e.getEntity().teleport(Config.getCenter());
-                            ((Player) e.getEntity()).sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
+        if (isFinal) p.getTeam().decreaseTeammatesAmount();
 
-                            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
-                                e.getEntity().teleport(p.getTeam().getSpawnLocation());
-                                PlayerInv.setPlayingInventory(p);
-                                ((Player) e.getEntity()).setGameMode(GameMode.SURVIVAL);
-                            }, 100);
-                        }
-                    }
-                }
+        updateToolsInventory();
+        addRespawnedItems();
+        p.clearParticles();
+
+        if (this.getPlugin().isWorking()) {
+            player.setGameMode(GameMode.SPECTATOR);
+            player.getInventory().clear();
+            player.setHealth(20.0);
+            player.teleport(Config.getCenter());
+
+            if (p.getTeam().isBroken()) {
+//              this.getPlugin().getTab().removePlayerFromTabs(p);
+                player.setPlayerListName("§7Наблюдатель " + player.getName());
+            } else {
+                player.sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
+
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
+                    player.teleport(p.getTeam().getSpawnLocation());
+                    PlayerInv.setPlayingInventory(p);
+                    player.setGameMode(GameMode.SURVIVAL);
+                }, 100);
+            }
+        }
+    }
+
+    private void updateToolsInventory() {
+        Map<Material, Material> tools = Map.of(
+            Material.STONE_AXE, Material.WOODEN_AXE,
+            Material.IRON_AXE, Material.STONE_AXE,
+            Material.DIAMOND_AXE, Material.IRON_AXE,
+            Material.GOLDEN_AXE, Material.DIAMOND_AXE,
+            Material.STONE_PICKAXE, Material.WOODEN_PICKAXE,
+            Material.IRON_PICKAXE, Material.STONE_PICKAXE,
+            Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE,
+            Material.GOLDEN_PICKAXE, Material.DIAMOND_PICKAXE
+        );
+
+        tools.forEach((k, v) -> {
+            if (player.getInventory().all(k).size() != 0) {
+                p.getRespawnItems().add(Utils.clearItem(ShopItem.valueOf(v.name()).getItem()));
+                p.getToolsInventory().setItem(k.name().matches(".*PICKAXE") ? 30 : 31, ShopItem.valueOf(k.name()).getItem());
+            }
+        });
+    }
+
+    private void addRespawnedItems() {
+        for (ItemStack item : player.getInventory().getContents()) {
+            if (item == null) continue;
+
+            List<Material> respawnedItems = List.of(
+                Material.GOLDEN_BOOTS, Material.CHAINMAIL_BOOTS,
+                Material.IRON_BOOTS, Material.DIAMOND_BOOTS,
+                Material.FISHING_ROD, Material.LEATHER_BOOTS,
+                Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS,
+                Material.LEATHER_HELMET, Material.SHEARS,
+                Material.WOODEN_PICKAXE, Material.WOODEN_AXE
+            );
+
+            if (respawnedItems.contains(item.getType())) {
+                p.getRespawnItems().add(item);
+            }
+        }
+    }
+
+    private boolean hasKiller() {
+        return p.getLastDamager().get() != null;
+    }
+
+
+    public String killWithKiller(boolean isFinal) {
+        if (getPlugin().getPlayers().containsKey(UUID.fromString(p.getLastDamager().get()))) {
+            Participant killer = getPlugin().getPlayers().get(UUID.fromString(p.getLastDamager().get()));
+
+            if (isFinal) killer.increaseFinalKills();
+            else killer.increaseKilledPlayers();
+
+            giveKillerResources(killer);
+
+            return "§7 был зверски убит." + PlayerManager.getCodeColor(killer) + killer.getPlayer().getName();
+        } else {
+            return "§7 был зверски убит." + p.getLastDamager().get();
+        }
+    }
+
+    public String killWithoutKiller(boolean isFinal) {
+        if (isFinal) {
+            p.getTeam().getBedDestroyer().increaseFinalKills();
+        }
+        return switch (e.getCause()) {
+            case VOID -> "§7 упал в бездну.";
+            case FALL -> "§7 разбился.";
+            default -> "§7 умер.";
+        };
+    }
+
+    private void giveKillerResources(Participant killer) {
+
+        Player bukkitKiller = killer.getPlayer();
+        if (bukkitKiller != null && bukkitKiller.isOnline()) {
+            List<Material> resources = Arrays.asList(
+                Material.IRON_INGOT, Material.GOLD_INGOT,
+                Material.DIAMOND, Material.EMERALD
+            );
+
+            for (Material mat : resources) {
+                player.getInventory().all(mat).values().forEach(res -> bukkitKiller.getInventory().addItem(res));
             }
         }
     }

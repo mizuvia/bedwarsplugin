@@ -53,8 +53,8 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
         if(e.getDamager() instanceof Player){
         	Player damager = (Player) e.getDamager();
         	Participant p = getPlugin().getPlayers().get(damager.getUniqueId());
-        	if (p.inInvis()) {
-        		p.show();
+        	if (p.isInvisible()) {
+        		p.showArmor();
         	}
             if(e.getEntity() instanceof IronGolem){
                 if(this.getPlugin().getPlayers().get(e.getDamager().getUniqueId()).getTeam().getIronGolem() == null) return;

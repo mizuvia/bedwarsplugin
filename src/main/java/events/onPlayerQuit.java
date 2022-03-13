@@ -11,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
-import util.TeamManager;
 
 public class onPlayerQuit extends SimpleListener implements Listener, EventExecutor {
 
@@ -24,18 +23,7 @@ public class onPlayerQuit extends SimpleListener implements Listener, EventExecu
         PlayerQuitEvent e = (PlayerQuitEvent) event;
 
         Participant p = this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId());
-
-        if (p != null) {
-            if (p.inInvis()) {
-            	p.show();
-            }
-            if(p.hasTeam()){
-                this.getPlugin().getTeamSelectionInventory().removePlayer(p);
-                TeamManager.removePlayerFromTeam(this.getPlugin(), p);
-            }
-        }
-
-        this.getPlugin().getPlayers().remove(e.getPlayer().getUniqueId());
+        p.destroy();
 
         if(this.getPlugin().isLoading()){
             Bukkit.getServer().getScheduler().runTaskLater(getPlugin(), () -> getPlugin().getWaiting().checkAmount(), 5);

@@ -18,10 +18,11 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import game.Messenger.Message;
 import util.PlayerInv;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Game {
+
+    public static final Map<UUID, Participant> PLAYERS = new HashMap<>();
 
     private int matchTime = 0;
     private List<Block> blockList = new ArrayList<>();

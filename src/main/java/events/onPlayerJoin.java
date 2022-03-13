@@ -11,6 +11,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.data.type.Bed;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -31,71 +33,42 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         PlayerJoinEvent e = (PlayerJoinEvent) event;
-        if (e.getPlayer().getGameMode() == GameMode.SURVIVAL || e.getPlayer().getGameMode() == GameMode.ADVENTURE) {
-        	e.getPlayer().getWorld().getPlayers().forEach(p -> p.showPlayer(getPlugin(), e.getPlayer()));
+        Player pl = e.getPlayer();
+        if (pl.getGameMode() == GameMode.SURVIVAL || pl.getGameMode() == GameMode.ADVENTURE) {
+        	pl.getWorld().getPlayers().forEach(p -> p.showPlayer(getPlugin(), pl));
         }
-        if(this.getPlugin().isLoading()){
+        if (this.getPlugin().isLoading()){
             Bukkit.getServer().getScheduler().runTaskLater(getPlugin(), () -> getPlugin().getWaiting().checkAmount(), 5);
-            e.getPlayer().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
-            e.getPlayer().setGameMode(GameMode.ADVENTURE);
+            pl.teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
+            pl.setGameMode(GameMode.ADVENTURE);
             
-            Participant p = new Participant(e.getPlayer(), this.getPlugin());
+            Participant p = new Participant(pl, this.getPlugin());
 
             this.setNames(p);
-            if (!this.plugin.getPlayers().containsKey(e.getPlayer().getUniqueId())) {
-            	e.getPlayer().getEnderChest().clear();
-            	for (PotionEffect eff : new ArrayList<>(e.getPlayer().getActivePotionEffects())) {
-            		e.getPlayer().removePotionEffect(eff.getType());
-            	}
-            	e.getPlayer().setFoodLevel(20);
-            	e.getPlayer().setLevel(0);
-            	e.getPlayer().setExp(0);
-            	e.getPlayer().setHealth(e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-            }
-            this.getPlugin().getPlayers().put(e.getPlayer().getUniqueId(), p);
             PlayerInv.setWaitingInventory(p);
 
-
-            e.getPlayer().setScoreboard(p.getSidebar().getScoreboard());
-            //this.getPlugin().getSidebar().fillPlayerSidebar(p);
-           // this.getPlugin().getTab().addPlayerToTabs(p);
-
-            //this.getPlugin().getSidebar().changePlayersAmount();
-
-            e.setJoinMessage(e.getPlayer().getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().getOnlinePlayers() + "§f/§b" + Config.getMaxPlayers() + "§f]");
-
-            this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());
-
-            Party party = MongoService.findOneParty("id", MongoService.findByUUID(e.getPlayer().getUniqueId()).gen$party_id);
-            if(party != null){
-                PartyManager.addPlayer(this.getPlugin(), party, MongoService.findByUUID(p.getPlayer().getUniqueId()));
-            } else {
-            	Team freeTeam = null;
-                for(Team team : this.getPlugin().getTeams().values()){
-                    if(team.getTeammatesAmount() != Config.getPlayersPerTeam()){
-                    	if (freeTeam == null) {
-                    		freeTeam = team;
-                    	}else {
-                    		if (freeTeam.getTeammatesAmount() > team.getTeammatesAmount()) {
-                    			freeTeam = team;
-                    		}
-                    	}
-                    }
-                }
-              TeamManager.addPlayerToTeam(this.getPlugin(), freeTeam, p);
-              return;
-            }
+            changePlayerAmount(e, pl);
+            addToTeam(p);
         }
-        if(this.getPlugin().isWorking()){
-            e.getPlayer().setGameMode(GameMode.SPECTATOR);
-            e.getPlayer().setPlayerListName("§7Наблюдатель " + e.getPlayer().getName());
-            e.getPlayer().setScoreboard(this.getPlugin().getScoreboard());
+        if (this.getPlugin().isWorking()){
+            pl.setGameMode(GameMode.SPECTATOR);
+            pl.setPlayerListName("§7Наблюдатель " + pl.getName());
+            pl.setScoreboard(this.getPlugin().getScoreboard());
 
             e.setJoinMessage(null);
         }
 
-        e.getPlayer().setHealth(20.0);
-        e.getPlayer().setFoodLevel(20);
+        pl.setLevel(0);
+        pl.setExp(0);
+        pl.setHealth(pl.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+        pl.setFoodLevel(20);
+    }
+
+    private void changePlayerAmount(PlayerJoinEvent e, Player pl) {
+        this.getPlugin().getSidebar().changePlayersAmount();
+        e.setJoinMessage(pl.getDisplayName() + " §eприсоединился к игре §f[§b" + this.getPlugin().getOnlinePlayers() + "§f/§b" + Config.getMaxPlayers() + "§f]");
+        this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());
+
     }
 
     private void setNames(Participant p){
@@ -104,5 +77,26 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
         String serverName = ChatColor.GOLD + "" + ChatColor.BOLD + "Mizuvia";
         p.getPlayer().setPlayerListHeader(serverName + "\n ");
         p.getPlayer().setPlayerListFooter("\n§e§lСайт: §6§lmizuvia.fun");
+    }
+
+    private void addToTeam(Participant p) {
+        Party party = MongoService.findOneParty("id", MongoService.findByUUID(p.getPlayer().getUniqueId()).gen$party_id);
+        if(party != null){
+            PartyManager.addPlayer(this.getPlugin(), party, MongoService.findByUUID(p.getPlayer().getUniqueId()));
+        } else {
+            Team freeTeam = null;
+            for(Team team : this.getPlugin().getTeams().values()){
+                if(team.getTeammatesAmount() != Config.getPlayersPerTeam()){
+                    if (freeTeam == null) {
+                        freeTeam = team;
+                    }else {
+                        if (freeTeam.getTeammatesAmount() > team.getTeammatesAmount()) {
+                            freeTeam = team;
+                        }
+                    }
+                }
+            }
+            p.setTeam(freeTeam);
+        }
     }
 }
