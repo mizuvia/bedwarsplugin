@@ -48,7 +48,7 @@ public class Sidebar {
         putInList("GAP4", "    ");
         putInList("PROJECT", ChatColor.GOLD + "" + ChatColor.BOLD + "   Mizuvia");
 
-        Logger.getLogger("SIDEBAR is created");
+        Logger.getLogger("").info("SIDEBAR is created");
 
         fillPlayersSidebars();
     }
@@ -126,6 +126,8 @@ public class Sidebar {
             team.addEntry("§" + SYMBOLS.get(index));
             p.getSidebarObjective().getScore("§" + SYMBOLS.get(index)).setScore(p.getSidebarTeams().size() - index);
         }
+
+        Logger.getLogger("").info("sidebar is drown");
     }
 
     public void fillPlayersSidebars(){
