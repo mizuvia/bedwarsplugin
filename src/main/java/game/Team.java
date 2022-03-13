@@ -88,7 +88,7 @@ public class Team {
     public void setBroken(boolean isBroken) {
         if(this.isBroken) return;
         this.isBroken = isBroken;
-        //this.getPlugin().getSidebar().decreaseTeammatesAmount(this);
+        this.getPlugin().getSidebar().decreaseTeammatesAmount(this);
         this.checkAlive();
     }
 

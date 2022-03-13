@@ -64,34 +64,33 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         String deathMessage = hasKiller() ? killWithKiller(isFinal) : killWithoutKiller(isFinal);
         Utils.sendToAll(PlayerManager.getCodeColor(p) + player.getName() + deathMessage + finalMessage);
 
-        if (isFinal) p.getTeam().decreaseTeammatesAmount();
+        player.setGameMode(GameMode.CREATIVE);
+        player.getInventory().clear();
+        player.setInvisible(true);
+        player.setCanPickupItems(false);
+        player.setHealth(20.0);
+        player.teleport(Config.getCenter());
 
-        updateToolsInventory();
-        addRespawnedItems();
-        p.clearParticles();
-
-        if (this.getPlugin().isWorking()) {
-            player.setGameMode(GameMode.SPECTATOR);
-            player.getInventory().clear();
-            player.setHealth(20.0);
-            player.teleport(Config.getCenter());
-
-            if (p.getTeam().isBroken()) {
-//              this.getPlugin().getTab().removePlayerFromTabs(p);
-                player.setPlayerListName("§7Наблюдатель " + player.getName());
-            } else {
-                player.sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
-
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
-                    player.teleport(p.getTeam().getSpawnLocation());
-                    PlayerInv.setPlayingInventory(p);
-                    player.setGameMode(GameMode.SURVIVAL);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.showPlayer(plugin, player);
-                        player.showPlayer(plugin, p);
-                    }
-                }, 100);
-            }
+        if (isFinal) {
+            player.sendTitle("§cВы умерли и больше не возродитесь", "§7Наблюдайте за игрой.", 10, 70, 20);
+            player.setPlayerListName("§7Наблюдатель " + player.getName());
+            p.destroy();
+        } else {
+            player.sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
+            updateToolsInventory();
+            addRespawnedItems();
+            p.clearParticles();
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
+                player.teleport(p.getTeam().getSpawnLocation());
+                player.setInvisible(false);
+                player.setCanPickupItems(true);
+                PlayerInv.setPlayingInventory(p);
+                player.setGameMode(GameMode.SURVIVAL);
+//                for (Player p : Bukkit.getOnlinePlayers()) {
+//                    p.showPlayer(plugin, player);
+//                    player.showPlayer(plugin, p);
+//                }
+            }, 100);
         }
     }
 
