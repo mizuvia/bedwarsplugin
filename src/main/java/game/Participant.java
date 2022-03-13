@@ -105,7 +105,7 @@ public class Participant {
     	if (this.team != null) {
             TeamSelection.removePlayerFromItem(plugin, this);
 
-            team.removeTeammate(this);
+            this.team.removeTeammate(this);
             tab.removePlayerFromTabs(this);
         }
         if (team != null) {
