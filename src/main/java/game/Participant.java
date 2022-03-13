@@ -103,7 +103,12 @@ public class Participant {
         Tab tab = this.plugin.getTab();
 
     	if (this.team != null) {
+            TeamSelection.removePlayerFromItem(plugin, this);
 
+            team.removeTeammate(this);
+            tab.removePlayerFromTabs(this);
+        }
+        if (team != null) {
             TeamSelection.addPlayerToItem(plugin, team, this.getPlayer());
             tab.addPlayerToTabs(this);
 
@@ -111,12 +116,6 @@ public class Participant {
             this.getPlayer().setPlayerListName("§8§l[" + team.getName() + "§8§l]§r§7 " + this.getPlayer().getName());
 
             team.addTeammate(this);
-        }
-    	else {
-            TeamSelection.removePlayerFromItem(plugin, this);
-
-            team.removeTeammate(this);
-            tab.removePlayerFromTabs(this);
         }
 
         this.team = team;
