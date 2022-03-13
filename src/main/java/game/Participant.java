@@ -56,6 +56,7 @@ public class Participant {
         this.lastDamager = new LastDamager();
         this.getPlayer().setScoreboard(scoreboard);
         plugin.getSidebar().fillPlayerSidebars(this);
+        plugin.getTab().createTab(this.scoreboard);
         plugin.getTab().addPlayerToTabs(this);
         plugin.getPlayers().put(player.getUniqueId(), this);
     }
