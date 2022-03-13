@@ -19,8 +19,6 @@ public class ChangeTime extends TaskGUI {
     public void run() {
         if(!this.getPlugin().isEnabled() || !this.getPlugin().isLoading()) return;
 
-        Logger.getLogger("").info("lol");
-
         if(this.getTime() == 0) {
             this.getPlugin().setLoading(false);
             this.getPlugin().getSidebar().changeTime(-1);
