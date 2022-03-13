@@ -11,7 +11,6 @@ import util.Utils;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class Sidebar {
     public static final String SIDEBAR_NAME = ChatColor.GOLD + "" + ChatColor.BOLD + "BED" + ChatColor.DARK_PURPLE + ChatColor.BOLD + "WARS";
