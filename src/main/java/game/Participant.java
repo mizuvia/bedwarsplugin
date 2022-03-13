@@ -7,6 +7,7 @@ import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import tab.Tab;
@@ -53,6 +54,7 @@ public class Participant {
         player.getEnderChest().clear();
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.sidebarObjective = scoreboard.registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
+        this.sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.lastDamager = new LastDamager();
         this.getPlayer().setScoreboard(scoreboard);
         plugin.getSidebar().fillPlayerSidebars(this);

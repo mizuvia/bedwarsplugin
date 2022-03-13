@@ -123,8 +123,8 @@ public class Sidebar {
     public void drawPlayerSidebar(Participant p){
         for(Team team : p.getSidebarTeams()){
             int index = p.getSidebarTeams().indexOf(team);
-            team.addEntry(SYMBOLS.get(index));
-            p.getSidebarObjective().getScore(SYMBOLS.get(index)).setScore(p.getSidebarTeams().size() - index);
+            team.addEntry(ChatColor.values()[index] + "" + ChatColor.WHITE);
+            p.getSidebarObjective().getScore(ChatColor.values()[index] + "" + ChatColor.WHITE).setScore(p.getSidebarTeams().size() - index);
         }
 
         Logger.getLogger("").info("sidebar is drown");
