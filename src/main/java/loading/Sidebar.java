@@ -8,18 +8,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Team;
 import util.Utils;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class Sidebar {
     public static final String SIDEBAR_NAME = ChatColor.GOLD + "" + ChatColor.BOLD + "BED" + ChatColor.DARK_PURPLE + ChatColor.BOLD + "WARS";
     private final Time timeClass;
     private final Plugin plugin;
-    public HashMap<String, String> stringsList = new HashMap<>();
-    private static final List<String> SYMBOLS = List.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e");
-
+    public Map<String, String> stringsList = new LinkedHashMap<>();
 
     public Sidebar(Plugin plugin){
         this.plugin = plugin;
@@ -47,8 +45,6 @@ public class Sidebar {
         putInList("MAP_NAME", ChatColor.AQUA + Config.getMapName());
         putInList("GAP4", "    ");
         putInList("PROJECT", ChatColor.GOLD + "" + ChatColor.BOLD + "   Mizuvia");
-
-        Logger.getLogger("").info("SIDEBAR is created");
 
         fillPlayersSidebars();
     }
@@ -126,8 +122,6 @@ public class Sidebar {
             team.addEntry(ChatColor.values()[index] + "" + ChatColor.WHITE);
             p.getSidebarObjective().getScore(ChatColor.values()[index] + "" + ChatColor.WHITE).setScore(p.getSidebarTeams().size() - index);
         }
-
-        Logger.getLogger("").info("sidebar is drown");
     }
 
     public void fillPlayersSidebars(){
