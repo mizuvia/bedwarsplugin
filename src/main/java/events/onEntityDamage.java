@@ -86,6 +86,10 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
                     player.teleport(p.getTeam().getSpawnLocation());
                     PlayerInv.setPlayingInventory(p);
                     player.setGameMode(GameMode.SURVIVAL);
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.showPlayer(plugin, player);
+                        player.showPlayer(plugin, p);
+                    }
                 }, 100);
             }
         }
