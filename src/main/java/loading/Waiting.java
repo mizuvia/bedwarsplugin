@@ -12,6 +12,7 @@ public class Waiting{
     public Waiting(Plugin plugin){
         this.plugin = plugin;
         this.change = new ChangeTime(plugin);
+        this.change.startTask();
         this.getPlugin().setLoading(true);
     }
 
