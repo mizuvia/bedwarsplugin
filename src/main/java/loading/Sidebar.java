@@ -11,6 +11,7 @@ import util.Utils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 public class Sidebar {
     public static final String SIDEBAR_NAME = ChatColor.GOLD + "" + ChatColor.BOLD + "BED" + ChatColor.DARK_PURPLE + ChatColor.BOLD + "WARS";
@@ -25,7 +26,6 @@ public class Sidebar {
         this.timeClass = this.getPlugin().getGame().getTime();
 
         fillWaitingList();
-
     }
 
     private void putInList(String key, String value){
@@ -47,6 +47,8 @@ public class Sidebar {
         putInList("MAP_NAME", ChatColor.AQUA + Config.getMapName());
         putInList("GAP4", "    ");
         putInList("PROJECT", ChatColor.GOLD + "" + ChatColor.BOLD + "   Mizuvia");
+
+        Logger.getLogger("SIDEBAR is created");
 
         fillPlayersSidebars();
     }
