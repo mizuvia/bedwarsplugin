@@ -127,12 +127,13 @@ public enum ShopItem {
     private final Material material;
     private final ItemStack item;
     private final ItemPrice price;
-    private static final Map<Material, ItemStack> itemMap = new HashMap<>();
-    private static final Map<Material, ItemPrice> priceMap = new HashMap<>();
+    private final String name;
+    private static final Map<String, ItemStack> itemMap = new HashMap<>();
+    private static final Map<String, ItemPrice> priceMap = new HashMap<>();
     static {
         for (ShopItem shopItem : ShopItem.values()){
-            itemMap.put(shopItem.getMaterial(), shopItem.getItem());
-            priceMap.put(shopItem.getMaterial(), shopItem.getPrice());
+            itemMap.put(shopItem.getName(), shopItem.getItem());
+            priceMap.put(shopItem.getName(), shopItem.getPrice());
         }
     }
 
@@ -141,6 +142,7 @@ public enum ShopItem {
         this.item = ShopItems.createShopItem(mat, amountInStack, name, price, lore);
         this.price = price;
         this.material = mat;
+        this.name = name;
     }
 
     public ItemPrice getPrice() {
@@ -151,16 +153,20 @@ public enum ShopItem {
         return item;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Material getMaterial() {
         return material;
     }
 
-    public static ItemPrice getPriceByMaterial(Material mat){
-        return ShopItem.priceMap.get(mat);
+    public static ItemPrice getPriceByName(String name){
+        return ShopItem.priceMap.get(name);
     }
 
-    public static ItemStack getItemByMaterial(Material mat){
-        return ShopItem.itemMap.get(mat);
+    public static ItemStack getItemByName(String name){
+        return ShopItem.itemMap.get(name);
     }
 
 }

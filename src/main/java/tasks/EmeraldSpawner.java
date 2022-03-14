@@ -59,7 +59,7 @@ public class EmeraldSpawner {
                 if(!WorldManager.canDropResource(armorStands.getStage(), Material.EMERALD, MAX_AMOUNT_OF_EMERALDS)) return;
                 ItemStack emerald = Utils.createItem(Material.EMERALD, 1, "§eИзумруд");
                 Item item = Bukkit.getServer().getWorld("world").dropItem(armorStands.getStage().getLocation(), emerald);
-                item.setVelocity(new Vector());
+                //item.setVelocity(new Vector());
             }
         }
     }

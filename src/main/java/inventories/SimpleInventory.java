@@ -47,12 +47,10 @@ public class SimpleInventory extends CraftInventoryCustom {
     }
 
     public boolean makeTrade(Participant p, ItemStack oldItem){
-        Material mat = Material.AIR;
-        int amount = 0;
         ItemStack item = new ItemStack(oldItem.getType(), oldItem.getAmount());
         if(oldItem.getType().name().matches("(.*)WOOL")) item.setType(Material.getMaterial(p.getTeam().getColor().toUpperCase(Locale.ROOT) + "_WOOL"));
         if(oldItem.getType().name().matches("(.*)TERRACOTTA")) item.setType(Material.getMaterial(p.getTeam().getColor().toUpperCase(Locale.ROOT) + "_TERRACOTTA"));
-        ItemPrice price = ShopItem.getPriceByMaterial(oldItem.getType());
+        ItemPrice price = ShopItem.getPriceByName(oldItem.getItemMeta().getDisplayName());
 
         item.setItemMeta(oldItem.getItemMeta());
         ItemMeta itemMeta = item.getItemMeta();

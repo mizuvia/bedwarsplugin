@@ -23,20 +23,20 @@ public class Armor implements IGUI{
             case 14 -> whoClicked.openInventory(this.player.getToolsInventory());
             case 15 -> whoClicked.openInventory(this.player.getPlugin().getGame().getPotionsInventory());
             case 16 -> whoClicked.openInventory(this.player.getPlugin().getGame().getOthersInventory());
-            case 29 -> {
+            case 28 -> {
                 if (clickedItem.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)) break;
                 if (this.getInventory().makeTrade(player, clickedItem)) {
                     this.getInventory().setItem(28, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
                 }
             }
-            case 30 -> {
+            case 29 -> {
                 if (clickedItem.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)) break;
                 if (this.getInventory().makeTrade(player, clickedItem)) {
                     this.getInventory().setItem(28, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
                     this.getInventory().setItem(29, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);
                 }
             }
-            case 32 -> {
+            case 30 -> {
                 if (clickedItem.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)) break;
                 if (this.getInventory().makeTrade(player, clickedItem)) {
                     this.getInventory().setItem(28, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", "")[0]);

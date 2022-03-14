@@ -49,7 +49,7 @@ public class DiamondSpawner {
                 if(!WorldManager.canDropResource(armorStands.getStage(), Material.DIAMOND, MAX_AMOUNT_OF_DIAMONDS)) return;
                 ItemStack diamond = Utils.createItem(Material.DIAMOND, 1, "§eАлмаз");
                 Item item = Bukkit.getServer().getWorld("world").dropItem(armorStands.getStage().getLocation(), diamond);
-                item.setVelocity(new Vector());
+                //item.setVelocity(new Vector());
             }
         }
     }
