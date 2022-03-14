@@ -50,6 +50,8 @@ public class Participant {
         this.player = player;
         this.plugin = plugin;
         this.setGroup();
+        player.setInvisible(false);
+        player.setCanPickupItems(true);
         this.clearPotionEffects();
         player.getEnderChest().clear();
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();

@@ -185,6 +185,9 @@ public class Plugin extends JavaPlugin {
         onEntityExplode onEntityExplode = new onEntityExplode(this);
         Bukkit.getPluginManager().registerEvent(EntityExplodeEvent.class, onEntityExplode, EventPriority.NORMAL, onEntityExplode, this);
 
+        onEntityPickupItem onEntityPickupItem = new onEntityPickupItem(this);
+        Bukkit.getPluginManager().registerEvent(EntityPickupItemEvent.class, onEntityPickupItem, EventPriority.NORMAL, onEntityPickupItem, this);
+
         onEntityTarget onEntityTarget = new onEntityTarget(this);
         Bukkit.getPluginManager().registerEvent(EntityTargetEvent.class, onEntityTarget, EventPriority.NORMAL, onEntityTarget, this);
 
