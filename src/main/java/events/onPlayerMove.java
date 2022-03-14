@@ -37,7 +37,7 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                 Location playerLoc = e.getPlayer().getLocation();
                 Location teamLoc = this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getSpawnLocation();
                 double distance = Math.sqrt(Math.pow(playerLoc.getX() - teamLoc.getX(), 2.0) + Math.pow(playerLoc.getZ() - teamLoc.getZ(), 2.0));
-                if (distance <= 25)
+                if (distance <= 25 && playerLoc.getY() > 0)
                     e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100000, 0));
                 else e.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
             }

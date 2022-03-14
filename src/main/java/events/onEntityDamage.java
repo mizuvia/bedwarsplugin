@@ -146,9 +146,9 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
             giveKillerResources(killer);
 
-            return "§7 был зверски убит." + PlayerManager.getCodeColor(killer) + killer.getPlayer().getName();
+            return "§7 был зверски убит " + PlayerManager.getCodeColor(killer) + killer.getPlayer().getName();
         } else {
-            return "§7 был зверски убит." + p.getLastDamager().get();
+            return "§7 был зверски убит " + p.getLastDamager().get();
         }
     }
 
