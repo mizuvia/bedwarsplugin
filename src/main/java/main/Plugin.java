@@ -212,6 +212,9 @@ public class Plugin extends JavaPlugin {
         onPlayerDropItem onPlayerDropItem = new onPlayerDropItem(this);
         Bukkit.getPluginManager().registerEvent(PlayerDropItemEvent.class, onPlayerDropItem, EventPriority.NORMAL, onPlayerDropItem, this);
 
+        onPlayerFish onPlayerFish = new onPlayerFish(this);
+        Bukkit.getPluginManager().registerEvent(PlayerFishEvent.class, onPlayerFish, EventPriority.NORMAL, onPlayerFish, this);
+
         onPlayerInteract onPlayerInteract = new onPlayerInteract(this);
         Bukkit.getPluginManager().registerEvent(PlayerInteractEvent.class, onPlayerInteract, EventPriority.NORMAL, onPlayerInteract, this);
 
