@@ -1,5 +1,6 @@
 package events;
 
+import game.Participant;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Bukkit;
@@ -7,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -26,45 +28,47 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException  {
         PlayerInteractEvent e = (PlayerInteractEvent) event;
 
+        Player p = e.getPlayer();
+        Participant par = getPlugin().getPlayers().get(p.getUniqueId());
+
         if(e.getAction().equals(Action.PHYSICAL)) return;
 
-        if (e.getMaterial().name().equals("RED_BED")) {
+        if (e.getMaterial().equals(Material.RED_BED)) {
             e.setCancelled(true);
 
             if(!e.getAction().equals(Action.RIGHT_CLICK_AIR) && !e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
 
-            e.getPlayer().openInventory(this.getPlugin().getTeamSelectionInventory());
+            p.openInventory(this.getPlugin().getTeamSelectionInventory());
         }
-        if (e.getMaterial().name().equals("DARK_OAK_DOOR")) {
+        if (e.getMaterial().equals(Material.DARK_OAK_DOOR)) {
             e.setCancelled(true);
 
-            Utils.connectToHub(e.getPlayer());
+            Utils.connectToHub(p);
         }
         if(e.getMaterial().equals(Material.GHAST_SPAWN_EGG)){
             e.setCancelled(true);
 
-            if(!e.getAction().equals(Action.RIGHT_CLICK_AIR) && !e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+            if(!Utils.isRightClick(e.getAction())) return;
 
-            if(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getIronGolem() != null) return;
+            if(par.getTeam().getIronGolem() != null) return;
 
             IronGolem golem = (IronGolem) Bukkit.getWorld("world").spawnEntity(new Location(e.getClickedBlock().getLocation().getWorld(), e.getClickedBlock().getLocation().getX() + 0.5, e.getClickedBlock().getLocation().getY() + 1, e.getClickedBlock().getLocation().getZ() + 0.5), EntityType.IRON_GOLEM);
-            golem.setCustomName(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId())) + "§lСтраж команды " + this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getName());
+            golem.setCustomName(PlayerManager.getCodeColor(par) + "§lСтраж команды " + par.getTeam().getName());
             golem.setCustomNameVisible(true);
 
-            this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().setIronGolem(golem);
+            par.getTeam().setIronGolem(golem);
 
-            e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getItem().getAmount() - 1);
+            e.getItem().setAmount(e.getItem().getAmount() - 1);
         }
         if(e.getMaterial().equals(Material.GUNPOWDER)){
             e.setCancelled(true);
 
-            if(!e.getAction().equals(Action.RIGHT_CLICK_AIR) && !e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+            if(!Utils.isRightClick(e.getAction())) return;
 
-            if(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).isTeleporting()) return;
+            if(par.isTeleporting()) return;
+            par.setTeleporting(true);
 
-            this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setTeleporting(true);
-
-            e.getPlayer().sendMessage("§eНе двигайтесь! Телепортация через:");
+            p.sendMessage("§eНе двигайтесь! Телепортация через:");
 
             final boolean[] shouldTeleport = {true};
 
@@ -74,13 +78,13 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
 
                 @Override
                 public void run() {
-                    double location = e.getPlayer().getLocation().getX() + e.getPlayer().getLocation().getY() + e.getPlayer().getLocation().getZ();
+                    double location = p.getLocation().getX() + p.getLocation().getY() + p.getLocation().getZ();
                     if(shouldTeleport[0]) {
                         if(oldLoc != 0 && location != oldLoc){
-                            e.getPlayer().sendMessage("§cТелепортация отменена!");
+                            p.sendMessage("§cТелепортация отменена!");
                             shouldTeleport[0] = false;
-                            getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setTeleporting(false);
-                        } else if(time % 20 == 0) e.getPlayer().sendMessage("§e" + time / 20);
+                            par.setTeleporting(false);
+                        } else if(time % 20 == 0) p.sendMessage("§e" + time / 20);
                     }
                     oldLoc = location;
                     time--;
@@ -89,9 +93,9 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
 
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
                 if(shouldTeleport[0]) {
-                    e.getPlayer().teleport(getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getSpawnLocation());
-                    e.getPlayer().getInventory().getItem(e.getPlayer().getInventory().first(Material.GUNPOWDER)).setAmount(e.getItem().getAmount() - 1);
-                    getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setTeleporting(false);
+                    p.teleport(par.getTeam().getSpawnLocation());
+                    e.getItem().setAmount(e.getItem().getAmount() - 1);
+                    par.setTeleporting(false);
                 }
                 Bukkit.getServer().getScheduler().cancelTask(id);
             }, 79L);
@@ -101,25 +105,25 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
             e.setCancelled(true);
 
             if(e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-                Location loc = e.getPlayer().getLocation();
+                Location loc = p.getLocation();
                 Location newLoc = new Location(loc.getWorld(), loc.getX() - (1 * Math.sin(Math.toRadians(loc.getYaw()))), loc.getY() + 1.0, loc.getZ() + (1 * Math.cos(Math.toRadians(loc.getYaw()))), loc.getYaw(), loc.getPitch());
                 Bukkit.getWorld("world").spawnEntity(newLoc, EntityType.FIREBALL);
-                e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getItem().getAmount() - 1);
+                p.getInventory().getItemInMainHand().setAmount(e.getItem().getAmount() - 1);
             }
         }
         if(e.getMaterial().equals(Material.MILK_BUCKET)){
             e.setCancelled(true);
 
-            if(!e.getAction().equals(Action.RIGHT_CLICK_AIR) && !e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+            if(!Utils.isRightClick(e.getAction())) return;
 
-            if(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).isUnderMilk()) return;
+            if(par.isUnderMilk()) return;
 
-            this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setUnderMilk(true);
+            par.setUnderMilk(true);
 
             e.getItem().setAmount(e.getItem().getAmount() - 1);
-            e.getPlayer().sendMessage("§cТеперь ловушки не действуют на вас в течении 60 секунд!");
+            p.sendMessage("§cТеперь ловушки не действуют на вас в течении 60 секунд!");
 
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).setUnderMilk(false), 1200L);
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> par.setUnderMilk(false), 1200L);
         }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().name().endsWith("_BED")) {
         	e.setCancelled(true);

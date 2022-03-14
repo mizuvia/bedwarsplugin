@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -68,6 +69,10 @@ public class Utils {
         if (name.matches(".+CHESTPLATE")) inv.setChestplate(armor);
         if (name.matches(".+LEGGINGS")) inv.setLeggings(armor);
         if (name.matches(".+BOOTS")) inv.setBoots(armor);
+    }
+
+    public static boolean isRightClick(Action a){
+        return a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK;
     }
 
 }

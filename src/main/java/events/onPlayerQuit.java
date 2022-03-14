@@ -23,6 +23,10 @@ public class onPlayerQuit extends SimpleListener implements Listener, EventExecu
         PlayerQuitEvent e = (PlayerQuitEvent) event;
 
         Participant p = this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId());
+        if (p == null) {
+            e.setQuitMessage(null);
+            return;
+        }
         p.destroy();
 
         if(this.getPlugin().isLoading()){
