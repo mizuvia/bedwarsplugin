@@ -43,7 +43,7 @@ public class TeamUpgrades implements IGUI{
             "§bЭффективность",
             Arrays.asList(new LevelInfo(new ItemPrice(Material.DIAMOND, 2), 1), new LevelInfo(new ItemPrice(Material.DIAMOND, 4), 2)),
             Enchantment.DIG_SPEED,
-            Arrays.asList(Material.WOODEN_AXE, Material.WOODEN_PICKAXE, Material.STONE_AXE, Material.STONE_PICKAXE, Material.IRON_AXE, Material.IRON_PICKAXE, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_AXE, Material.GOLDEN_PICKAXE)
+            Arrays.asList(Material.WOODEN_AXE, Material.WOODEN_PICKAXE, Material.STONE_AXE, Material.STONE_PICKAXE, Material.IRON_AXE, Material.IRON_PICKAXE, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE)
         ));
         upgrades.put("Bedrock", new UpgradeInfo(
             "§bНесокрушимость",
@@ -124,7 +124,6 @@ public class TeamUpgrades implements IGUI{
                         case STONE_AXE, STONE_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 4 + level, true);
                         case IRON_AXE, IRON_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 5 + level, true);
                         case DIAMOND_AXE, DIAMOND_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 6 + level, true);
-                        case GOLDEN_AXE, GOLDEN_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 7 + level, true);
                         default -> {
                         }
                     }

@@ -78,8 +78,6 @@ public enum ShopItem {
             (Material.IRON_PICKAXE, 1, "§eКирка III уровня", new ItemPrice(Material.GOLD_INGOT, 3), "§5Уровень предмета может", "§5быть повышен.", "§5После смерти вы теряете", "§5один уровень улучшения."),
     DIAMOND_PICKAXE
             (Material.DIAMOND_PICKAXE, 1, "§eКирка IV уровня", new ItemPrice(Material.GOLD_INGOT, 6), "§5Уровень предмета может", "§5быть повышен.", "§5После смерти вы теряете", "§5один уровень улучшения."),
-    GOLDEN_PICKAXE
-            (Material.GOLDEN_PICKAXE, 1, "§eКирка V уровня", new ItemPrice(Material.EMERALD, 5), "§5Уровень предмета может", "§5быть повышен.", "§5После смерти вы теряете", "§5один уровень улучшения."),
     WOODEN_AXE
             (Material.WOODEN_AXE, 1, "§eТопор I уровня", new ItemPrice(Material.IRON_INGOT, 10), "§5Уровень предмета может", "§5быть повышен.", "§5После смерти вы теряете", "§5один уровень улучшения.", "§dI уровень остается навсегда."),
     STONE_AXE
@@ -88,8 +86,6 @@ public enum ShopItem {
             (Material.IRON_AXE, 1, "§eТопор III уровня", new ItemPrice(Material.GOLD_INGOT, 3), "§5Уровень предмета может", "§5быть повышен.", "§5После смерти вы теряете", "§5один уровень улучшения."),
     DIAMOND_AXE
             (Material.DIAMOND_AXE, 1, "§eТопор IV уровня", new ItemPrice(Material.GOLD_INGOT, 6), "§5Уровень предмета может", "§5быть повышен.", "§5После смерти вы теряете", "§5один уровень улучшения."),
-    GOLDEN_AXE
-            (Material.GOLDEN_AXE, 1, "§eТопор V уровня", new ItemPrice(Material.EMERALD, 5), "§5Уровень предмета может", "§5быть повышен.", "§5После смерти вы теряете", "§5один уровень улучшения."),
     FISHING_ROD
             (Material.FISHING_ROD, 1, "§eУдочка", new ItemPrice(Material.GOLD_INGOT, 6), "§5Удобна для рыбалки и", "§5хороша чтобы скидывать", "§5игроков в бездну.", "§dнавсегда."),
 

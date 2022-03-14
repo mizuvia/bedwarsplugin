@@ -28,28 +28,8 @@ public class onPlayerInteractEntity extends SimpleListener implements Listener, 
                 if(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).hasTeam()) e.getPlayer().openInventory(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getUpgradesInventory());
                 else e.getPlayer().sendMessage("§cВы не находитесь в команде!");
             }
-        }else if (e.getRightClicked() instanceof IronGolem) {
+        } else if (e.getRightClicked() instanceof IronGolem) {
         	e.setCancelled(true);
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
         }
     }
 }

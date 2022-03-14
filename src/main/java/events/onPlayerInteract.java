@@ -56,15 +56,15 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
             case DARK_OAK_DOOR -> Utils.connectToHub(p);
             case GHAST_SPAWN_EGG -> {
                 if(!Utils.isRightClick(e.getAction())) return;
-
                 if(par.getTeam().getIronGolem() != null) return;
 
                 IronGolem golem = (IronGolem) Bukkit.getWorld("world").spawnEntity(new Location(e.getClickedBlock().getLocation().getWorld(), e.getClickedBlock().getLocation().getX() + 0.5, e.getClickedBlock().getLocation().getY() + 1, e.getClickedBlock().getLocation().getZ() + 0.5), EntityType.IRON_GOLEM);
                 golem.setCustomName(PlayerManager.getCodeColor(par) + "§lСтраж команды " + par.getTeam().getName());
                 golem.setCustomNameVisible(true);
 
-                par.getTeam().setIronGolem(golem);
+                Bukkit.getScheduler().runTaskLater(plugin, golem::remove, 20 * 240);
 
+                par.getTeam().setIronGolem(golem);
                 consumeItem();
             }
             case GUNPOWDER -> {

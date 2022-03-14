@@ -2,6 +2,7 @@ package events;
 
 import game.Participant;
 import inventories.ShopItem;
+import inventories.ShopItems;
 import main.Config;
 import main.PlayerManager;
 import main.Plugin;
@@ -94,18 +95,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
     }
 
     private void updateToolsInventory() {
-        Map<Material, Material> tools = Map.of(
-            Material.STONE_AXE, Material.WOODEN_AXE,
-            Material.IRON_AXE, Material.STONE_AXE,
-            Material.DIAMOND_AXE, Material.IRON_AXE,
-            Material.GOLDEN_AXE, Material.DIAMOND_AXE,
-            Material.STONE_PICKAXE, Material.WOODEN_PICKAXE,
-            Material.IRON_PICKAXE, Material.STONE_PICKAXE,
-            Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE,
-            Material.GOLDEN_PICKAXE, Material.DIAMOND_PICKAXE
-        );
-
-        tools.forEach((k, v) -> {
+        ShopItems.PREVIOUS_TOOLS_TIER.forEach((k, v) -> {
             if (player.getInventory().all(k).size() != 0) {
                 p.getRespawnItems().add(Utils.clearItem(ShopItem.valueOf(v.name()).getItem()));
                 p.getToolsInventory().setItem(k.name().matches(".*PICKAXE") ? 30 : 31, ShopItem.valueOf(k.name()).getItem());

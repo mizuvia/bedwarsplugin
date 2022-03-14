@@ -17,6 +17,8 @@ import java.util.Locale;
 
 public class SimpleInventory extends CraftInventoryCustom {
 
+    private static int index = 0;
+
     protected Plugin plugin;
 
     public SimpleInventory(InventoryHolder owner, int size, String title) {
@@ -24,13 +26,13 @@ public class SimpleInventory extends CraftInventoryCustom {
     }
 
     @NotNull
-    protected ItemStack[] createItem(int amount, Material mat, int amountInStack, boolean ench, String name, String ...lore){
+    public ItemStack[] createItem(int amount, Material mat, int amountInStack, boolean ench, String name, String ...lore){
         ItemStack[] itemList = new ItemStack[amount];
         for(int i = 0; i < amount; i++){
             ItemStack item = new ItemStack(mat, amountInStack);
             ItemMeta meta = item.getItemMeta();
 
-            int localName = (int) (Math.random() * 100000);
+            int localName = index++;
 
             meta.setDisplayName(name);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);

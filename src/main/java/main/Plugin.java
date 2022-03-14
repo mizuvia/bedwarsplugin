@@ -206,6 +206,9 @@ public class Plugin extends JavaPlugin {
         onPlayerDeath onPlayerDeath = new onPlayerDeath(this);
         Bukkit.getPluginManager().registerEvent(PlayerDeathEvent.class, onPlayerDeath, EventPriority.NORMAL, onPlayerDeath, this);
 
+        onPlayerDropItem onPlayerDropItem = new onPlayerDropItem(this);
+        Bukkit.getPluginManager().registerEvent(PlayerDropItemEvent.class, onPlayerDropItem, EventPriority.NORMAL, onPlayerDropItem, this);
+
         onPlayerInteract onPlayerInteract = new onPlayerInteract(this);
         Bukkit.getPluginManager().registerEvent(PlayerInteractEvent.class, onPlayerInteract, EventPriority.NORMAL, onPlayerInteract, this);
 

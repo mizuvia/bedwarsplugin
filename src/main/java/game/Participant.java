@@ -203,11 +203,9 @@ public class Participant {
                 Map.entry(Material.STONE_AXE, Material.WOODEN_AXE),
                 Map.entry(Material.IRON_AXE, Material.STONE_AXE),
                 Map.entry(Material.DIAMOND_AXE, Material.IRON_AXE),
-                Map.entry(Material.GOLDEN_AXE, Material.DIAMOND_AXE),
                 Map.entry(Material.STONE_PICKAXE, Material.WOODEN_PICKAXE),
                 Map.entry(Material.IRON_PICKAXE, Material.STONE_PICKAXE),
                 Map.entry(Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE),
-                Map.entry(Material.GOLDEN_PICKAXE, Material.DIAMOND_PICKAXE),
                 Map.entry(Material.GOLDEN_BOOTS, Material.GOLDEN_LEGGINGS),
                 Map.entry(Material.CHAINMAIL_BOOTS, Material.CHAINMAIL_LEGGINGS),
                 Map.entry(Material.IRON_BOOTS, Material.IRON_LEGGINGS),
@@ -217,14 +215,12 @@ public class Participant {
         Map<Material, Integer> enchantmentLvl = Map.of(
                 Material.WOODEN_AXE, 1,
                 Material.WOODEN_PICKAXE, 1,
-                Material.STONE_AXE, 2,
+                Material.STONE_AXE, 1,
                 Material.STONE_PICKAXE, 2,
-                Material.IRON_AXE, 3,
-                Material.IRON_PICKAXE, 3,
-                Material.DIAMOND_AXE, 4,
-                Material.DIAMOND_PICKAXE, 4,
-                Material.GOLDEN_AXE, 5,
-                Material.GOLDEN_PICKAXE, 5
+                Material.IRON_AXE, 2,
+                Material.IRON_PICKAXE, 2,
+                Material.DIAMOND_AXE, 3,
+                Material.DIAMOND_PICKAXE, 3
         );
 
         PlayerInventory inv = player.getInventory();
@@ -248,7 +244,7 @@ public class Participant {
                 return;
             }
             case WOODEN_AXE, WOODEN_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 1 + elvl, true);
-            case STONE_AXE, STONE_PICKAXE, IRON_AXE, IRON_PICKAXE, DIAMOND_AXE, DIAMOND_PICKAXE, GOLDEN_AXE, GOLDEN_PICKAXE -> {
+            case STONE_AXE, STONE_PICKAXE, IRON_AXE, IRON_PICKAXE, DIAMOND_AXE, DIAMOND_PICKAXE -> {
                 if (inv.first(secondItem.get(item.getType())) != -1)
                     inv.clear(inv.first(secondItem.get(item.getType())));
                 meta.addEnchant(Enchantment.DIG_SPEED, enchantmentLvl.get(item.getType()) + elvl, true);

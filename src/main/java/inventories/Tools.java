@@ -23,53 +23,22 @@ public class Tools implements IGUI{
             case 14 -> whoClicked.openInventory(this.getPlayer().getToolsInventory());
             case 15 -> whoClicked.openInventory(this.getPlayer().getPlugin().getGame().getPotionsInventory());
             case 16 -> whoClicked.openInventory(this.getPlayer().getPlugin().getGame().getOthersInventory());
-            case 30 -> {
+            case 30, 31 -> {
                 if (clickedItem.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)) break;
                 if (this.getInventory().makeTrade(this.getPlayer(), clickedItem)) {
                     switch (clickedItem.getType()) {
-                        case WOODEN_PICKAXE:
-                            this.getInventory().setItem(slot, ShopItem.STONE_PICKAXE.getItem());
-                            break;
-                        case STONE_PICKAXE:
-                            this.getInventory().setItem(slot, ShopItem.IRON_PICKAXE.getItem());
-                            break;
-                        case IRON_PICKAXE:
-                            this.getInventory().setItem(slot, ShopItem.DIAMOND_PICKAXE.getItem());
-                            break;
-                        case DIAMOND_PICKAXE:
-                            this.getInventory().setItem(slot, ShopItem.GOLDEN_PICKAXE.getItem());
-                            break;
-                        case GOLDEN_PICKAXE:
-                            this.getInventory().setItem(slot, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", " ")[0]);
-                        default:
-                            break;
+                        case DIAMOND_PICKAXE, DIAMOND_AXE -> this.getInventory().setItem(slot, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", " ")[0]);
+                        default -> {
+                            String nextToolTier = ShopItems.NEXT_TOOLS_TIER.get(clickedItem.getType()).name();
+                            this.getInventory().setItem(slot, ShopItem.valueOf(nextToolTier).getItem());
+                        }
                     }
                 }
             }
-            case 31 -> {
-                if (clickedItem.getType().equals(Material.LIGHT_GRAY_STAINED_GLASS_PANE)) break;
-                if (this.getInventory().makeTrade(this.getPlayer(), clickedItem)) {
-                    switch (clickedItem.getType()) {
-                        case WOODEN_AXE:
-                            this.getInventory().setItem(slot, ShopItem.STONE_AXE.getItem());
-                            break;
-                        case STONE_AXE:
-                            this.getInventory().setItem(slot, ShopItem.IRON_AXE.getItem());
-                            break;
-                        case IRON_AXE:
-                            this.getInventory().setItem(slot, ShopItem.DIAMOND_AXE.getItem());
-                            break;
-                        case DIAMOND_AXE:
-                            this.getInventory().setItem(slot, ShopItem.GOLDEN_AXE.getItem());
-                            break;
-                        case GOLDEN_AXE:
-                            this.getInventory().setItem(slot, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", " ")[0]);
-                        default:
-                            break;
-                    }
-                }
+            case 28, 33 -> {
+                this.getInventory().makeTrade(this.getPlayer(), clickedItem);
+                this.getInventory().setItem(slot, this.getInventory().createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", " ")[0]);
             }
-            case 28, 33, 34 -> this.getInventory().makeTrade(this.getPlayer(), clickedItem);
         }
     }
 

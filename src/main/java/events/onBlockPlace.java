@@ -33,8 +33,6 @@ public class onBlockPlace extends SimpleListener implements Listener, EventExecu
 
         this.getPlugin().getGame().getBlockList().add(e.getBlockPlaced());
         if(e.getBlockPlaced().getType().equals(Material.TNT)){
-            //int index = e.getPlayer().getInventory().first(Material.TNT);
-            //ItemStack tntItem = e.getPlayer().getInventory().getItem(index);
             e.getItemInHand().setAmount(e.getItemInHand().getAmount() - 1);
             Bukkit.getWorld("world").spawnEntity(WorldManager.centralizeLocation(e.getBlockPlaced().getLocation()), EntityType.PRIMED_TNT);
             e.setCancelled(true);

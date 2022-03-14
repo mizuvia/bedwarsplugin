@@ -17,6 +17,7 @@ import org.bukkit.potion.PotionType;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ShopItems {
 
@@ -42,11 +43,9 @@ public class ShopItems {
                 ((PotionMeta) meta).addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 0, false), true);
                 ((PotionMeta) meta).setColor(Color.PURPLE);
             }
-            case "§eКирка I уровня", "§eТопор I уровня" -> meta.addEnchant(Enchantment.DIG_SPEED, 1, true);
-            case "§eКирка II уровня", "§eТопор II уровня" -> meta.addEnchant(Enchantment.DIG_SPEED, 2, true);
-            case "§eКирка III уровня", "§eТопор III уровня" -> meta.addEnchant(Enchantment.DIG_SPEED, 3, true);
-            case "§eКирка IV уровня", "§eТопор IV уровня" -> meta.addEnchant(Enchantment.DIG_SPEED, 4, true);
-            case "§eКирка V уровня", "§eТопор V уровня" -> meta.addEnchant(Enchantment.DIG_SPEED, 5, true);
+            case "§eКирка I уровня", "§eТопор I уровня", "§eТопор II уровня" -> meta.addEnchant(Enchantment.DIG_SPEED, 1, true);
+            case "§eКирка II уровня", "§eКирка III уровня", "§eТопор III уровня" -> meta.addEnchant(Enchantment.DIG_SPEED, 2, true);
+            case "§eКирка IV уровня", "§eТопор IV уровня" -> meta.addEnchant(Enchantment.DIG_SPEED, 3, true);
             case "§eЗелье невидимости" -> {
                 ((PotionMeta) meta).addCustomEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 600, 0, true), true);
                 ((PotionMeta) meta).setColor(Color.PURPLE);
@@ -97,5 +96,31 @@ public class ShopItems {
     public static ItemStack TOOLS = ShopItems.createShopItem(Material.GOLDEN_PICKAXE, 1, "§e§lИнструменты", null);
     public static ItemStack POTIONS = ShopItems.createShopItem(Material.POTION, 1, "§e§lЗелья", null);
     public static ItemStack OTHERS = ShopItems.createShopItem(Material.GOLDEN_APPLE, 1, "§e§lРазное", null);
+
+    public static final Map<Material, Integer> TOOLS_ITEMS_INDEXES = Map.ofEntries(
+            Map.entry(Material.SHEARS, 28), Map.entry(Material.FISHING_ROD, 33),
+            Map.entry(Material.WOODEN_PICKAXE, 30), Map.entry(Material.WOODEN_AXE, 31),
+            Map.entry(Material.STONE_PICKAXE, 30), Map.entry(Material.STONE_AXE, 31),
+            Map.entry(Material.IRON_PICKAXE, 30), Map.entry(Material.IRON_AXE, 31),
+            Map.entry(Material.DIAMOND_PICKAXE, 30), Map.entry(Material.DIAMOND_AXE, 31)
+    );
+
+    public static final Map<Material, Material> PREVIOUS_TOOLS_TIER = Map.of(
+            Material.STONE_AXE, Material.WOODEN_AXE,
+            Material.IRON_AXE, Material.STONE_AXE,
+            Material.DIAMOND_AXE, Material.IRON_AXE,
+            Material.STONE_PICKAXE, Material.WOODEN_PICKAXE,
+            Material.IRON_PICKAXE, Material.STONE_PICKAXE,
+            Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE
+    );
+
+    public static final Map<Material, Material> NEXT_TOOLS_TIER = Map.of(
+            Material.WOODEN_AXE, Material.STONE_AXE,
+            Material.STONE_AXE, Material.IRON_AXE,
+            Material.IRON_AXE, Material.DIAMOND_AXE,
+            Material.WOODEN_PICKAXE, Material.STONE_PICKAXE,
+            Material.STONE_PICKAXE, Material.IRON_PICKAXE,
+            Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE
+    );
 
 }
