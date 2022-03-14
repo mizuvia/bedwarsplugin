@@ -230,7 +230,6 @@ public class TeamUpgrades implements IGUI{
         lore.add(var0, "§c" + levelStr);
 
         List<LevelInfo> lvls = upgrades.get(name).getLevels();
-        Logger.getLogger("").info(lvls.get(level).getItemPrice().toString());
 
         int var1 = lore.indexOf(lvls.get(level).getItemPrice().toString());
         lore.remove(lvls.get(level).getItemPrice().toString());

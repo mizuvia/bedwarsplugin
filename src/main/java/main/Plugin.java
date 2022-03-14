@@ -103,9 +103,6 @@ public class Plugin extends JavaPlugin {
         this.game = new Game(this);
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
-        for (Player p : Bukkit.getOnlinePlayers()) {
-        	Bukkit.getLogger().info(p.getName());
-        }
         this.sidebar = new Sidebar(this);
         this.waiting = new Waiting(this);
         this.tab = new Tab(this);

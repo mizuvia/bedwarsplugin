@@ -27,7 +27,8 @@ public class onPlayerQuit extends SimpleListener implements Listener, EventExecu
 
         if(this.getPlugin().isLoading()){
             Bukkit.getServer().getScheduler().runTaskLater(getPlugin(), () -> getPlugin().getWaiting().checkAmount(), 5);
-            e.setQuitMessage(e.getPlayer().getDisplayName() + " §eпокинул игру §f[§b" + this.getPlugin().getOnlinePlayers() + "§f/§b" + Config.getMaxPlayers() + "§f]");
+            e.setQuitMessage(e.getPlayer().getDisplayName() + " §eпокинул игру §f[§b" + (this.getPlugin().getOnlinePlayers() - 1) + "§f/§b" + Config.getMaxPlayers() + "§f]");
+            Bukkit.getServer().getScheduler().runTaskLater(getPlugin(), () -> getPlugin().getSidebar().changePlayersAmount(), 15);
 
             this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());
         }
