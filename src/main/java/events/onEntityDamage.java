@@ -80,15 +80,15 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
             addRespawnedItems();
             p.clearPotionEffects();
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
-                player.teleport(p.getTeam().getSpawnLocation());
                 player.setInvisible(false);
-                player.setCanPickupItems(true);
-                PlayerInv.setPlayingInventory(p);
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     p.showPlayer(plugin, player);
                     player.showPlayer(plugin, p);
                 }
+                player.teleport(p.getTeam().getSpawnLocation());
                 player.setGameMode(GameMode.SURVIVAL);
+                player.setCanPickupItems(true);
+                PlayerInv.setPlayingInventory(p);
             }, 100);
         }
     }

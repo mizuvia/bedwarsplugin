@@ -1,7 +1,9 @@
 package game;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import tasks.TaskGUI;
 import util.Utils;
 import util.WorldManager;
@@ -33,7 +35,8 @@ public class SpawnResources extends TaskGUI {
         if(silverCounter <= 0) {
             if(WorldManager.canDropResource(team.getResourceLocation(), Material.IRON_INGOT, MAX_AMOUNT_OF_SILVER)) {
                 ItemStack silver = Utils.createItem(Material.IRON_INGOT, 1, "§eЖелезо");
-                WorldManager.dropItem(team.getResourceLocation(), silver);
+                Item item = WorldManager.dropItem(team.getResourceLocation(), silver);
+                item.setVelocity(new Vector());
             }
             silverCounter = team.silverTimeout;
         }
@@ -44,7 +47,8 @@ public class SpawnResources extends TaskGUI {
         if(goldCounter <= 0) {
             if(WorldManager.canDropResource(team.getResourceLocation(), Material.GOLD_INGOT, MAX_AMOUNT_OF_GOLD)) {
                 ItemStack gold = Utils.createItem(Material.GOLD_INGOT, 1, "§eЗолото");
-                WorldManager.dropItem(team.getResourceLocation(), gold);
+                Item item = WorldManager.dropItem(team.getResourceLocation(), gold);
+                item.setVelocity(new Vector());
             }
             goldCounter = team.goldTimeout;
         }

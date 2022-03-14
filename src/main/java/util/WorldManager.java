@@ -26,8 +26,8 @@ public class WorldManager {
         return itemsInArea < maxAmount;
     }
 
-    public static void dropItem(Location loc, ItemStack item){
-        Bukkit.getServer().getWorld("world").dropItem(loc, item);
+    public static Item dropItem(Location loc, ItemStack item){
+        return Bukkit.getServer().getWorld("world").dropItem(loc, item);
     }
 
     public static Location getLocation(String cord){
