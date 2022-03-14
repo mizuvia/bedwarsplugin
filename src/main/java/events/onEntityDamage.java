@@ -64,7 +64,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         String deathMessage = hasKiller() ? killWithKiller(isFinal) : killWithoutKiller(isFinal);
         Utils.sendToAll(PlayerManager.getCodeColor(p) + player.getName() + deathMessage + finalMessage);
 
-        player.setGameMode(GameMode.CREATIVE);
+        player.setGameMode(GameMode.SPECTATOR);
         player.setInvisible(true);
         player.setCanPickupItems(false);
         player.setHealth(20.0);
@@ -84,6 +84,10 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
                 player.setInvisible(false);
                 player.setCanPickupItems(true);
                 PlayerInv.setPlayingInventory(p);
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.showPlayer(plugin, player);
+                    player.showPlayer(plugin, p);
+                }
                 player.setGameMode(GameMode.SURVIVAL);
             }, 100);
         }

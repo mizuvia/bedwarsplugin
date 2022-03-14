@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class WorldManager {
     public static boolean canDropResource(Location location, Material material, int maxAmount){
-        ArmorStand ent = (ArmorStand) Bukkit.getWorld("world").spawnEntity(location, EntityType.ARMOR_STAND);
+        ArmorStand ent = (ArmorStand) Bukkit.getWorld("world").spawnEntity(location.add(0, -3, 0), EntityType.ARMOR_STAND);
         ent.setInvisible(true);
 
         int itemsInArea = 0;
