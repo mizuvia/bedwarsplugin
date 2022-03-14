@@ -3,16 +3,12 @@ package util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 
 public class WorldManager {
     public static boolean canDropResource(Location location, Material material, int maxAmount){
-        ArmorStand ent = (ArmorStand) Bukkit.getWorld("world").spawnEntity(new Location(location.getWorld(), location.getX(), location.getY() - 2, location.getZ()), EntityType.ARROW);
-        ent.setInvisible(true);
+        Arrow ent = (Arrow) Bukkit.getWorld("world").spawnEntity(new Location(location.getWorld(), location.getX(), location.getY() - 2, location.getZ()), EntityType.ARROW);
 
         int itemsInArea = 0;
         for(Entity entity : ent.getNearbyEntities(5, 5, 5)){
