@@ -65,7 +65,6 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         Utils.sendToAll(PlayerManager.getCodeColor(p) + player.getName() + deathMessage + finalMessage);
 
         player.setGameMode(GameMode.CREATIVE);
-        player.getInventory().clear();
         player.setInvisible(true);
         player.setCanPickupItems(false);
         player.setHealth(20.0);
@@ -79,17 +78,13 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
             player.sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
             updateToolsInventory();
             addRespawnedItems();
-            p.clearParticles();
+            p.clearPotionEffects();
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
                 player.teleport(p.getTeam().getSpawnLocation());
                 player.setInvisible(false);
                 player.setCanPickupItems(true);
                 PlayerInv.setPlayingInventory(p);
                 player.setGameMode(GameMode.SURVIVAL);
-//                for (Player p : Bukkit.getOnlinePlayers()) {
-//                    p.showPlayer(plugin, player);
-//                    player.showPlayer(plugin, p);
-//                }
             }, 100);
         }
     }

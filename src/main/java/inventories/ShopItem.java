@@ -116,7 +116,7 @@ public enum ShopItem {
             (Material.GUNPOWDER, 1, "§eТелепортатор", new ItemPrice(Material.GOLD_INGOT, 4), "§5Через три секунды после использования", "§5вы возвращаетесь к себе на базу.", "§dУдобно, если на вас нападают враги."),
     ENDER_PEARL
             (Material.ENDER_PEARL, 1, "§eЖемчуг Эндера", new ItemPrice(Material.EMERALD, 1), "§5Самый быстрый способ", "§5попасть на базу противника.", "§dНе промахнитесь, пока кидаете."),
-    WATER_BUCKER
+    WATER_BUCKET
            (Material.WATER_BUCKET, 1, "§eВедро с водой", new ItemPrice(Material.EMERALD, 1), "§5Замедляет врагов и", "§5защищает вас от взрывов." ),
     FIRE_CHARGE
             (Material.FIRE_CHARGE, 1, "§eОгненный шар", new ItemPrice(Material.IRON_INGOT, 40), "§5Нажмите ПКМ чтобы выстрелить.", "§dХорошее противодействие игрокам,", "§dстроящим тонкие мосты."),

@@ -32,7 +32,7 @@ public class OthersInventory extends SimpleInventory{
         this.addItem(ShopItem.TELEPORT.getItem());
         this.addItem(ShopItem.ENDER_PEARL.getItem());
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-        this.addItem(ShopItem.WATER_BUCKER.getItem());
+        this.addItem(ShopItem.WATER_BUCKET.getItem());
         this.addItem(ShopItem.FIRE_CHARGE.getItem());
         this.addItem(this.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
 

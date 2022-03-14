@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ShopItems {
 
-    public static ItemStack createShopItem(Material mat, int amountInStack, String name, ItemPrice price, @Nullable String... lore) {
+    public static ItemStack createShopItem(Material mat, int amountInStack, String name, @Nullable ItemPrice price, @Nullable String... lore) {
         ItemStack item = new ItemStack(mat, amountInStack);
         ItemMeta meta = item.getItemMeta();
 

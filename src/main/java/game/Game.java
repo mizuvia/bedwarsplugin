@@ -187,7 +187,8 @@ public class Game {
             participant.getPlayer().getInventory().setChestplate(chestplate);
             participant.getPlayer().getInventory().setLeggings(leggings);
             participant.getPlayer().getInventory().setBoots(boots);
-            participant.getPlayer().getInventory().addItem(new ItemStack(Material.WOODEN_SWORD));
+            ItemStack ws = ShopItems.createShopItem(Material.WOODEN_SWORD, 1, "§eДеревянный меч", null);
+            participant.getPlayer().getInventory().addItem(ws);
         }
     }
 

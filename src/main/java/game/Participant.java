@@ -50,7 +50,7 @@ public class Participant {
         this.player = player;
         this.plugin = plugin;
         this.setGroup();
-        this.clearParticles();
+        this.clearPotionEffects();
         player.getEnderChest().clear();
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.sidebarObjective = scoreboard.registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
@@ -301,12 +301,14 @@ public class Participant {
     }
 
     public void destroy() {
-        this.setTeam(null);
+        setTeam(null);
+        getPlayer().getInventory().clear();
+        clearPotionEffects();
         if (isInvisible()) showArmor();
         plugin.getPlayers().remove(getPlayer().getUniqueId());
     }
 
-    public void clearParticles() {
+    public void clearPotionEffects() {
         Collection<PotionEffect> effects = getPlayer().getActivePotionEffects();
         for (PotionEffect effect : effects) {
             getPlayer().removePotionEffect(effect.getType());
