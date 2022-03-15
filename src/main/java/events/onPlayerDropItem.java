@@ -27,6 +27,11 @@ public class onPlayerDropItem extends SimpleListener implements Listener, EventE
     public void execute(@NotNull Listener listener, @NotNull Event event) {
         this.e = (PlayerDropItemEvent) event;
 
+        if(plugin.isLoading()) {
+            e.setCancelled(true);
+            return;
+        }
+
         Material droppedType = e.getItemDrop().getItemStack().getType();
 
         if (!ShopItems.TOOLS_ITEMS_INDEXES.containsKey(droppedType)) return;

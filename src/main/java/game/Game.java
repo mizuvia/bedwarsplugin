@@ -130,7 +130,7 @@ public class Game {
 
     public void checkWin(){
         if (Config.getTeamsAmount() - 1 == this.getDeadTeams()) {
-            this.getPlugin().getGame().getTime().finishGame(0);
+            this.getPlugin().getGame().getTime().finishGame(Time.FinishReason.WIN);
         }
     }
 

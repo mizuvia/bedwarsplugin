@@ -20,6 +20,8 @@ public class onPlayerFish extends SimpleListener implements Listener, EventExecu
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         this.e = (PlayerFishEvent) event;
 
-        e.setCancelled(true);
+        if (e.getState() == PlayerFishEvent.State.BITE) {
+            e.setCancelled(true);
+        }
     }
 }
