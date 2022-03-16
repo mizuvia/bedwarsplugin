@@ -3,7 +3,7 @@ package events;
 import game.Participant;
 import inventories.ShopItem;
 import inventories.ShopItems;
-import inventories.ToolsInventory;
+import inventories.SimpleInventory;
 import main.Plugin;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -12,8 +12,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 public class onPlayerDropItem extends SimpleListener implements Listener, EventExecutor {
 
@@ -32,20 +30,24 @@ public class onPlayerDropItem extends SimpleListener implements Listener, EventE
             return;
         }
 
-        Material droppedType = e.getItemDrop().getItemStack().getType();
+        ItemStack item = e.getItemDrop().getItemStack();
 
-        if (!ShopItems.TOOLS_ITEMS_INDEXES.containsKey(droppedType)) return;
+        Material droppedType = e.getItemDrop().getItemStack().getType();
+        String name = item.getItemMeta().getDisplayName();
+        ShopItem shopItem = ShopItem.getShopItem(name);
+
+        if (ShopItems.TOOLS.values().stream().noneMatch(list -> list.contains(shopItem))) return;
 
         Participant p = plugin.getPlayers().get(e.getPlayer().getUniqueId());
-        ToolsInventory inv = p.getToolsInventory();
+        SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
 
         int index = ShopItems.TOOLS_ITEMS_INDEXES.get(droppedType);
-        ItemStack item = switch (droppedType) {
+        ItemStack i = switch (shopItem) {
             case WOODEN_AXE, STONE_AXE, IRON_AXE, DIAMOND_AXE -> ShopItem.WOODEN_AXE.getItem();
             case WOODEN_PICKAXE, STONE_PICKAXE, IRON_PICKAXE, DIAMOND_PICKAXE -> ShopItem.WOODEN_PICKAXE.getItem();
-            default -> ShopItem.valueOf(droppedType.name()).getItem();
+            default -> shopItem.getItem();
         };
 
-        inv.setItem(index, item);
+        inv.setItem(index, i);
     }
 }

@@ -60,13 +60,15 @@ public class TeamUpgrades implements IGUI{
     }
 
     @Override
-    public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
+    public void onGUIClick(Player whoClicked, int slot, Inventory inventory) {
 
         if(isTrapsClicked(slot)){
             if(this.getTeam().getTraps().size() == 3) return;
             whoClicked.openInventory(this.getTeam().getTrapsInventory());
             return;
         }
+
+        ItemStack clickedItem = inventory.getItem(slot);
 
         ItemMeta meta = clickedItem.getItemMeta();
         List<String> lore = meta.getLore();

@@ -20,9 +20,10 @@ public class Traps implements IGUI{
     public Traps(Team team) {this.team = team;}
 
     @Override
-    public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
+    public void onGUIClick(Player whoClicked, int slot, Inventory inventory) {
+        Participant p = team.getTeammates().get(whoClicked.getName());
         int price = (int) Math.pow(2, this.getTeam().getTraps().size());
-        if(this.getTeam().getPlugin().getPlayers().get(whoClicked.getUniqueId()).takeItem(Material.DIAMOND, price)) {
+        if(p.takeItem(Material.DIAMOND, price)) {
             String name;
 
             switch (slot){
@@ -33,11 +34,7 @@ public class Traps implements IGUI{
                 default: return;
             }
 
-            Participant p = this.getTeam().getPlugin().getPlayers().get(whoClicked.getUniqueId());
-
-            for(Participant participant : this.getTeam().getTeammates().values()){
-                participant.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил ловушку §b" + name);
-            }
+            team.sendToAll(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил ловушку §b" + name);
 
             ItemStack item = this.getTeam().getUpgradesInventory().getItem(16);
             ItemMeta meta = item.getItemMeta();

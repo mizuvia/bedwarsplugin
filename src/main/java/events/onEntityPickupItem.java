@@ -3,9 +3,8 @@ package events;
 import game.Participant;
 import inventories.ShopItem;
 import inventories.ShopItems;
-import inventories.ToolsInventory;
+import inventories.SimpleInventory;
 import main.Plugin;
-import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -14,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+import java.util.LinkedList;
 
 public class onEntityPickupItem extends SimpleListener implements Listener, EventExecutor {
 
@@ -28,19 +27,26 @@ public class onEntityPickupItem extends SimpleListener implements Listener, Even
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         this.e = (EntityPickupItemEvent) event;
 
-        Material pickedType = e.getItem().getItemStack().getType();
+        ItemStack item = e.getItem().getItemStack();
 
-        if (!ShopItems.TOOLS_ITEMS_INDEXES.containsKey(pickedType)) return;
+        String name = item.getItemMeta().getDisplayName();
+        ShopItem shopItem = ShopItem.getShopItem(name);
+
+        if (ShopItems.TOOLS.values().stream().noneMatch(list -> list.contains(shopItem))) return;
 
         Participant p = plugin.getPlayers().get(e.getEntity().getUniqueId());
-        ToolsInventory inv = p.getToolsInventory();
+        SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
 
-        int index = ShopItems.TOOLS_ITEMS_INDEXES.get(pickedType);
-        ItemStack item = switch (pickedType) {
-            case SHEARS, FISHING_ROD, DIAMOND_AXE, DIAMOND_PICKAXE -> inv.createItem(1, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, false, " ", " ")[0];
-            default -> ShopItem.valueOf(ShopItems.NEXT_TOOLS_TIER.get(pickedType).name()).getItem();
-        };
+        int index = ShopItems.getIndex(ShopItems.TOOLS, shopItem);
+        ItemStack i;
+        LinkedList<ShopItem> list = ShopItems.TOOLS.get(index);
+        if (shopItem != list.getLast()) {
+            int in = list.indexOf(shopItem);
+            i = list.get(in + 1).getItem();
+        } else {
+            i = null;
+        }
 
-        inv.setItem(index, item);
+        inv.setItem(index, i);
     }
 }

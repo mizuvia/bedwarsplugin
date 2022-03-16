@@ -30,7 +30,8 @@ public class TeamSelection implements IGUI{
     }
 
     @Override
-    public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
+    public void onGUIClick(Player whoClicked, int slot, Inventory inventory) {
+        ItemStack clickedItem = inventory.getItem(slot);
         if(clickedItem.getType().name().equals("GRAY_STAINED_GLASS_PANE")) return;
 
         String color = clickedItem.getType().name().replace("_WOOL", "").toLowerCase(Locale.ROOT);

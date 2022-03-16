@@ -29,8 +29,7 @@ public class Utils {
 
     public static ItemStack clearItem(ItemStack item){
         ItemStack newItem = new ItemStack(item.getType(), item.getAmount());
-        newItem.setItemMeta(item.getItemMeta());
-        ItemMeta meta = newItem.getItemMeta();
+        ItemMeta meta = item.getItemMeta();
         meta.setLore(null);
         newItem.setItemMeta(meta);
 

@@ -25,7 +25,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         if(e.getInventory().getHolder() instanceof IGUI){
             e.setCancelled(true);
             IGUI gui = (IGUI) e.getInventory().getHolder();
-            gui.onGUIClick((Player) e.getWhoClicked(), e.getRawSlot(), e.getCurrentItem());
+            gui.onGUIClick((Player) e.getWhoClicked(), e.getRawSlot(), e.getClickedInventory());
         }
         if(e.getInventory().getHolder() instanceof HumanEntity){
             switch (e.getSlot()) {

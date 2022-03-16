@@ -30,37 +30,13 @@ public class Game {
     private final Plugin plugin;
     private final Time time;
     private final ArmorStandsManager armorStandsManager;
-    private final BlocksInventory blocksInventory = new BlocksInventory(new Blocks(this), 54, "Блоки");
-    private final SwordsInventory swordsInventory = new SwordsInventory(new Swords(this), 54, "Мечи");
-    private final OthersInventory othersInventory = new OthersInventory(new Others(this), 54, "Разное");
-    private final BowsInventory bowsInventory = new BowsInventory(new Bows(this), 54, "Луки");
-    private final PotionsInventory potionsInventory = new PotionsInventory(new Potions(this), 54, "Зелья");
     private List<Villager> villagers = new ArrayList<>();
     private final List<Inventory> chests = new ArrayList<>();
+    private final Map<Integer, SimpleInventory> inventories = new HashMap<>();
     private int deadTeams = 0;
     private Messenger messenger;
     
     public List<Inventory> getChestsInventories() { return this.chests; }
-
-    public BlocksInventory getBlocksInventory(){
-        return this.blocksInventory;
-    }
-
-    public SwordsInventory getSwordsInventory(){
-        return this.swordsInventory;
-    }
-
-    public BowsInventory getBowsInventory(){
-        return this.bowsInventory;
-    }
-
-    public OthersInventory getOthersInventory(){
-        return this.othersInventory;
-    }
-
-    public PotionsInventory getPotionsInventory(){
-        return this.potionsInventory;
-    }
 
     public int getMatchTime(){ return this.matchTime; }
 
@@ -90,6 +66,20 @@ public class Game {
 
         this.time.startTask();
         this.armorStandsManager.startTask();
+
+        createInventories();
+    }
+
+    public Map<Integer, SimpleInventory> getInventories() {
+        return inventories;
+    }
+
+    public void createInventories() {
+        inventories.put(10, new SimpleInventory(plugin, "Блоки", ShopItems.BLOCKS));
+        inventories.put(11, new SimpleInventory(plugin, "Мечи", ShopItems.SWORDS));
+        inventories.put(13, new SimpleInventory(plugin, "Луки", ShopItems.BOWS));
+        inventories.put(15, new SimpleInventory(plugin, "Зелья", ShopItems.POTIONS));
+        inventories.put(16, new SimpleInventory(plugin, "Разное", ShopItems.OTHERS));
     }
 
     public void start() {

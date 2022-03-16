@@ -69,16 +69,15 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         player.setCanPickupItems(false);
         player.setHealth(20.0);
         player.teleport(Config.getCenter());
+        p.clearPotionEffects();
 
         if (isFinal) {
             player.sendTitle("§cВы умерли и больше не возродитесь", "§7Наблюдайте за игрой.", 10, 70, 20);
             player.setPlayerListName("§7Наблюдатель " + player.getName());
-            p.destroy();
         } else {
             player.sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
             updateToolsInventory();
             addRespawnedItems();
-            p.clearPotionEffects();
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
                 player.setGameMode(GameMode.SURVIVAL);
                 for (Player p : Bukkit.getOnlinePlayers()) {
@@ -93,12 +92,19 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
     }
 
     private void updateToolsInventory() {
-        ShopItems.PREVIOUS_TOOLS_TIER.forEach((k, v) -> {
-            if (player.getInventory().all(k).size() != 0) {
-                p.getRespawnItems().add(Utils.clearItem(ShopItem.valueOf(v.name()).getItem()));
-                p.getToolsInventory().setItem(k.name().matches(".*PICKAXE") ? 30 : 31, ShopItem.valueOf(k.name()).getItem());
+        for (LinkedList<ShopItem> list : ShopItems.TOOLS.values()){
+            if (list.contains(ShopItem.SHEARS) || list.contains(ShopItem.FISHING_ROD)) continue;
+
+            ListIterator<ShopItem> it = list.listIterator(list.size() - 1);
+            while (it.hasPrevious()){
+                ShopItem item = it.previous();
+                if (player.getInventory().all(item.getMaterial()).size() == 0) continue;
+
+                p.getShopInventory(ShopItem.TOOLS).setItem(ShopItems.getIndex(ShopItems.TOOLS, item), item.getItem());
+                if (it.hasPrevious()) p.getRespawnItems().add(it.previous().getItem());
+                break;
             }
-        });
+        }
     }
 
     private void addRespawnedItems() {

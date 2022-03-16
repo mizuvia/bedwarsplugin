@@ -72,15 +72,13 @@ public class Time extends TaskGUI {
         if(reason == FinishReason.WIN){
             Team winningTeam = plugin.getTeams().values().stream().filter(team -> !team.isDead()).findFirst().orElse(null);
 
-            for(Team team : plugin.getTeams().values()) {
-                if (team.isDead()) {
-                    team.getTeammates().values().forEach(p -> {
-                        String mainTitle = MineColor.DARK_RED.BOLD() + "Поражение!";
-                        String secondTitle = "Победила команда " + winningTeam.getName();
-                        p.getPlayer().sendTitle(mainTitle, secondTitle, 10, 150, 20);
-                    });
+            plugin.getPlayers().forEach((uuid, p) -> {
+                if (p.getTeam() != winningTeam) {
+                    String mainTitle = MineColor.DARK_RED.BOLD() + "Поражение!";
+                    String secondTitle = "Победила команда " + winningTeam.getName();
+                    p.getPlayer().sendTitle(mainTitle, secondTitle, 10, 150, 20);
                 }
-            }
+            });
 
             for(Participant participant : winningTeam.getTeammates().values()){
                 participant.getPlayer().sendTitle("§6§lПобеда!", "§eСейчас вы будете перемещены в хаб!", 10, 150, 20);

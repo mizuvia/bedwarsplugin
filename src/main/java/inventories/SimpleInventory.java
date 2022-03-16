@@ -1,5 +1,6 @@
 package inventories;
 
+import game.Game;
 import game.ItemPrice;
 import game.Participant;
 import main.Plugin;
@@ -12,17 +13,27 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Locale;
+import java.util.*;
 
 public class SimpleInventory extends CraftInventoryCustom {
 
     private static int index = 0;
-
     protected Plugin plugin;
+    protected Map<Integer, LinkedList<ShopItem>> shopItems;
 
     public SimpleInventory(InventoryHolder owner, int size, String title) {
         super(owner, size, title);
+    }
+
+    public SimpleInventory(Plugin plugin, String title, Map<Integer, LinkedList<ShopItem>> shopItems) {
+        super(new ShopGUI(plugin, shopItems), 54, title);
+        this.shopItems = shopItems;
+        createShop();
+    }
+
+    public void createShop(){
+        SimpleInventory.SHOPS.forEach((index, item) -> this.setItem(index, item.getItem()));
+        shopItems.forEach((index, item) -> this.setItem(index, item.getFirst().getItem()));
     }
 
     @NotNull
@@ -49,7 +60,9 @@ public class SimpleInventory extends CraftInventoryCustom {
     }
 
     public boolean makeTrade(Participant p, ItemStack oldItem){
+
         ItemStack item = new ItemStack(oldItem.getType(), oldItem.getAmount());
+
         if(oldItem.getType().name().matches("(.*)WOOL")) item.setType(Material.getMaterial(p.getTeam().getColor().toUpperCase(Locale.ROOT) + "_WOOL"));
         if(oldItem.getType().name().matches("(.*)TERRACOTTA")) item.setType(Material.getMaterial(p.getTeam().getColor().toUpperCase(Locale.ROOT) + "_TERRACOTTA"));
         ItemPrice price = ShopItem.getPriceByName(oldItem.getItemMeta().getDisplayName());
@@ -57,7 +70,6 @@ public class SimpleInventory extends CraftInventoryCustom {
         item.setItemMeta(oldItem.getItemMeta());
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.setLore(null);
-        if(item.getType().isBlock()) itemMeta.setDisplayName(null);
         item.setItemMeta(itemMeta);
 
         boolean take = p.takeItem(price.getMaterial(), price.getPrice());
@@ -69,5 +81,38 @@ public class SimpleInventory extends CraftInventoryCustom {
         return take;
     }
 
+    public void updateSlot(int slot) {
+        String name = getItem(slot).getItemMeta().getDisplayName();
+        ShopItem item = ShopItem.getShopItem(name);
+        LinkedList<ShopItem> list = shopItems.get(slot);
+
+        if (item != list.getLast()) {
+            int in = list.indexOf(item);
+            setItem(slot, list.get(in + 1).getItem());
+        } else {
+            setItem(slot, null);
+        }
+
+        if (shopItems == ShopItems.ARMOR){
+            int index = ShopItems.ARMOR_ORDER.indexOf(item);
+            ListIterator<ShopItem> it = ShopItems.ARMOR_ORDER.listIterator(index);
+            setItem(slot, null);
+            while (it.hasPrevious()) {
+                setItem(ShopItems.getIndex(shopItems, it.previous()), null);
+            }
+        }
+    }
+
     public Plugin getPlugin() { return this.plugin; }
+
+    public static final Map<Integer, ShopItem> SHOPS = Map.of(
+            10, ShopItem.BLOCKS,
+            11, ShopItem.SWORDS,
+            12, ShopItem.ARMOR,
+            13, ShopItem.TOOLS,
+            14, ShopItem.BOWS,
+            15, ShopItem.POTIONS,
+            16, ShopItem.OTHERS
+    );
+
 }

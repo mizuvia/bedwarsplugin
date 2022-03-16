@@ -31,8 +31,7 @@ public class Participant {
     private Team team;
     private String group;
     private final ShopInventory shop = new ShopInventory(new Shop(this), 54, "Магазин");
-    private final ArmorInventory armor = new ArmorInventory(new Armor(this), 54, "Броня");
-    private final ToolsInventory tools = new ToolsInventory(new Tools(this), 54, "Инструменты");
+    private final Map<Integer, SimpleInventory> inventories = new HashMap<>();
     private final List<ItemStack> respawnItems = new ArrayList<>();
     private boolean isTeleporting = false;
     private boolean isUnderMilk = false;
@@ -54,6 +53,7 @@ public class Participant {
         player.setCanPickupItems(true);
         this.clearPotionEffects();
         player.getEnderChest().clear();
+        createInventories();
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.sidebarObjective = scoreboard.registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
         this.sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -63,6 +63,16 @@ public class Participant {
         plugin.getTab().createTab(this.scoreboard);
         plugin.getTab().addPlayerToTabs(this);
         plugin.getPlayers().put(player.getUniqueId(), this);
+    }
+
+    private void createInventories() {
+        inventories.put(12, new SimpleInventory(plugin, "Броня", ShopItems.ARMOR));
+        inventories.put(14, new SimpleInventory(plugin, "Инструменты", ShopItems.TOOLS));
+        inventories.putAll(plugin.getGame().getInventories());
+    }
+
+    public Map<Integer, SimpleInventory> getInventories() {
+        return inventories;
     }
 
     public List<org.bukkit.scoreboard.Team> getSidebarTeams() {
@@ -84,10 +94,6 @@ public class Participant {
     }
     
     public int getFinalKills() { return this.finalKills; }
-
-    public ArmorInventory getArmorInventory(){ return this.armor; }
-
-    public ToolsInventory getToolsInventory(){ return this.tools; }
 
     public Plugin getPlugin(){ return this.plugin; }
 
@@ -311,5 +317,16 @@ public class Participant {
         for (PotionEffect effect : effects) {
             getPlayer().removePotionEffect(effect.getType());
         }
+    }
+
+    public SimpleInventory getShopInventory(ShopItem icon) {
+        int index = 0;
+        for (Map.Entry<Integer, ShopItem> entry : SimpleInventory.SHOPS.entrySet()) {
+            if(entry.getValue() == icon) {
+                index = entry.getKey();
+                break;
+            }
+        }
+        return inventories.get(index);
     }
 }

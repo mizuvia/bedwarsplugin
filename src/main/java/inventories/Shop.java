@@ -8,6 +8,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 public class Shop implements IGUI {
 
     private final Participant player;
@@ -17,15 +19,11 @@ public class Shop implements IGUI {
     }
 
     @Override
-    public void onGUIClick(Player whoClicked, int slot, ItemStack clickedItem) {
-        switch (slot) {
-            case 10 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getBlocksInventory());
-            case 11 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getSwordsInventory());
-            case 12 -> this.player.getPlayer().openInventory(this.player.getArmorInventory());
-            case 13 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getBowsInventory());
-            case 14 -> this.player.getPlayer().openInventory(this.player.getToolsInventory());
-            case 15 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getPotionsInventory());
-            case 16 -> this.player.getPlayer().openInventory(this.player.getPlugin().getGame().getOthersInventory());
+    public void onGUIClick(Player whoClicked, int slot, Inventory inventory) {
+        if (player.getInventories().containsKey(slot)){
+            SimpleInventory inv = player.getInventories().get(slot);
+            player.getPlayer().openInventory(inv);
+            return;
         }
     }
 

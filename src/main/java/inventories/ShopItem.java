@@ -117,6 +117,22 @@ public enum ShopItem {
     FIRE_CHARGE
             (Material.FIRE_CHARGE, 1, "§eОгненный шар", new ItemPrice(Material.IRON_INGOT, 40), "§5Нажмите ПКМ чтобы выстрелить.", "§dХорошее противодействие игрокам,", "§dстроящим тонкие мосты."),
 
+    //icons
+
+    BLOCKS
+            (Material.YELLOW_WOOL, 1, "§e§lБлоки", null),
+    SWORDS
+            (Material.GOLDEN_SWORD, 1, "§e§lМечи", null),
+    ARMOR
+            (Material.GOLDEN_CHESTPLATE, 1, "§e§lБроня", null),
+    BOWS
+            (Material.BOW, 1, "§e§lЛуки", null),
+    TOOLS
+            (Material.GOLDEN_PICKAXE, 1, "§e§lИнструменты", null),
+    POTIONS
+            (Material.POTION, 1, "§e§lЗелья", null),
+    OTHERS
+            (Material.GOLDEN_APPLE, 1, "§e§lРазное", null)
     ;
 
 
@@ -126,10 +142,12 @@ public enum ShopItem {
     private final String name;
     private static final Map<String, ItemStack> itemMap = new HashMap<>();
     private static final Map<String, ItemPrice> priceMap = new HashMap<>();
+    private static final Map<String, ShopItem> shopItemMap = new HashMap<>();
     static {
         for (ShopItem shopItem : ShopItem.values()){
             itemMap.put(shopItem.getName(), shopItem.getItem());
             priceMap.put(shopItem.getName(), shopItem.getPrice());
+            shopItemMap.put(shopItem.getName(), shopItem);
         }
     }
 
@@ -159,6 +177,10 @@ public enum ShopItem {
 
     public static ItemPrice getPriceByName(String name){
         return ShopItem.priceMap.get(name);
+    }
+
+    public static ShopItem getShopItem(String name) {
+        return ShopItem.shopItemMap.get(name);
     }
 
     public static ItemStack getItemByName(String name){

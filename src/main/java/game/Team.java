@@ -209,4 +209,10 @@ public class Team {
     public SpawnResources getSpawnResources() {
         return spawnResources;
     }
+
+    public void sendToAll(String message) {
+        for (Participant p : teammates.values()) {
+            p.getPlayer().sendMessage(message);
+        }
+    }
 }
