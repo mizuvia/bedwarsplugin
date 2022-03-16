@@ -112,6 +112,7 @@ public class Game {
         this.getArmorStandsManager().resetData();
         this.getTime().resetData();
         this.clearTeams();
+        this.getPlugin().getSidebar().fillWaitingList();
         this.getPlugin().resetTeamSelection();
         this.getPlugin().setLoading(true);
         this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());

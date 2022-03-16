@@ -84,6 +84,7 @@ public class onBlockBreak extends SimpleListener implements Listener, EventExecu
         ItemMeta meta = item.getItemMeta();
         meta.setLore(null);
         item.setItemMeta(meta);
+        item.setAmount(1);
 
         e.getPlayer().getInventory().addItem(item);
 
