@@ -109,8 +109,8 @@ public class SimpleInventory extends CraftInventoryCustom {
             10, ShopItem.BLOCKS,
             11, ShopItem.SWORDS,
             12, ShopItem.ARMOR,
-            13, ShopItem.TOOLS,
-            14, ShopItem.BOWS,
+            13, ShopItem.BOWS,
+            14, ShopItem.TOOLS,
             15, ShopItem.POTIONS,
             16, ShopItem.OTHERS
     );

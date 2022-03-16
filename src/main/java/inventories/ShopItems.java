@@ -67,7 +67,7 @@ public class ShopItems {
     );
 
     public static int getIndex(Map<Integer, LinkedList<ShopItem>> map, ShopItem value){
-        int key = Integer.parseInt(null);
+        int key = 0;
 
         for (Map.Entry<Integer, LinkedList<ShopItem>> entry : map.entrySet()) {
             if (entry.getValue().contains(value)) {
