@@ -90,7 +90,7 @@ public class SimpleInventory extends CraftInventoryCustom {
             int in = list.indexOf(item);
             setItem(slot, list.get(in + 1).getItem());
         } else {
-            setItem(slot, null);
+            if(item == ShopItem.SHEARS || item == ShopItem.FISHING_ROD) setItem(slot, null);
         }
 
         if (shopItems == ShopItems.ARMOR){
