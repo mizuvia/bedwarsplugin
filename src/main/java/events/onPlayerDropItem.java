@@ -41,7 +41,7 @@ public class onPlayerDropItem extends SimpleListener implements Listener, EventE
         Participant p = plugin.getPlayers().get(e.getPlayer().getUniqueId());
         SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
 
-        int index = ShopItems.TOOLS_ITEMS_INDEXES.get(droppedType);
+        int index = ShopItems.getIndex(ShopItems.TOOLS, shopItem);
         ItemStack i = switch (shopItem) {
             case WOODEN_AXE, STONE_AXE, IRON_AXE, DIAMOND_AXE -> ShopItem.WOODEN_AXE.getItem();
             case WOODEN_PICKAXE, STONE_PICKAXE, IRON_PICKAXE, DIAMOND_PICKAXE -> ShopItem.WOODEN_PICKAXE.getItem();

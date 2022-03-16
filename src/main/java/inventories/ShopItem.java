@@ -153,7 +153,7 @@ public enum ShopItem {
 
 
     ShopItem(Material mat, int amountInStack, String name, ItemPrice price, @Nullable String... lore){
-        this.item = ShopItems.createShopItem(mat, amountInStack, name, price, lore);
+        this.item = ShopItemCreator.createShopItem(mat, amountInStack, name, price, lore);
         this.price = price;
         this.material = mat;
         this.name = name;
