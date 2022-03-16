@@ -86,11 +86,13 @@ public class SimpleInventory extends CraftInventoryCustom {
         ShopItem item = ShopItem.getShopItem(name);
         LinkedList<ShopItem> list = shopItems.get(slot);
 
-        if (item != list.getLast()) {
-            int in = list.indexOf(item);
-            setItem(slot, list.get(in + 1).getItem());
-        } else {
-            if(item == ShopItem.SHEARS || item == ShopItem.FISHING_ROD) setItem(slot, null);
+        if (shopItems == ShopItems.TOOLS) {
+            if (item != list.getLast()) {
+                int in = list.indexOf(item);
+                setItem(slot, list.get(in + 1).getItem());
+            } else {
+                setItem(slot, null);
+            }
         }
 
         if (shopItems == ShopItems.ARMOR){

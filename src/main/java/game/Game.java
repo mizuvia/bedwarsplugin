@@ -96,7 +96,7 @@ public class Game {
 
     private void checkEmptyTeams() {
         for(Team team : this.getPlugin().getTeams().values()){
-            if(team.getTeammatesAmount() == 0) {
+            if(team.getAliveTeammates() == 0) {
                 team.setBroken(true);
             }
         }

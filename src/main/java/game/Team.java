@@ -27,7 +27,8 @@ public class Team {
     private boolean isDead = false;
     private TeamUpgradesInventory upgradesInventory = new TeamUpgradesInventory(new TeamUpgrades(this), 27, "Улучшение команды");
     private TrapsInventory trapsInventory = new TrapsInventory(new Traps(this), 27, "Ловушки");
-    private int teammates_amount = 0;
+    private int teammatesAmount = 0;
+    private int aliveTeammates = 0;
     private HashMap<String, Participant> teammates = new HashMap<>();
     private IronGolem golem;
     private List<String> traps = new ArrayList<>();
@@ -45,7 +46,8 @@ public class Team {
         this.isDead = false;
         this.trapsInventory = new TrapsInventory(new Traps(this), 27, "Ловушки");
         this.upgradesInventory = new TeamUpgradesInventory(new TeamUpgrades(this), 27, "Улучшение команды");
-        this.teammates_amount = 0;
+        this.teammatesAmount = 0;
+        this.aliveTeammates = 0;
         this.traps = new ArrayList<>();
         this.teammates = new HashMap<>();
         this.bedDestroyer = null;
@@ -88,7 +90,7 @@ public class Team {
     public void setBroken(boolean isBroken) {
         if(this.isBroken) return;
         this.isBroken = isBroken;
-        this.getPlugin().getSidebar().decreaseTeammatesAmount(this);
+        this.getPlugin().getSidebar().decreaseAliveTeammates(this);
         this.checkAlive();
     }
 
@@ -134,17 +136,17 @@ public class Team {
 
     public IronGolem getIronGolem() {return this.golem;}
 
-    public int getTeammatesAmount(){return this.teammates_amount;}
+    public int getTeammatesAmount(){return this.teammatesAmount;}
 
-    public void decreaseTeammatesAmount() {
-        this.teammates_amount--;
+    public void decreaseAliveTeammates() {
+        this.aliveTeammates--;
         if(this.getPlugin().isWorking()){
-            if(this.isBroken()) this.getPlugin().getSidebar().decreaseTeammatesAmount(this);
+            if(this.isBroken()) this.getPlugin().getSidebar().decreaseAliveTeammates(this);
             this.checkAlive();
         }
     }
 
-    public void increaseTeammatesAmount(){this.teammates_amount++;}
+    public void increaseAliveTeammates(){this.aliveTeammates++;}
 
     public void setDead(boolean isDead) {
         this.isDead = isDead;
@@ -157,8 +159,12 @@ public class Team {
 
     public Participant getBedDestroyer() {return this.bedDestroyer; }
 
+    public int getAliveTeammates() {
+        return aliveTeammates;
+    }
+
     public void checkAlive() {
-        if(this.getTeammatesAmount() == 0) {
+        if(this.getAliveTeammates() == 0) {
             this.setDead(true);
             this.getPlugin().getGame().increaseDeadTeams();
         }
@@ -182,12 +188,22 @@ public class Team {
 
     public void addTeammate(Participant p) {
         this.getTeammates().put(p.getPlayer().getName(), p);
-        this.increaseTeammatesAmount();
+        this.increaseAliveTeammates();
+        this.increaseTeammates();
+    }
+
+    private void increaseTeammates(){
+        this.teammatesAmount++;
     }
 
     public void removeTeammate(Participant p) {
         this.getTeammates().remove(p.getPlayer().getName());
-        this.decreaseTeammatesAmount();
+        this.decreaseAliveTeammates();
+        this.decreaseTeammates();
+    }
+
+    private void decreaseTeammates() {
+        this.teammatesAmount--;
     }
 
     public void setBedBottomLocation(Location location) {
@@ -214,5 +230,9 @@ public class Team {
         for (Participant p : teammates.values()) {
             p.getPlayer().sendMessage(message);
         }
+    }
+
+    public void kill(Participant p) {
+        decreaseAliveTeammates();
     }
 }

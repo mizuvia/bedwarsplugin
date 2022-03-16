@@ -14,6 +14,7 @@ import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 import util.Utils;
@@ -68,12 +69,22 @@ public class onBlockBreak extends SimpleListener implements Listener, EventExecu
             return;
         }
 
-        String name;
-        if(b.getType().name().matches("(.*)WOOL")) name = ShopItem.WOOL.getName();
-        else if(b.getType().name().matches("(.*)TERRACOTTA")) name = ShopItem.TERRACOTTA.getName();
-        else name = ShopItem.valueOf(b.getType().name()).getName();
+        ItemStack item;
 
-        ItemStack item = Utils.createItem(b.getType(), 1, name);
+        if(b.getType().name().matches("(.*)WOOL")) {
+            item = ShopItem.WOOL.getItem().clone();
+            item.setType(b.getType());
+        }
+        else if(b.getType().name().matches("(.*)TERRACOTTA")) {
+            item = ShopItem.TERRACOTTA.getItem().clone();
+            item.setType(b.getType());
+        }
+        else item = ShopItem.valueOf(b.getType().name()).getItem();
+
+        ItemMeta meta = item.getItemMeta();
+        meta.setLore(null);
+        item.setItemMeta(meta);
+
         e.getPlayer().getInventory().addItem(item);
 
     }

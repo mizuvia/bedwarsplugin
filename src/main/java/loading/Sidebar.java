@@ -155,9 +155,9 @@ public class Sidebar {
         }
     }
 
-    public void decreaseTeammatesAmount(game.Team team) {
+    public void decreaseAliveTeammates(game.Team team) {
         String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
-        String message = ChatColor.YELLOW + "" + ChatColor.BOLD + team.getTeammatesAmount() + ChatColor.RESET + " " + ChatColor.GRAY + ChatColor.BOLD + "| " + ChatColor.RESET + team.getName().replace(ChatColor.BOLD.toString(), "");
+        String message = ChatColor.YELLOW + "" + ChatColor.BOLD + team.getAliveTeammates() + ChatColor.RESET + " " + ChatColor.GRAY + ChatColor.BOLD + "| " + ChatColor.RESET + team.getName().replace(ChatColor.BOLD.toString(), "");
         updateSidebar(key, message);
         for(Participant p : team.getTeammates().values()){
             updatePlayerSidebar(p, key, message + " " + ChatColor.RESET + ChatColor.GRAY + "ВЫ");
