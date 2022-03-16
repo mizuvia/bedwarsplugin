@@ -164,7 +164,7 @@ public class Team {
     }
 
     public void checkAlive() {
-        if(this.getAliveTeammates() == 0) {
+        if (this.getAliveTeammates() == 0) {
             this.setDead(true);
             this.getPlugin().getGame().increaseDeadTeams();
         }
@@ -234,5 +234,6 @@ public class Team {
 
     public void kill(Participant p) {
         decreaseAliveTeammates();
+        plugin.getTab().removePlayerFromTabs(p);
     }
 }

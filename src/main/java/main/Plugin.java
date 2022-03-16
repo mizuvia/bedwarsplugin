@@ -19,6 +19,7 @@ import org.bukkit.event.EventException;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -172,6 +173,9 @@ public class Plugin extends JavaPlugin {
 
         onBlockPlace onBlockPlace = new onBlockPlace(this);
         Bukkit.getPluginManager().registerEvent(BlockPlaceEvent.class, onBlockPlace, EventPriority.NORMAL, onBlockPlace, this);
+
+        onBlockSpread onBlockSpread = new onBlockSpread(this);
+        Bukkit.getPluginManager().registerEvent(BlockSpreadEvent.class, onBlockSpread, EventPriority.NORMAL, onBlockSpread, this);
 
         onEntityDamage onEntityDamage = new onEntityDamage(this);
         Bukkit.getPluginManager().registerEvent(EntityDamageEvent.class, onEntityDamage, EventPriority.NORMAL, onEntityDamage, this);

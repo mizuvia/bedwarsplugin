@@ -80,12 +80,12 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
             updateToolsInventory();
             addRespawnedItems();
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
+                player.teleport(p.getTeam().getSpawnLocation());
                 player.setGameMode(GameMode.SURVIVAL);
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     p.showPlayer(plugin, player);
                     player.showPlayer(plugin, p);
                 }
-                player.teleport(p.getTeam().getSpawnLocation());
                 player.setCanPickupItems(true);
                 PlayerInv.setPlayingInventory(p);
             }, 100);
@@ -96,7 +96,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         for (LinkedList<ShopItem> list : ShopItems.TOOLS.values()){
             if (list.contains(ShopItem.SHEARS) || list.contains(ShopItem.FISHING_ROD)) continue;
 
-            ListIterator<ShopItem> it = list.listIterator(list.size() - 1);
+            ListIterator<ShopItem> it = list.listIterator(list.size());
             while (it.hasPrevious()){
                 ShopItem item = it.previous();
                 if (player.getInventory().all(item.getMaterial()).size() == 0) continue;
@@ -149,7 +149,8 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
     public String killWithoutKiller(boolean isFinal) {
         if (isFinal) {
-            p.getTeam().getBedDestroyer().increaseFinalKills();
+            Participant destroyer = p.getTeam().getBedDestroyer();
+            if (destroyer != null) destroyer.increaseFinalKills();
         }
         return switch (e.getCause()) {
             case VOID -> "§7 упал в бездну.";
