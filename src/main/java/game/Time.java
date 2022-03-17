@@ -39,11 +39,12 @@ public class Time extends TaskGUI {
         setStages();
         it = stages.iterator();
         stage = it.next();
+        isFinished = false;
     }
 
     @Override
     public void run() {
-        if(!plugin.isWorking()) return;
+        if(!plugin.isWorking() && isFinished) return;
 
         getGame().getArmorStandsManager().changeSpawners();
         changeStage();
@@ -70,6 +71,7 @@ public class Time extends TaskGUI {
         isFinished = true;
 
         if(reason == FinishReason.WIN){
+            plugin.getSidebar().updateStage(MineColor.ORANGE.BOLD() + "Победа!");
             Team winningTeam = plugin.getTeams().values().stream().filter(team -> !team.isDead()).findFirst().orElse(null);
 
             plugin.getPlayers().forEach((uuid, p) -> {
@@ -104,6 +106,7 @@ public class Time extends TaskGUI {
             }
 
         } else {
+            plugin.getSidebar().updateStage(MineColor.ORANGE.BOLD() + "Ничья!");
             for(Participant participant : plugin.getPlayers().values()) {
                 participant.getPlayer().sendTitle("§2§lНичья!", "§aСейчас вы будете перемещены в хаб!", 10, 150, 20);
 

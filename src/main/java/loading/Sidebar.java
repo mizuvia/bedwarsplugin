@@ -97,6 +97,10 @@ public class Sidebar {
         updateSidebar("STAGE", stage.getName() + ChatColor.RESET +  ": " + Utils.getTime(stage.getTime()));
     }
 
+    public void updateStage(String stage){
+        updateSidebar("STAGE", stage);
+    }
+
     public void changeKilled(Participant p){
         updatePlayerSidebar(p, "KILLS", "Убито игроков: §c" + p.getKilledPlayers());
     }
