@@ -8,9 +8,8 @@ public class ChangeTime extends TaskGUI {
 
     public int time = -1;
 
-    public ChangeTime(Plugin plugin){
+    public ChangeTime(){
         this.period = 20;
-        this.plugin = plugin;
     }
 
     @Override

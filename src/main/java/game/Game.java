@@ -64,8 +64,8 @@ public class Game {
         this.time = new Time(this);
         this.armorStandsManager = new ArmorStandsManager(this);
 
-        this.time.startTask();
-        this.armorStandsManager.startTask();
+        this.time.startTask(plugin);
+        this.armorStandsManager.startTask(plugin);
 
         createInventories();
     }

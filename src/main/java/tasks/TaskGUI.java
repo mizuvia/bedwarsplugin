@@ -11,10 +11,12 @@ public abstract class TaskGUI extends BukkitRunnable {
     public long period;
     private BukkitTask task;
 
-    public void startTask(){
+    public void startTask(Plugin plugin){
+        this.plugin = plugin;
         task = this.runTaskTimer(Bukkit.getPluginManager().getPlugin(Plugin.PluginName), 0L, this.period);
     }
 
+    @Override
     public void run() {
         if (plugin.isEnabled()) {
             task.cancel();

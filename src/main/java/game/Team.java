@@ -67,7 +67,7 @@ public class Team {
         this.plugin = plugin;
         this.color = color;
         this.spawnResources = new SpawnResources(this);
-        this.spawnResources.startTask();
+        this.spawnResources.startTask(plugin);
         this.teamUpgrades.put("Sharpness", 0);
         this.teamUpgrades.put("Protection", 0);
         this.teamUpgrades.put("Haste", 0);
