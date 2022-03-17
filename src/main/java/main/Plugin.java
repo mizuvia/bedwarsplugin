@@ -9,15 +9,16 @@ import inventories.*;
 import jedis.RedisThread;
 import loading.Sidebar;
 import loading.Waiting;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftItem;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.*;
@@ -171,6 +172,9 @@ public class Plugin extends JavaPlugin {
 
         onBlockBreak onBlockBreak = new onBlockBreak(this);
         Bukkit.getPluginManager().registerEvent(BlockBreakEvent.class, onBlockBreak, EventPriority.NORMAL, onBlockBreak, this);
+
+        onBlockPhysics onBlockPhysics = new onBlockPhysics(this);
+        Bukkit.getPluginManager().registerEvent(BlockPhysicsEvent.class, onBlockPhysics, EventPriority.NORMAL, onBlockPhysics, this);
 
         onBlockPlace onBlockPlace = new onBlockPlace(this);
         Bukkit.getPluginManager().registerEvent(BlockPlaceEvent.class, onBlockPlace, EventPriority.NORMAL, onBlockPlace, this);
