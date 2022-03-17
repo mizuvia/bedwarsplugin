@@ -159,12 +159,12 @@ public class Time extends TaskGUI {
     }
 
     private void setStages(){
-        stages.add(new Stage(360, ArmorStandsManager.DIAMOND_COLOR + "§lАлмазы II"));
-        stages.add(new Stage(360, ArmorStandsManager.EMERALD_COLOR + "§lИзумруды II"));
-        stages.add(new Stage(360, ArmorStandsManager.DIAMOND_COLOR + "§lАлмазы III"));
-        stages.add(new Stage(360, ArmorStandsManager.EMERALD_COLOR + "§lИзумруды III"));
-        stages.add(new Stage(360, "§c§lПоломка кроватей"));
-        stages.add(new Stage(600, "§c§lКонец игры"));
+        stages.add(new Stage(60, ArmorStandsManager.DIAMOND_COLOR + "§lАлмазы II"));
+        stages.add(new Stage(60, ArmorStandsManager.EMERALD_COLOR + "§lИзумруды II"));
+        stages.add(new Stage(60, ArmorStandsManager.DIAMOND_COLOR + "§lАлмазы III"));
+        stages.add(new Stage(60, ArmorStandsManager.EMERALD_COLOR + "§lИзумруды III"));
+        stages.add(new Stage(60, "§c§lПоломка кроватей"));
+        stages.add(new Stage(240, "§c§lКонец игры"));
     }
 
     public enum FinishReason {
