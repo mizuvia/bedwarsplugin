@@ -78,7 +78,7 @@ public class ArmorStandsManager extends TaskGUI{
     }
 
     @Override
-    public void run() {
+    public void execute() {
 
         if(!this.getGame().getPlugin().isWorking()) return;
 

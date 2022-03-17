@@ -4,8 +4,6 @@ import main.Config;
 import main.Plugin;
 import tasks.TaskGUI;
 
-import java.util.logging.Logger;
-
 public class ChangeTime extends TaskGUI {
 
     public int time = -1;
@@ -16,8 +14,8 @@ public class ChangeTime extends TaskGUI {
     }
 
     @Override
-    public void run() {
-        if(!this.getPlugin().isEnabled() || !this.getPlugin().isLoading()) return;
+    public void execute() {
+        if(!this.getPlugin().isLoading()) return;
 
         if(this.getTime() == 0) {
             this.getPlugin().setLoading(false);

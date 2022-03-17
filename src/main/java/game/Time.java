@@ -43,7 +43,7 @@ public class Time extends TaskGUI {
     }
 
     @Override
-    public void run() {
+    public void execute() {
         if(!plugin.isWorking() && isFinished) return;
 
         getGame().getArmorStandsManager().changeSpawners();

@@ -24,7 +24,7 @@ public class SpawnResources extends TaskGUI {
     }
 
     @Override
-    public void run() {
+    public void execute() {
         if(!team.getPlugin().isWorking()) return;
 
         spawnSilver();
