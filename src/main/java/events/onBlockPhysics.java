@@ -18,7 +18,7 @@ public class onBlockPhysics extends SimpleListener implements Listener, EventExe
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         BlockPhysicsEvent e = (BlockPhysicsEvent) event;
 
-        Levelled data = (Levelled) e.getBlock();
+        Levelled data = (Levelled) e.getBlock().getBlockData();
         if (data.getLevel() == data.getMaximumLevel()) {
             e.setCancelled(true);
             plugin.getLogger().info("water moreify event canceled!");

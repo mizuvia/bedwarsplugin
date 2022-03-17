@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -20,12 +21,12 @@ public class ShopItemCreator {
 
     public static ItemStack createShopItem(ShopItem shopItem, Material mat, int amountInStack, String name, @Nullable ItemPrice price, @Nullable List<String> lore) {
         ItemStack item = new ItemStack(mat, amountInStack);
-        PotionMeta meta = (PotionMeta) item.getItemMeta();
+        ItemMeta meta = item.getItemMeta();
 
         int localName = (int) (Math.random() * Math.random() * 1000);
 
         switch (shopItem) {
-            case POTIONS -> meta.setColor(Color.YELLOW);
+            case POTIONS -> ((PotionMeta) meta).setColor(Color.YELLOW);
             case BOW2 -> meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
             case BOW3 -> {
                 meta.addEnchant(Enchantment.ARROW_DAMAGE, 2, true);
@@ -33,27 +34,27 @@ public class ShopItemCreator {
             }
             case STICK -> meta.addEnchant(Enchantment.KNOCKBACK, 1, true);
             case ARROW2 -> {
-                meta.setBasePotionData(new PotionData(PotionType.INSTANT_DAMAGE));
-                meta.setColor(Color.ORANGE);
+                ((PotionMeta) meta).setBasePotionData(new PotionData(PotionType.INSTANT_DAMAGE));
+                ((PotionMeta) meta).setColor(Color.ORANGE);
             }
             case ARROW3 -> {
-                meta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 0, false), true);
-                meta.setColor(Color.PURPLE);
+                ((PotionMeta) meta).addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 0, false), true);
+                ((PotionMeta) meta).setColor(Color.PURPLE);
             }
             case WOODEN_PICKAXE, WOODEN_AXE, STONE_AXE -> meta.addEnchant(Enchantment.DIG_SPEED, 1, true);
             case STONE_PICKAXE, IRON_PICKAXE, IRON_AXE -> meta.addEnchant(Enchantment.DIG_SPEED, 2, true);
             case DIAMOND_AXE, DIAMOND_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 3, true);
             case INVISIBILITY_POTION -> {
-                meta.addCustomEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 600, 0, true), true);
-                meta.setColor(Color.PURPLE);
+                ((PotionMeta) meta).addCustomEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 600, 0, true), true);
+                ((PotionMeta) meta).setColor(Color.PURPLE);
             }
             case JUMPING_POTION -> {
-                meta.addCustomEffect(new PotionEffect(PotionEffectType.JUMP, 900, 4, true), true);
-                meta.setColor(Color.LIME);
+                ((PotionMeta) meta).addCustomEffect(new PotionEffect(PotionEffectType.JUMP, 900, 4, true), true);
+                ((PotionMeta) meta).setColor(Color.LIME);
             }
             case SWIFTNESS_POTION -> {
-                meta.addCustomEffect(new PotionEffect(PotionEffectType.SPEED, 900, 1, true), true);
-                meta.setColor(Color.AQUA);
+                ((PotionMeta) meta).addCustomEffect(new PotionEffect(PotionEffectType.SPEED, 900, 1, true), true);
+                ((PotionMeta) meta).setColor(Color.AQUA);
             }
             case CROSSBOW1 -> {
                 meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 1, true);
