@@ -1,5 +1,7 @@
 package inventories;
 
+import org.bukkit.Material;
+
 import java.util.*;
 
 public class ShopItems {
@@ -66,6 +68,11 @@ public class ShopItems {
             Map.entry(42, getList(ShopItem.FIRE_CHARGE))
     );
 
+    public static LinkedList<ShopItem> getList(Map<Integer, LinkedList<ShopItem>> map, ShopItem value) {
+        int key = getIndex(map, value);
+        return map.get(key);
+    }
+
     public static int getIndex(Map<Integer, LinkedList<ShopItem>> map, ShopItem value){
         int key = 0;
 
@@ -83,8 +90,24 @@ public class ShopItems {
         return new LinkedList<>(Collections.singleton(item));
     }
 
+    @SafeVarargs
     public static <T> LinkedList<T> getList(T... items) {
         return new LinkedList<>(List.of(items));
+    }
+
+    public static boolean isArmor(Material mat) {
+        String name = mat.name();
+        return name.matches(".+HELMET") || name.matches(".+CHESTPLATE") ||
+               name.matches(".+LEGGINGS") || name.matches(".+BOOTS");
+    }
+
+    public static boolean isSword(Material mat) {
+        return mat.name().matches(".+SWORD");
+    }
+
+    public static boolean isTool(Material mat) {
+        String name = mat.name();
+        return name.matches(".+AXE");
     }
 
 }

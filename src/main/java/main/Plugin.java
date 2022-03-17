@@ -98,7 +98,8 @@ public class Plugin extends JavaPlugin {
             	}
             });
         }
-        
+
+        ShopItem.init();
         this.reloadWorld();
         Config.createInstance(this);
         this.game = new Game(this);

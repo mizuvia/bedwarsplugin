@@ -174,22 +174,24 @@ public class Participant {
     public int getBrokenBeds(){return this.brokenBeds;}
 
     public boolean takeItem(Material mat, int amount){
-        if(!this.getPlayer().getInventory().contains(mat)) return false;
+        PlayerInventory inv = getPlayer().getInventory();
+        if(!inv.contains(mat)) return false;
         int amountInInv = 0;
 
-        for(ItemStack stack : this.getPlayer().getInventory().all(mat).values()){
+        for(ItemStack stack : inv.all(mat).values()){
             amountInInv += stack.getAmount();
         }
 
         if(amountInInv < amount) return false;
 
-        for(Integer index : this.getPlayer().getInventory().all(mat).keySet()){
-            if(amount >= this.getPlayer().getInventory().getItem(index).getAmount()){
-                amount -= this.getPlayer().getInventory().getItem(index).getAmount();
-                this.getPlayer().getInventory().clear(index);
-            }
-            else {
-                this.getPlayer().getInventory().getItem(index).setAmount(this.getPlayer().getInventory().getItem(index).getAmount() - amount);
+        for(int index : inv.all(mat).keySet()){
+            ItemStack item = inv.getItem(index);
+            int iAmount = item.getAmount();
+            if(amount >= iAmount){
+                amount -= iAmount;
+                inv.clear(index);
+            } else {
+                item.setAmount(iAmount - amount);
                 break;
             }
 
@@ -201,26 +203,10 @@ public class Participant {
 
     public void giveItem(ItemStack item){
 
-        ItemMeta meta = item.getItemMeta();
+        Material mat = item.getType();
+        PlayerInventory inv = player.getInventory();
 
-        int slvl = this.getTeam().getTeamUpgrades().get("Sharpness");
-        int elvl = this.getTeam().getTeamUpgrades().get("Haste");
-        int plvl = this.getTeam().getTeamUpgrades().get("Protection");
-
-        Map<Material, Material> secondItem = Map.ofEntries(
-                Map.entry(Material.STONE_AXE, Material.WOODEN_AXE),
-                Map.entry(Material.IRON_AXE, Material.STONE_AXE),
-                Map.entry(Material.DIAMOND_AXE, Material.IRON_AXE),
-                Map.entry(Material.STONE_PICKAXE, Material.WOODEN_PICKAXE),
-                Map.entry(Material.IRON_PICKAXE, Material.STONE_PICKAXE),
-                Map.entry(Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE),
-                Map.entry(Material.GOLDEN_BOOTS, Material.GOLDEN_LEGGINGS),
-                Map.entry(Material.CHAINMAIL_BOOTS, Material.CHAINMAIL_LEGGINGS),
-                Map.entry(Material.IRON_BOOTS, Material.IRON_LEGGINGS),
-                Map.entry(Material.DIAMOND_BOOTS, Material.DIAMOND_LEGGINGS)
-        );
-
-        Map<Material, Integer> enchantmentLvl = Map.of(
+        Map<Material, Integer> toolEnchLvl = Map.of(
                 Material.WOODEN_AXE, 1,
                 Material.WOODEN_PICKAXE, 1,
                 Material.STONE_AXE, 1,
@@ -231,41 +217,45 @@ public class Participant {
                 Material.DIAMOND_PICKAXE, 3
         );
 
-        PlayerInventory inv = player.getInventory();
+        ItemMeta meta = item.getItemMeta();
+        ShopItem shopItem = ShopItem.getShopItem(meta.getDisplayName());
+        int lvl = 0;
+        Enchantment ench = null;
 
-        switch (item.getType()) {
-            case LEATHER_CHESTPLATE, LEATHER_HELMET, LEATHER_BOOTS, LEATHER_LEGGINGS -> {
-                Utils.setArmor(inv, item);
-                return;
+        if (ShopItems.isArmor(mat)) {
+            lvl = team.getTeamUpgrades().get("Protection");
+            ench = Enchantment.PROTECTION_ENVIRONMENTAL;
+        } else if (ShopItems.isSword(mat)) {
+            lvl = team.getTeamUpgrades().get("Sharpness");
+            ench = Enchantment.DAMAGE_ALL;
+        } else if (ShopItems.isTool(mat)) {
+            lvl = team.getTeamUpgrades().get("Haste") + toolEnchLvl.get(mat);
+            ench = Enchantment.DIG_SPEED;
+            LinkedList<ShopItem> list = ShopItems.getList(ShopItems.TOOLS, shopItem);
+            if (list.getFirst() != shopItem) {
+                int index = list.indexOf(shopItem) - 1;
+                inv.remove(list.get(index).getMaterial());
             }
-            case GOLDEN_BOOTS, CHAINMAIL_BOOTS, IRON_BOOTS, DIAMOND_BOOTS -> {
-                ItemStack leggings = new ItemStack(secondItem.get(item.getType()));
-                ItemMeta leggingsMeta = leggings.getItemMeta();
-                if (plvl != 0) {
-                    leggingsMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
-                    meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, plvl, true);
-                }
-                leggings.setItemMeta(leggingsMeta);
-                item.setItemMeta(meta);
-                Utils.setArmor(inv, item);
-                Utils.setArmor(inv, leggings);
-                return;
-            }
-            case WOODEN_AXE, WOODEN_PICKAXE -> meta.addEnchant(Enchantment.DIG_SPEED, 1 + elvl, true);
-            case STONE_AXE, STONE_PICKAXE, IRON_AXE, IRON_PICKAXE, DIAMOND_AXE, DIAMOND_PICKAXE -> {
-                if (inv.first(secondItem.get(item.getType())) != -1)
-                    inv.clear(inv.first(secondItem.get(item.getType())));
-                meta.addEnchant(Enchantment.DIG_SPEED, enchantmentLvl.get(item.getType()) + elvl, true);
-            }
-            case WOODEN_SWORD, STONE_SWORD, IRON_SWORD, DIAMOND_SWORD -> {
-                if (slvl != 0)
-                    meta.addEnchant(Enchantment.DAMAGE_ALL, slvl, true);
-            }
+        }
+
+        if (ench != null && lvl != 0) {
+            meta.addEnchant(ench, lvl, true);
         }
 
         item.setItemMeta(meta);
 
-        inv.addItem(item);
+        if(ShopItems.isArmor(item.getType())) {
+            if (mat.name().matches(".+BOOTS") && mat != Material.LEATHER_BOOTS) {
+                ItemStack leggings = new ItemStack(Material.valueOf(mat.name().split("_")[0] + "_LEGGINGS"));
+                ItemMeta leggingsMeta = leggings.getItemMeta();
+                if (lvl != 0) {
+                    leggingsMeta.addEnchant(ench, lvl, true);
+                }
+                leggings.setItemMeta(leggingsMeta);
+                Utils.setArmor(inv, leggings);
+            }
+            Utils.setArmor(inv, item);
+        } else inv.addItem(item);
     }
     
     public boolean isInvisible() {

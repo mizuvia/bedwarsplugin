@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public enum ShopItem {
@@ -31,6 +32,8 @@ public enum ShopItem {
 
     STICK
             (Material.STICK, 1, "§eПалка", new ItemPrice(Material.GOLD_INGOT, 5), "§5Потерянная трость", "§5Друга сервера §dKernox'a§5."),
+    WOODEN_SWORD
+            (Material.WOODEN_SWORD, 1, "§eДеревянный меч", null),
     STONE_SWORD
             (Material.STONE_SWORD, 1, "§eКаменный меч", new ItemPrice(Material.IRON_INGOT, 10), "§5Неплохой меч для сражений", "§5на начальной стадии игры."),
     IRON_SWORD
@@ -137,9 +140,11 @@ public enum ShopItem {
 
 
     private final Material material;
-    private final ItemStack item;
+    private ItemStack item;
     private final ItemPrice price;
     private final String name;
+    private final int amount;
+    private final List<String> lore;
     private static final Map<String, ItemStack> itemMap = new HashMap<>();
     private static final Map<String, ItemPrice> priceMap = new HashMap<>();
     private static final Map<String, ShopItem> shopItemMap = new HashMap<>();
@@ -153,10 +158,11 @@ public enum ShopItem {
 
 
     ShopItem(Material mat, int amountInStack, String name, ItemPrice price, @Nullable String... lore){
-        this.item = ShopItemCreator.createShopItem(mat, amountInStack, name, price, lore);
         this.price = price;
+        this.amount = amountInStack;
         this.material = mat;
         this.name = name;
+        this.lore = lore != null ? List.of(lore) : null;
     }
 
     public ItemPrice getPrice() {
@@ -175,6 +181,14 @@ public enum ShopItem {
         return material;
     }
 
+    public int getAmount() {
+        return amount;
+    }
+
+    public List<String> getLore() {
+        return lore;
+    }
+
     public static ItemPrice getPriceByName(String name){
         return ShopItem.priceMap.get(name);
     }
@@ -185,6 +199,12 @@ public enum ShopItem {
 
     public static ItemStack getItemByName(String name){
         return ShopItem.itemMap.get(name);
+    }
+
+    public static void init() {
+        for (ShopItem item : ShopItem.values()) {
+            item.item = ShopItemCreator.createShopItem(item, item.material, item.amount, item.name, item.price, item.lore);
+        }
     }
 
 }
