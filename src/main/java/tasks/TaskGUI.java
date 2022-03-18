@@ -20,7 +20,6 @@ public abstract class TaskGUI extends BukkitRunnable {
 
     @Override
     public void run() {
-        Logger.getLogger("").info(String.valueOf(plugin.isEnabled()));
         if (!plugin.isEnabled()) {
             task.cancel();
             this.cancel();
