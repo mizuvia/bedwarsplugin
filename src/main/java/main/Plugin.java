@@ -4,6 +4,7 @@ import com.hoshion.mongoapi.MongoService;
 import events.*;
 import game.Game;
 import game.Participant;
+import game.PlayerKiller;
 import game.Team;
 import inventories.*;
 import jedis.RedisThread;
@@ -102,6 +103,7 @@ public class Plugin extends JavaPlugin {
 
         ShopItem.init();
         this.reloadWorld();
+        PlayerKiller.createInstance(this);
         Config.createInstance(this);
         this.game = new Game(this);
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -126,6 +128,7 @@ public class Plugin extends JavaPlugin {
             }
         }
         getLogger().info("enabled!");
+        jedis.publish("plugin_reload", PluginName + "," + Config.getServerName());
     }
 
     public void reloadWorld(){

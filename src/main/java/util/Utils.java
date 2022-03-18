@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Utils {
 
@@ -74,4 +75,13 @@ public class Utils {
         return a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK;
     }
 
+    public static boolean isUUID(String uuid) {
+        try {
+            UUID.fromString(uuid);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+    }
 }

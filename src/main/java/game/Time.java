@@ -106,7 +106,7 @@ public class Time extends TaskGUI {
             }
 
         } else {
-            plugin.getSidebar().updateStage(MineColor.ORANGE.BOLD() + "Ничья!");
+            plugin.getSidebar().updateStage(MineColor.GREEN.BOLD() + "Ничья!");
             for(Participant participant : plugin.getPlayers().values()) {
                 participant.getPlayer().sendTitle("§2§lНичья!", "§aСейчас вы будете перемещены в хаб!", 10, 150, 20);
 
