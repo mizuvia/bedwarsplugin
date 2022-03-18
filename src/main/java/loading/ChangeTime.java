@@ -16,7 +16,6 @@ public class ChangeTime extends TaskGUI {
 
     @Override
     public void execute() {
-        Logger.getLogger("").info("test");
         if(!this.getPlugin().isLoading()) return;
 
         if(this.getTime() == 0) {
