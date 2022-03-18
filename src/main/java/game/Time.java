@@ -167,7 +167,7 @@ public class Time extends TaskGUI {
         stages.add(new Stage(60, ArmorStandsManager.DIAMOND_COLOR + "§lАлмазы III"));
         stages.add(new Stage(60, ArmorStandsManager.EMERALD_COLOR + "§lИзумруды III"));
         stages.add(new Stage(60, "§c§lПоломка кроватей"));
-        stages.add(new Stage(240, "§c§lКонец игры"));
+        stages.add(new Stage(60, "§c§lКонец игры"));
     }
 
     public enum FinishReason {

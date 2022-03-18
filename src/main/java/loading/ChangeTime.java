@@ -4,8 +4,6 @@ import main.Config;
 import main.Plugin;
 import tasks.TaskGUI;
 
-import java.util.logging.Logger;
-
 public class ChangeTime extends TaskGUI {
 
     public int time = -1;
