@@ -5,6 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.logging.Logger;
+
 public abstract class TaskGUI extends BukkitRunnable {
 
     protected Plugin plugin;
@@ -13,13 +15,15 @@ public abstract class TaskGUI extends BukkitRunnable {
 
     public void startTask(Plugin plugin){
         this.plugin = plugin;
-        task = this.runTaskTimer(Bukkit.getPluginManager().getPlugin(Plugin.PluginName), 0L, this.period);
+        task = this.runTaskTimer(plugin, 0L, this.period);
     }
 
     @Override
     public void run() {
+        Logger.getLogger("").info(String.valueOf(plugin.isEnabled()));
         if (!plugin.isEnabled()) {
             task.cancel();
+            this.cancel();
             return;
         }
         execute();
