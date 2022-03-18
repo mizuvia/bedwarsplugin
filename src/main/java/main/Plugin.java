@@ -152,7 +152,7 @@ public class Plugin extends JavaPlugin {
 
     public void onDisable(){
         getLogger().info("disabled!");
-        Bukkit.getOnlinePlayers().forEach(p -> Utils.connectToHub(p));
+        Bukkit.getOnlinePlayers().forEach(Utils::connectToHub);
         this.getGame().stop();
     }
     
