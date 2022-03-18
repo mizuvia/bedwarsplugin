@@ -4,6 +4,7 @@ import main.Plugin;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,7 @@ public class onPlayerDeath extends SimpleListener implements Listener, EventExec
 
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException  {
+        if (event instanceof EntityDeathEvent) return;
         PlayerDeathEvent e = (PlayerDeathEvent) event;
 
         e.setDeathMessage(null);

@@ -114,7 +114,7 @@ public class Time extends TaskGUI {
             }
         }
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> getGame().stop(), 250L);
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> getGame().stop(), 400);
     }
 
     private void breakBeds() {

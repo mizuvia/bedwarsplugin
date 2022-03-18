@@ -19,6 +19,7 @@ import game.Messenger.Message;
 import util.PlayerInv;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Game {
 
@@ -103,6 +104,7 @@ public class Game {
     }
 
     public void stop(){
+        Logger.getLogger("").info("Game is stopping");
         this.getPlugin().setWorking(false);
         this.getPlugin().reloadWorld();
         Config.reloadValues();
