@@ -44,6 +44,9 @@ public class Time extends TaskGUI {
 
     @Override
     public void execute() {
+        if (plugin.getGame() != game) {
+            this.cancel();
+        }
         if(!plugin.isWorking() || isFinished) return;
 
         getGame().getArmorStandsManager().changeSpawners();
@@ -56,7 +59,10 @@ public class Time extends TaskGUI {
             int index = stage.getIndex();
             if(index != 4 && index != 5) getGame().getArmorStandsManager().changeStage(index);
             if(index == 4) breakBeds();
-            if(index == 5) finishGame(FinishReason.DRAW);
+            if(index == 5) {
+                finishGame(FinishReason.DRAW);
+                return;
+            }
 
             nextStage();
         }
@@ -114,7 +120,7 @@ public class Time extends TaskGUI {
             }
         }
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> getGame().stop(), 400);
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plugin.reloadGame(), 400);
     }
 
     private void breakBeds() {
@@ -132,8 +138,6 @@ public class Time extends TaskGUI {
             p.getPlayer().sendTitle(MineColor.DARK_RED.BOLD() + "Ваша кровать разрушена", MineColor.RED + "Вы больше не возродитесь", 10, 20, 20);
         }
     }
-
-    public List<Stage> getStages(){return this.stages;}
 
     public Stage getStage() { return this.stage; }
 

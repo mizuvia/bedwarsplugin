@@ -25,7 +25,10 @@ public class SpawnResources extends TaskGUI {
 
     @Override
     public void execute() {
-        if(!team.getPlugin().isWorking()) return;
+        if (!plugin.getTeams().containsValue(team)){
+            this.cancel();
+        }
+        if (!team.getPlugin().isWorking()) return;
 
         spawnSilver();
         spawnGold();

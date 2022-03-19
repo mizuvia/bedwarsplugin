@@ -30,26 +30,23 @@ public class TeamSelection implements IGUI{
     }
 
     @Override
-    public void onGUIClick(Player whoClicked, int slot, Inventory inventory) {
+    public void onGUIClick(Player player, int slot, Inventory inventory) {
         ItemStack clickedItem = inventory.getItem(slot);
         if(clickedItem.getType().name().equals("GRAY_STAINED_GLASS_PANE")) return;
 
         String color = clickedItem.getType().name().replace("_WOOL", "").toLowerCase(Locale.ROOT);
         Team team = this.getPlugin().getTeams().get(color);
-        Participant participant = this.getPlugin().getPlayers().get(whoClicked.getUniqueId());
+        Participant participant = this.getPlugin().getPlayers().get(player.getUniqueId());
+        player.closeInventory();
 
         if (team.getTeammatesAmount() == Config.getPlayersPerTeam()){
-            whoClicked.closeInventory();
-            whoClicked.sendMessage("§cКоманда заполнена!");
+            player.sendMessage("§cКоманда заполнена!");
             return;
         }
 
         if (participant.hasTeam()) {
-            String oldColor = participant.getTeam().getColor();
-
-            if(oldColor.equals(color)){
-                whoClicked.closeInventory();
-                whoClicked.sendMessage("§eВы уже присоединились к данной команде!");
+            if(participant.getTeam() == team){
+                player.sendMessage("§eВы уже присоединились к данной команде!");
                 return;
             }
 
@@ -57,8 +54,7 @@ public class TeamSelection implements IGUI{
         }
 
         participant.setTeam(team);
-        participant.getPlayer().closeInventory();
-        participant.getPlayer().sendMessage("§eВы успешно присоединились к команде " + team.getName() + "§e!");
+        player.sendMessage("§eВы успешно присоединились к команде " + team.getName() + "§e!");
     }
 
     public static void addPlayerToItem(Plugin plugin, Team team, Player player){

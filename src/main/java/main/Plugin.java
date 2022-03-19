@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class Plugin extends JavaPlugin {
 
@@ -131,6 +132,19 @@ public class Plugin extends JavaPlugin {
         jedis.publish("plugin_reload", PluginName + "," + Config.getServerName());
     }
 
+    public void reloadGame() {
+        Logger.getLogger("").info("Game is stopping");
+        this.setWorking(false);
+        this.reloadWorld();
+        Config.reloadValues();
+        this.game = new Game(this);
+        Config.loadTeams(this);
+        this.getSidebar().fillWaitingList();
+        this.setLoading(true);
+        this.getJedis().publish("bw", Config.getServerName() + " " + this.getOnlinePlayers());
+        //this.messenger.stop();
+    }
+
     public void reloadWorld(){
         Bukkit.unloadWorld(Bukkit.getWorld("world"), false);
 
@@ -153,7 +167,7 @@ public class Plugin extends JavaPlugin {
     public void onDisable(){
         getLogger().info("disabled!");
         Bukkit.getOnlinePlayers().forEach(Utils::connectToHub);
-        this.getGame().stop();
+        this.reloadGame();
     }
     
     private void loadJedis(){
@@ -162,10 +176,6 @@ public class Plugin extends JavaPlugin {
         this.jedis.publish(Plugin.JedisChannel, Config.getServerName() + " 0");
         Thread jedisThread = new Thread(new RedisThread(subJedis, this));
         jedisThread.start();
-    }
-
-    public void resetTeamSelection() {
-        this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
     }
 
     private void loadEvents(){

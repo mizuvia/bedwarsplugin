@@ -22,8 +22,8 @@ public class ArmorStandsManager extends TaskGUI{
     private final Game game;
     private float angle = 0;
     private int direction = 1;
-    private List<ArmorStands> diamondArmorStands = new ArrayList<>();
-    private List<ArmorStands> emeraldArmorStands = new ArrayList<>();
+    private final List<ArmorStands> diamondArmorStands = new ArrayList<>();
+    private final List<ArmorStands> emeraldArmorStands = new ArrayList<>();
     private final DiamondSpawner diamondSpawner;
     private final EmeraldSpawner emeraldSpawner;
     public static final String DIAMOND_COLOR = Colors.fromHex("4beddb");
@@ -42,15 +42,6 @@ public class ArmorStandsManager extends TaskGUI{
         this.period = 1;
         this.diamondSpawner = new DiamondSpawner(game);
         this.emeraldSpawner = new EmeraldSpawner(game);
-    }
-
-    public void resetData(){
-        this.angle = 0;
-        this.direction = 1;
-        this.getDiamondSpawner().resetData();
-        this.getEmeraldSpawner().resetData();
-        diamondArmorStands = new ArrayList<>();
-        emeraldArmorStands = new ArrayList<>();
     }
 
     public void createArmorStands() {
@@ -79,7 +70,9 @@ public class ArmorStandsManager extends TaskGUI{
 
     @Override
     public void execute() {
-
+        if (plugin.getGame() != game) {
+            this.cancel();
+        }
         if(!this.getGame().getPlugin().isWorking()) return;
 
         for(ArmorStands arm : this.getEmeraldArmorStands()){

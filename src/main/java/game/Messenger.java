@@ -1,6 +1,7 @@
 package game;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -10,28 +11,21 @@ import main.Plugin;
 
 public class Messenger {
 	
-	private ArrayDeque<Message> messages;
-	private BukkitTask worker;
+	private final List<String> messages = new ArrayList<>();
+	private final BukkitTask worker;
 	
 	public Messenger(Plugin plugin, int delayTicks) {
-		this.messages = new ArrayDeque<>();
 		this.worker = new BukkitRunnable() {
 			@Override
 			public void run() {
-				Message m = messages.poll();
-				if (m == null) {
-					return;
-				}
-				messages.addLast(m);
-				Bukkit.getOnlinePlayers().forEach(p -> {
-					p.sendMessage(m.getLines());
-				});
+				if (messages.size() == 0) return;
+				Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(messages.toArray(new String[0])));
 			}
 		}.runTaskTimer(plugin, 10, delayTicks);
 	}
 	
-	public void addMessage(Message message) {
-		messages.addLast(message);
+	public void addMessage(String message) {
+		messages.add(message);
 	}
 	
 	public void stop() {
@@ -39,19 +33,4 @@ public class Messenger {
 			worker.cancel();
 		}
 	}
-	
-	public static class Message {
-		
-		private String[] lines;
-		
-		public Message(String[] lines) {
-			this.lines = lines;
-		}
-		
-		public String[] getLines() {
-			return lines;
-		}
-		
-	}
-	
 }

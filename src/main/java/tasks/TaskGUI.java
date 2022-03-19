@@ -22,7 +22,6 @@ public abstract class TaskGUI extends BukkitRunnable {
     public void run() {
         if (!plugin.isEnabled()) {
             task.cancel();
-            this.cancel();
             return;
         }
         execute();

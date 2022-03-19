@@ -65,9 +65,4 @@ public class EmeraldSpawner {
     }
 
     public Game getGame() { return this.game; }
-
-    public void resetData() {
-        this.setEmeraldTimeLeft(EMERALD_PHASES.get(0));
-        this.setEmeraldTimeout(EMERALD_PHASES.get(0));
-    }
 }

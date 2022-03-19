@@ -15,23 +15,21 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import game.Messenger.Message;
 import util.PlayerInv;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 public class Game {
 
     public static final Map<UUID, Participant> PLAYERS = new HashMap<>();
 
     private int matchTime = 0;
-    private List<Block> blockList = new ArrayList<>();
-    private List<Location> inaccessibleBlocks = new ArrayList<>();
+    private final List<Block> blockList = new ArrayList<>();
+    private final List<Location> inaccessibleBlocks = new ArrayList<>();
     private final Plugin plugin;
     private final Time time;
     private final ArmorStandsManager armorStandsManager;
-    private List<Villager> villagers = new ArrayList<>();
+    private final List<Villager> villagers = new ArrayList<>();
     private final List<Inventory> chests = new ArrayList<>();
     private final Map<Integer, SimpleInventory> inventories = new HashMap<>();
     private int deadTeams = 0;
@@ -46,8 +44,6 @@ public class Game {
     public void increaseMatchTime(int newMatchTime){ this.matchTime += newMatchTime; }
 
     public Plugin getPlugin(){ return this.plugin; }
-
-    public void resetMatchTime(){ this.matchTime = 0; }
 
     public List<Block> getBlockList(){ return this.blockList; }
 
@@ -92,7 +88,7 @@ public class Game {
         this.teleportPlayers();
         this.getPlugin().setWorking(true);
         this.messenger = new Messenger(getPlugin(), 12000);
-        this.messenger.addMessage(new Message(new String[] {"§c§lТимерство запрещено!"}));
+        this.messenger.addMessage("§c§lТимерство запрещено!");
     }
 
     private void checkEmptyTeams() {
@@ -103,38 +99,10 @@ public class Game {
         }
     }
 
-    public void stop(){
-        Logger.getLogger("").info("Game is stopping");
-        this.getPlugin().setWorking(false);
-        this.getPlugin().reloadWorld();
-        Config.reloadValues();
-        this.resetLists();
-        this.resetMatchTime();
-        this.resetTimeout();
-        this.getArmorStandsManager().resetData();
-        this.getTime().resetData();
-        Config.loadTeams(plugin);
-        this.getPlugin().getSidebar().fillWaitingList();
-        this.getPlugin().resetTeamSelection();
-        this.getPlugin().setLoading(true);
-        this.getPlugin().getJedis().publish("bw", Config.getServerName() + " " + this.getPlugin().getOnlinePlayers());
-        this.messenger.stop();
-    }
-
     public void checkWin(){
         if (Config.getTeamsAmount() - 1 == this.getDeadTeams()) {
             this.getPlugin().getGame().getTime().finishGame(Time.FinishReason.WIN);
         }
-    }
-
-    private void resetLists() {
-        this.villagers = new ArrayList<>();
-        this.inaccessibleBlocks = new ArrayList<>();
-        this.blockList = new ArrayList<>();
-    }
-
-    private void resetTimeout() {
-        this.deadTeams = 0;
     }
 
     public void teleportPlayers(){

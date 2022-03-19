@@ -55,9 +55,4 @@ public class DiamondSpawner {
     }
 
     public Game getGame() {return this.game;}
-
-    public void resetData() {
-        this.setDiamondTimeout(DIAMONDS_PHASES.get(0));
-        this.setDiamondTimeLeft(DIAMONDS_PHASES.get(0));
-    }
 }
