@@ -43,6 +43,14 @@ public enum ShopItem {
 
     // armor
 
+    LEATHER_HELMET
+            (Material.LEATHER_HELMET, 1, "§eШлем", null),
+    LEATHER_CHESTPLATE
+            (Material.LEATHER_CHESTPLATE, 1, "§eНагрудник", null),
+    LEATHER_LEGGINGS
+            (Material.LEATHER_LEGGINGS, 1, "§eПоножи", null),
+    LEATHER_BOOTS
+            (Material.LEATHER_BOOTS, 1, "§eБотинки", null),
     CHAINMAIL_BOOTS
             (Material.CHAINMAIL_BOOTS, 1, "§eКольчуга", new ItemPrice(Material.IRON_INGOT, 25), "§5Кольчуга для друга,", "§5кольчужка для подружки.", "§dВыдаётся навсегда."),
     IRON_BOOTS
@@ -170,7 +178,7 @@ public enum ShopItem {
     }
 
     public ItemStack getItem() {
-        return item;
+        return item.clone();
     }
 
     public String getName() {

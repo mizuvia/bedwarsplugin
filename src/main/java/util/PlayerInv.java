@@ -51,6 +51,13 @@ public class PlayerInv {
 
     }
 
+    public static boolean hasShopItem(PlayerInventory inv, ShopItem item) {
+        Material mat = item.getMaterial();
+        if (inv.first(mat) != -1) return true;
+        if (inv.getItemInOffHand() != null && inv.getItemInOffHand().getType() == mat) return true;
+        return inv.getHolder().getItemOnCursor() != null && inv.getHolder().getItemOnCursor().getType() == mat;
+    }
+
     public static void removeShopItem(PlayerInventory inv, ShopItem item, int amount) {
         Material mat = item.getMaterial();
         ItemStack i = null;

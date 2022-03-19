@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import util.PlayerInv;
 import util.Utils;
 
@@ -63,44 +64,42 @@ public class PlayerKiller {
 
 
     private static void updateToolsInventory() {
+        PlayerInventory inv = p.getPlayer().getInventory();
         for (LinkedList<ShopItem> list : ShopItems.TOOLS.values()){
             if (list.contains(ShopItem.SHEARS) || list.contains(ShopItem.FISHING_ROD)) continue;
 
-            ListIterator<ShopItem> it = list.listIterator(list.size());
-            while (it.hasPrevious()){
-                ShopItem item = it.previous();
-                if (p.getPlayer().getInventory().all(item.getMaterial()).size() == 0) continue;
-
+            for (ShopItem item : list) {
+                if (!PlayerInv.hasShopItem(inv, item)) continue;
                 p.getShopInventory(ShopItem.TOOLS).setItem(ShopItems.getIndex(ShopItems.TOOLS, item), item.getItem());
-                if (it.hasPrevious()) p.getRespawnItems().add(it.previous().getItem());
+
+                int index = list.indexOf(item) - 1;
+                if (index >= 0) p.getRespawnItems().add(list.get(index).getItem());
                 break;
             }
         }
     }
 
     private static void addRespawnedItems() {
-        for (ItemStack item : p.getPlayer().getInventory().getContents()) {
-            if (item == null) continue;
+        PlayerInventory inv = p.getPlayer().getInventory();
 
-            List<Material> respawnedItems = List.of(
-                    Material.GOLDEN_BOOTS, Material.CHAINMAIL_BOOTS,
-                    Material.IRON_BOOTS, Material.DIAMOND_BOOTS,
-                    Material.FISHING_ROD, Material.LEATHER_BOOTS,
-                    Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS,
-                    Material.LEATHER_HELMET, Material.SHEARS,
-                    Material.WOODEN_PICKAXE, Material.WOODEN_AXE
-            );
+        List<ShopItem> respawnedItems = List.of(
+                ShopItem.CHAINMAIL_BOOTS, ShopItem.IRON_BOOTS,
+                ShopItem.DIAMOND_BOOTS, ShopItem.FISHING_ROD,
+                ShopItem.WOODEN_AXE, ShopItem.SHEARS,
+                ShopItem.WOODEN_PICKAXE, ShopItem.LEATHER_HELMET,
+                ShopItem.LEATHER_CHESTPLATE, ShopItem.LEATHER_LEGGINGS,
+                ShopItem.LEATHER_BOOTS
+        );
 
-            if (respawnedItems.contains(item.getType())) {
-                p.getRespawnItems().add(item);
-            }
+        for (ShopItem item : respawnedItems) {
+            if (!PlayerInv.hasShopItem(inv, item)) continue;
+            p.getRespawnItems().add(item.getItem());
         }
     }
 
     private static boolean hasKiller() {
         return p.getLastDamager().get() != null;
     }
-
 
     private static String killWithKiller(boolean isFinal) {
         if (Utils.isUUID(p.getLastDamager().get())) {
