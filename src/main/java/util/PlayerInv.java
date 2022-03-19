@@ -52,9 +52,20 @@ public class PlayerInv {
 
     public static void removeShopItem(PlayerInventory inv, ShopItem item, int amount) {
         Material mat = item.getMaterial();
-        Logger.getLogger("").info(String.valueOf(inv.first(mat)));
-        if(inv.getItemInMainHand().getType() == mat) Logger.getLogger("").info("in main hand");
-        if(inv.getItemInOffHand().getType() == mat) Logger.getLogger("").info("in off hand");
-    }
+        ItemStack i = null;
 
+        if (inv.first(mat) != -1) {
+            i = inv.getItem(inv.first(mat));
+        }
+        if (i == null) {
+            i = inv.getItemInOffHand();
+            if (i == null || i.getType() != mat)
+                i = null;
+        }
+
+        if (i != null) {
+            if (amount == 0) i.setAmount(amount);
+            else i.setAmount(i.getAmount() - amount);
+        }
+    }
 }

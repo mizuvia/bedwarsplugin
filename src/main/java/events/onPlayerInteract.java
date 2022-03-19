@@ -67,7 +67,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                 Bukkit.getScheduler().runTaskLater(plugin, golem::remove, 20 * 240);
 
                 par.getTeam().setIronGolem(golem);
-                consumeItem();
+                consumeItem(ShopItem.GOLEM);
             }
             case GUNPOWDER -> {
                 if(!Utils.isRightClick(e.getAction())) return;
@@ -102,7 +102,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                     if(shouldTeleport[0]) {
                         p.teleport(par.getTeam().getSpawnLocation());
                         PlayerInv.removeShopItem(e.getPlayer().getInventory(), ShopItem.TELEPORT, 1);
-                        consumeItem();
+                        consumeItem(ShopItem.TELEPORT);
                         par.setTeleporting(false);
                     }
                     Bukkit.getServer().getScheduler().cancelTask(id);
@@ -113,7 +113,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                     Location loc = p.getLocation();
                     Location newLoc = new Location(loc.getWorld(), loc.getX() - (1 * Math.sin(Math.toRadians(loc.getYaw()))), loc.getY() + 1.0, loc.getZ() + (1 * Math.cos(Math.toRadians(loc.getYaw()))), loc.getYaw(), loc.getPitch());
                     Fireball fireball = (Fireball) Bukkit.getWorld("world").spawnEntity(newLoc, EntityType.FIREBALL);
-                    consumeItem();
+                    consumeItem(ShopItem.FIRE_CHARGE);
                     Bukkit.getScheduler().runTaskLater(plugin, fireball::remove, 400);
                 }
             }
@@ -123,7 +123,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                 if(par.isUnderMilk()) return;
                 par.setUnderMilk(true);
 
-                consumeItem();
+                consumeItem(ShopItem.MILK);
                 p.sendMessage("§cТеперь ловушки не действуют на вас в течении 60 секунд!");
 
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> par.setUnderMilk(false), 1200L);
@@ -134,7 +134,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
         }
     }
 
-    private void consumeItem(){
-        e.getItem().setAmount(e.getItem().getAmount() - 1);
+    private void consumeItem(ShopItem item){
+        PlayerInv.removeShopItem(e.getPlayer().getInventory(), item, 1);
     }
 }

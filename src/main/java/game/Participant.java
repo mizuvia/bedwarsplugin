@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import util.PlayerInv;
 import util.Utils;
 
 import java.util.*;
@@ -234,7 +235,7 @@ public class Participant {
             LinkedList<ShopItem> list = ShopItems.getList(ShopItems.TOOLS, shopItem);
             if (list.getFirst() != shopItem) {
                 int index = list.indexOf(shopItem) - 1;
-                inv.remove(list.get(index).getMaterial());
+                PlayerInv.removeShopItem(inv, list.get(index), 1);
             }
         }
 
