@@ -37,4 +37,13 @@ public class WorldManager {
     public static Location centralizeLocation(Location loc){
         return new Location(loc.getWorld(), loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5, loc.getYaw(), loc.getPitch());
     }
+
+    public static double getDistance(Location loc1, Location loc2) {
+        double x1 = loc1.getX();
+        double x2 = loc2.getX();
+        double y1 = loc1.getY();
+        double y2 = loc2.getY();
+
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
 }

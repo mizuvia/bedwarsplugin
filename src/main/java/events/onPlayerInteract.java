@@ -19,10 +19,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import util.MineColor;
 import util.PlayerInv;
 import util.Utils;
+import util.WorldManager;
 
 import java.util.List;
+import java.util.Locale;
 
 public class onPlayerInteract extends SimpleListener implements Listener, EventExecutor {
 
@@ -57,8 +60,20 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
             }
             case DARK_OAK_DOOR -> Utils.connectToHub(p);
             case GHAST_SPAWN_EGG -> {
-                if(!Utils.isRightClick(e.getAction())) return;
-                if(par.getTeam().getIronGolem() != null) return;
+                if(!Utils.isRightClick(e.getAction()) && e.getAction() == Action.RIGHT_CLICK_AIR) return;
+                if(par.getTeam().getIronGolem() != null) {
+                    p.sendMessage(MineColor.RED + "Нельзя создать больше одного голема на команду!");
+                    return;
+                }
+
+                Location blockLoc = e.getClickedBlock().getLocation();
+                Location golemLoc = new Location(blockLoc.getWorld(), blockLoc.getX() + 0.5, blockLoc.getY() + 1, blockLoc.getZ() + 0.5);
+
+                double distance = WorldManager.getDistance(golemLoc, par.getTeam().getSpawnLocation());
+                if (distance > 25) {
+                    p.sendMessage(MineColor.RED + "Вы можете создавать голема только в пределах своей базы!");
+                    return;
+                }
 
                 IronGolem golem = (IronGolem) Bukkit.getWorld("world").spawnEntity(new Location(e.getClickedBlock().getLocation().getWorld(), e.getClickedBlock().getLocation().getX() + 0.5, e.getClickedBlock().getLocation().getY() + 1, e.getClickedBlock().getLocation().getZ() + 0.5), EntityType.IRON_GOLEM);
                 golem.setCustomName(PlayerManager.getCodeColor(par) + "§lСтраж команды " + par.getTeam().getName());

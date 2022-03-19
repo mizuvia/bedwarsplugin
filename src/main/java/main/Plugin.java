@@ -260,6 +260,9 @@ public class Plugin extends JavaPlugin {
 
         onPrepareItemCraft onPrepareItemCraft = new onPrepareItemCraft(this);
         Bukkit.getPluginManager().registerEvent(PrepareItemCraftEvent.class, onPrepareItemCraft, EventPriority.NORMAL, onPrepareItemCraft, this);
+
+        onProjectileHit onProjectileHit = new onProjectileHit(this);
+        Bukkit.getPluginManager().registerEvent(ProjectileHitEvent.class, onProjectileHit, EventPriority.NORMAL, onProjectileHit, this);
     }
 
     public Sidebar getSidebar() {
