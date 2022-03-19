@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.builder.Diff;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import tasks.TaskGUI;
@@ -107,16 +108,16 @@ public class Time extends TaskGUI {
                 }.runTaskTimer(plugin, 0L, 20L);
             }
 
-            for(Participant participant : plugin.getPlayers().values()) {
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Utils.connectToHub(participant.getPlayer()), 200L);
+            for(Player player : Bukkit.getOnlinePlayers()) {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Utils.connectToHub(player), 200L);
             }
 
         } else {
-            plugin.getSidebar().updateStage(MineColor.GREEN.BOLD() + "Ничья!");
-            for(Participant participant : plugin.getPlayers().values()) {
-                participant.getPlayer().sendTitle("§2§lНичья!", "§aСейчас вы будете перемещены в хаб!", 10, 150, 20);
+            plugin.getSidebar(). updateStage(MineColor.GREEN.BOLD() + "Ничья!");
+            for(Player player : Bukkit.getOnlinePlayers()) {
+                player.sendTitle("§2§lНичья!", "§aСейчас вы будете перемещены в хаб!", 10, 150, 20);
 
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Utils.connectToHub(participant.getPlayer()), 200);
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Utils.connectToHub(player), 200);
             }
         }
 
