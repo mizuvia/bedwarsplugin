@@ -1,12 +1,15 @@
 package util;
 
 import game.Participant;
+import inventories.ShopItem;
 import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 public class PlayerInv {
 
@@ -45,6 +48,13 @@ public class PlayerInv {
             iterator.remove();
         }
 
+    }
+
+    public static void removeShopItem(PlayerInventory inv, ShopItem item, int amount) {
+        Material mat = item.getMaterial();
+        Logger.getLogger("").info(String.valueOf(inv.first(mat)));
+        if(inv.getItemInMainHand().getType() == mat) Logger.getLogger("").info("in main hand");
+        if(inv.getItemInOffHand().getType() == mat) Logger.getLogger("").info("in off hand");
     }
 
 }

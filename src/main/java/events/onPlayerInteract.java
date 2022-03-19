@@ -1,6 +1,7 @@
 package events;
 
 import game.Participant;
+import inventories.ShopItem;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Bukkit;
@@ -18,6 +19,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import util.PlayerInv;
 import util.Utils;
 
 import java.util.List;
@@ -99,6 +101,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> {
                     if(shouldTeleport[0]) {
                         p.teleport(par.getTeam().getSpawnLocation());
+                        PlayerInv.removeShopItem(e.getPlayer().getInventory(), ShopItem.TELEPORT, 1);
                         consumeItem();
                         par.setTeleporting(false);
                     }
