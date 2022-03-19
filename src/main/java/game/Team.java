@@ -39,30 +39,6 @@ public class Team {
     private Location bedBottomLocation;
     private Location bedTopLocation;
 
-    public void clearAfterGame(){
-        this.silverTimeout = (int) (1.5 * 20);
-        this.goldTimeout = 6 * 20;
-        this.isBroken = false;
-        this.isDead = false;
-        this.trapsInventory = new TrapsInventory(new Traps(this), 27, "Ловушки");
-        this.upgradesInventory = new TeamUpgradesInventory(new TeamUpgrades(this), 27, "Улучшение команды");
-        this.teammatesAmount = 0;
-        this.aliveTeammates = 0;
-        this.traps = new ArrayList<>();
-        this.teammates = new HashMap<>();
-        this.bedDestroyer = null;
-        this.golem = null;
-        Config.reloadTeam(this);
-        this.teamUpgrades = new HashMap<>();
-        this.teamUpgrades.put("Sharpness", 0);
-        this.teamUpgrades.put("Protection", 0);
-        this.teamUpgrades.put("Haste", 0);
-        this.teamUpgrades.put("Bedrock", 0);
-        this.teamUpgrades.put("Forge", 0);
-        this.teamUpgrades.put("Healing", 0);
-        this.teamUpgrades.put("Trap", 0);
-    }
-
     public Team(Plugin plugin, String color) {
         this.plugin = plugin;
         this.color = color;

@@ -113,7 +113,7 @@ public class Game {
         this.resetTimeout();
         this.getArmorStandsManager().resetData();
         this.getTime().resetData();
-        this.clearTeams();
+        Config.loadTeams(plugin);
         this.getPlugin().getSidebar().fillWaitingList();
         this.getPlugin().resetTeamSelection();
         this.getPlugin().setLoading(true);
@@ -135,12 +135,6 @@ public class Game {
 
     private void resetTimeout() {
         this.deadTeams = 0;
-    }
-
-    private void clearTeams() {
-        for(Team team : this.getPlugin().getTeams().values()){
-            team.clearAfterGame();
-        }
     }
 
     public void teleportPlayers(){

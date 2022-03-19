@@ -61,7 +61,7 @@ public class Config {
             e.printStackTrace();
         }
 
-        this.loadTeams(plugin);
+        loadTeams(plugin);
         setDiamonds(config.getStringList("diamonds"));
         setEmeralds(config.getStringList("emeralds"));
 
@@ -86,7 +86,8 @@ public class Config {
         return configFile;
     }
 
-    private void loadTeams(Plugin plugin) {
+    public static void loadTeams(Plugin plugin) {
+        plugin.getTeams().clear();
         teams_names = config.getStringList("team_list");
         for(String color : getTeamsNames()){
             Team team = new Team(plugin, color);
