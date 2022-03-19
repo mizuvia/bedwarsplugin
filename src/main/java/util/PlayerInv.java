@@ -38,8 +38,7 @@ public class PlayerInv {
 
     public static void setPlayingInventory(Participant p){
 
-        PlayerInventory inventory = p.getPlayer().getInventory();
-        inventory.clear();
+        clear(p);
 
         Iterator<ItemStack> iterator = p.getRespawnItems().iterator();
 
@@ -82,5 +81,11 @@ public class PlayerInv {
 
             ((Player) inv.getHolder()).updateInventory();
         }
+    }
+
+    public static void clear(Participant p) {
+        PlayerInventory inv = p.getPlayer().getInventory();
+        inv.clear();
+        p.getPlayer().getItemOnCursor().setAmount(0);
     }
 }

@@ -49,6 +49,7 @@ public class PlayerKiller {
             player.sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
             updateToolsInventory();
             addRespawnedItems();
+            PlayerInv.clear(p);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 player.teleport(p.getTeam().getSpawnLocation());
                 player.setGameMode(GameMode.SURVIVAL);
