@@ -11,6 +11,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Logger;
+
 public class onInventoryClick extends SimpleListener implements Listener, EventExecutor {
 
     public onInventoryClick(Plugin plugin) {
@@ -28,6 +30,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
             gui.onGUIClick((Player) e.getWhoClicked(), e.getRawSlot(), e.getClickedInventory());
         }
         if(e.getInventory().getHolder() instanceof HumanEntity){
+            Logger.getLogger("").info(e.getSlot() + " " + e.getRawSlot());
             switch (e.getSlot()) {
                 case 36, 37, 38, 39 -> e.setCancelled(true);
             }
