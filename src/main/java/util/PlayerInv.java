@@ -3,6 +3,7 @@ package util;
 import game.Participant;
 import inventories.ShopItem;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -62,10 +63,17 @@ public class PlayerInv {
             if (i == null || i.getType() != mat)
                 i = null;
         }
+        if (i == null) {
+            i = inv.getHolder().getItemOnCursor();
+            if (i == null || i.getType() != mat)
+                i = null;
+        }
 
         if (i != null) {
             if (amount == 0) i.setAmount(amount);
             else i.setAmount(i.getAmount() - amount);
+
+            ((Player) inv.getHolder()).updateInventory();
         }
     }
 }
