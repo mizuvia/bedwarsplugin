@@ -24,15 +24,13 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         InventoryClickEvent e = (InventoryClickEvent) event;
 
         if(e.getClickedInventory() == null) return;
-        if(e.getInventory().getHolder() instanceof IGUI){
+        if(e.getInventory().getHolder() instanceof IGUI gui){
             e.setCancelled(true);
-            IGUI gui = (IGUI) e.getInventory().getHolder();
             gui.onGUIClick((Player) e.getWhoClicked(), e.getRawSlot(), e.getClickedInventory());
         }
         if(e.getInventory().getHolder() instanceof HumanEntity){
-            Logger.getLogger("").info(e.getSlot() + " " + e.getRawSlot());
-            switch (e.getSlot()) {
-                case 36, 37, 38, 39 -> e.setCancelled(true);
+            switch (e.getRawSlot()) {
+                case 0, 1, 2, 3, 4, 5, 6, 7, 8-> e.setCancelled(true);
             }
         }
     }
