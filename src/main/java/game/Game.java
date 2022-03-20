@@ -113,36 +113,11 @@ public class Game {
             participant.getPlayer().teleport(participant.getTeam().getSpawnLocation());
             PlayerInv.setPlayingInventory(participant);
 
-            ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
-            ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
-            ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
-            ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
-
-            LeatherArmorMeta hm = (LeatherArmorMeta) helmet.getItemMeta();
-            LeatherArmorMeta cm = (LeatherArmorMeta) chestplate.getItemMeta();
-            LeatherArmorMeta lm = (LeatherArmorMeta) leggings.getItemMeta();
-            LeatherArmorMeta bm = (LeatherArmorMeta) boots.getItemMeta();
-
-            hm.setColor(PlayerManager.getColor(participant));
-            cm.setColor(PlayerManager.getColor(participant));
-            lm.setColor(PlayerManager.getColor(participant));
-            bm.setColor(PlayerManager.getColor(participant));
-
-            hm.setUnbreakable(true);
-            cm.setUnbreakable(true);
-            lm.setUnbreakable(true);
-            bm.setUnbreakable(true);
-
-            helmet.setItemMeta(hm);
-            chestplate.setItemMeta(cm);
-            leggings.setItemMeta(lm);
-            boots.setItemMeta(bm);
-
-            participant.getPlayer().getInventory().setHelmet(helmet);
-            participant.getPlayer().getInventory().setChestplate(chestplate);
-            participant.getPlayer().getInventory().setLeggings(leggings);
-            participant.getPlayer().getInventory().setBoots(boots);
-            participant.getPlayer().getInventory().addItem(ShopItem.WOODEN_SWORD.getItem());
+            participant.giveItem(ShopItem.LEATHER_HELMET.getItem());
+            participant.giveItem(ShopItem.LEATHER_CHESTPLATE.getItem());
+            participant.giveItem(ShopItem.LEATHER_LEGGINGS.getItem());
+            participant.giveItem(ShopItem.LEATHER_BOOTS.getItem());
+            participant.giveItem(ShopItem.WOODEN_SWORD.getItem());
         }
     }
 

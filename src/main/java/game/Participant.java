@@ -6,6 +6,7 @@ import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -226,6 +227,9 @@ public class Participant {
         if (ShopItems.isArmor(mat)) {
             lvl = team.getTeamUpgrades().get("Protection");
             ench = Enchantment.PROTECTION_ENVIRONMENTAL;
+            if (item.getType().name().matches("LEATHER.+")) {
+                ((LeatherArmorMeta) meta).setColor(PlayerManager.getColor(this));
+            }
         } else if (ShopItems.isSword(mat)) {
             lvl = team.getTeamUpgrades().get("Sharpness");
             ench = Enchantment.DAMAGE_ALL;
