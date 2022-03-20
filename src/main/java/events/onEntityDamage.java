@@ -53,7 +53,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         }
 
         if(this.getPlugin().isLoading()) {
-            if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(this.getPlugin().getPlayers().get(e.getEntity().getUniqueId()));
+            if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(p);
             e.getEntity().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
         } else {
             PlayerKiller.killInGame(player, e.getCause());

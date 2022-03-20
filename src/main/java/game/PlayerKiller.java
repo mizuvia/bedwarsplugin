@@ -44,6 +44,7 @@ public class PlayerKiller {
         if (isFinal) {
             player.sendTitle("§cВы умерли и больше не возродитесь", "§7Наблюдайте за игрой.", 10, 70, 20);
             player.setPlayerListName("§7Наблюдатель " + player.getName());
+            PlayerInv.clear(p);
             p.getTeam().kill(p);
         } else {
             player.sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
