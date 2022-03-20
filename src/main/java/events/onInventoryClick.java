@@ -2,12 +2,14 @@ package events;
 
 import inventories.IGUI;
 import main.Plugin;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +26,17 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         InventoryClickEvent e = (InventoryClickEvent) event;
 
         if(e.getClickedInventory() == null) return;
+
+        InventoryHolder hold = e.getClickedInventory().getHolder();
+        if (hold instanceof Chest) Logger.getLogger("").info("wow");
+        else Logger.getLogger("").info("wow2");
+
+        if (e.getView().getTopInventory().getHolder() instanceof Chest ) Logger.getLogger("").info("wow3");
+        if (e.getView().getBottomInventory().getHolder() instanceof Chest ) Logger.getLogger("").info("wow4");
+        else Logger.getLogger("").info("wow5");
+
+        Logger.getLogger("").info(e.getClickedInventory().getHolder().toString());
+
         if(e.getInventory().getHolder() instanceof IGUI gui){
             e.setCancelled(true);
             gui.onGUIClick((Player) e.getWhoClicked(), e.getRawSlot(), e.getClickedInventory());
