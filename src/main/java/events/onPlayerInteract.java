@@ -61,7 +61,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
             case DARK_OAK_DOOR -> Utils.connectToHub(p);
             case GHAST_SPAWN_EGG -> {
                 if(!Utils.isRightClick(e.getAction()) && e.getAction() == Action.RIGHT_CLICK_AIR) return;
-                if(par.getTeam().getIronGolem() != null) {
+                if(par.getTeam().getIronGolem() != null && !par.getTeam().getIronGolem().isDead()) {
                     p.sendMessage(MineColor.RED + "Нельзя создать больше одного голема на команду!");
                     return;
                 }

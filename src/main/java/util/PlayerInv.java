@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
@@ -52,11 +53,8 @@ public class PlayerInv {
 
     public static boolean hasShopItem(PlayerInventory inv, ShopItem item) {
         Material mat = item.getMaterial();
-        Logger.getLogger("").info("Чекаем " + mat.name());
-        if (inv.all(mat).size() != 0) {
-            Logger.getLogger("").info(mat.name() + " есть в инвентаре");
-            return true;
-        }
+        if (inv.first(mat) != -1) return true;
+        if (Arrays.stream(inv.getArmorContents()).anyMatch(i -> i.getType() == mat)) return true;
         if (inv.getItemInOffHand() != null && inv.getItemInOffHand().getType() == mat) return true;
         return inv.getHolder().getItemOnCursor() != null && inv.getHolder().getItemOnCursor().getType() == mat;
     }
@@ -77,6 +75,9 @@ public class PlayerInv {
             i = inv.getHolder().getItemOnCursor();
             if (i == null || i.getType() != mat)
                 i = null;
+        }
+        if (i == null) {
+            i = Arrays.stream(inv.getArmorContents()).filter(it -> it.getType() == mat).findFirst().orElse(null);
         }
 
         if (i != null) {
