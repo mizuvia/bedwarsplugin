@@ -32,7 +32,11 @@ public class onProjectileHit extends SimpleListener implements Listener, EventEx
         if (e.getHitEntity() instanceof Player bukkitPlayer) {
             Participant player = plugin.getPlayers().get(bukkitPlayer.getUniqueId());
 
-            if (player.getTeam() == shooter.getTeam()) e.setCancelled(true);
+            if (player.getTeam() == shooter.getTeam()) {
+                e.setCancelled(true);
+                return;
+            }
+            player.getLastDamager().put(String.valueOf(bukkitShooter.getUniqueId()));
         }
     }
 }

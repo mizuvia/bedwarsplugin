@@ -28,10 +28,9 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
         if(!(event instanceof EntityDamageByEntityEvent e)) return;
 
         Participant player = null;
-        if (e.getEntity() instanceof Player bukkitP) {
+        if (e.getEntity() instanceof Player)
             player = getPlugin().getPlayers().get(e.getEntity().getUniqueId());
-            Logger.getLogger("").info(bukkitP.getDisplayName() + " " + bukkitP.getAddress().getHostName());
-        }
+
 
         Participant damager = null;
         if (e.getDamager() instanceof Player)
