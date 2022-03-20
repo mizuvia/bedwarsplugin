@@ -29,22 +29,18 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
     public onEntityDamage(Plugin plugin) {
         super(plugin);
     }
-    private EntityDamageEvent e;
-    private Player player;
-    private Participant p;
 
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
 
-        this.e = (EntityDamageEvent) event;
+        EntityDamageEvent e = (EntityDamageEvent) event;
 
         if(!(e.getEntity() instanceof Player player)) return;
         if(e.getFinalDamage() < player.getHealth()) return;
 
         e.setCancelled(true);
 
-        this.p = getPlugin().getPlayers().get(player.getUniqueId());
-        this.player = player;
+        Participant p = getPlugin().getPlayers().get(player.getUniqueId());
 
         if (p == null) return;
 
@@ -56,7 +52,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
             if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(p);
             e.getEntity().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
         } else {
-            PlayerKiller.killInGame(player, e.getCause());
+            new PlayerKiller(p, e.getCause()).killInGame();
         }
     }
 }

@@ -10,7 +10,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import util.PlayerInv;
 import util.Utils;
@@ -20,16 +19,21 @@ import java.util.*;
 public class PlayerKiller {
 
     private static Plugin plugin;
-    private static Participant p;
-    private static EntityDamageEvent.DamageCause cause;
+    private final Participant p;
+    private final EntityDamageEvent.DamageCause cause;
+
+    public PlayerKiller(Participant p, EntityDamageEvent.DamageCause cause) {
+        this.p = p;
+        this.cause = cause;
+    }
 
     public static void createInstance(Plugin pl) {
         plugin = pl;
     }
 
-    public static void killInGame(Player player, EntityDamageEvent.DamageCause c) {
-        p = plugin.getPlayers().get(player.getUniqueId());
-        cause = c;
+    public void killInGame() {
+        Player player = p.getPlayer();
+        plugin.getPlayers().get(player.getUniqueId());
         boolean isFinal = p.getTeam().isBroken();
         String finalMessage = isFinal ? " §b§lФинальное убийство!" : "";
         String deathMessage = hasKiller() ? killWithKiller(isFinal) : killWithoutKiller(isFinal);
@@ -65,7 +69,7 @@ public class PlayerKiller {
     }
 
 
-    private static void updateToolsInventory() {
+    private void updateToolsInventory() {
         PlayerInventory inv = p.getPlayer().getInventory();
         for (LinkedList<ShopItem> list : ShopItems.TOOLS.values()){
             if (list.contains(ShopItem.SHEARS) || list.contains(ShopItem.FISHING_ROD)) continue;
@@ -81,7 +85,7 @@ public class PlayerKiller {
         }
     }
 
-    private static void addRespawnedItems() {
+    private void addRespawnedItems() {
         PlayerInventory inv = p.getPlayer().getInventory();
 
         List<ShopItem> respawnedItems = List.of(
@@ -99,11 +103,11 @@ public class PlayerKiller {
         }
     }
 
-    private static boolean hasKiller() {
+    private boolean hasKiller() {
         return p.getLastDamager().get() != null;
     }
 
-    private static String killWithKiller(boolean isFinal) {
+    private String killWithKiller(boolean isFinal) {
         if (Utils.isUUID(p.getLastDamager().get())) {
             Participant killer = plugin.getPlayers().get(UUID.fromString(p.getLastDamager().get()));
 
@@ -118,7 +122,7 @@ public class PlayerKiller {
         }
     }
 
-    public static String killWithoutKiller(boolean isFinal) {
+    public String killWithoutKiller(boolean isFinal) {
         if (isFinal) {
             Participant destroyer = p.getTeam().getBedDestroyer();
             if (destroyer != null) destroyer.increaseFinalKills();
@@ -130,7 +134,7 @@ public class PlayerKiller {
         };
     }
 
-    private static void giveKillerResources(Participant killer) {
+    private void giveKillerResources(Participant killer) {
 
         Player bukkitKiller = killer.getPlayer();
         if (bukkitKiller != null && bukkitKiller.isOnline()) {
