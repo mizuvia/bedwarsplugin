@@ -16,6 +16,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Logger;
+
 public class onEntityDamageByEntity extends SimpleListener implements Listener, EventExecutor {
     public onEntityDamageByEntity(Plugin plugin) {
         super(plugin);
@@ -26,8 +28,10 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
         if(!(event instanceof EntityDamageByEntityEvent e)) return;
 
         Participant player = null;
-        if (e.getEntity() instanceof Player)
+        if (e.getEntity() instanceof Player bukkitP) {
             player = getPlugin().getPlayers().get(e.getEntity().getUniqueId());
+            Logger.getLogger("").info(bukkitP.getDisplayName() + " " + bukkitP.getAddress().getHostName());
+        }
 
         Participant damager = null;
         if (e.getDamager() instanceof Player)
@@ -66,9 +70,6 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
                 }
                 if (golemTeam != null) {
                 	getPlugin().getPlayers().get(e.getEntity().getUniqueId()).getLastDamager().put("големом команды " + golemTeam.getName());
-                }
-                if(e.getFinalDamage() >= ((Player) e.getEntity()).getHealth()){
-                    PlayerKiller.killInGame((Player) e.getEntity(), EntityDamageEvent.DamageCause.ENTITY_ATTACK);
                 }
             }
         }
