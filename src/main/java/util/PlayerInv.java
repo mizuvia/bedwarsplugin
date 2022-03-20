@@ -52,7 +52,11 @@ public class PlayerInv {
 
     public static boolean hasShopItem(PlayerInventory inv, ShopItem item) {
         Material mat = item.getMaterial();
-        if (inv.all(mat).size() != 0) return true;
+        Logger.getLogger("").info("Чекаем " + mat.name());
+        if (inv.all(mat).size() != 0) {
+            Logger.getLogger("").info(mat.name() + " есть в инвентаре");
+            return true;
+        }
         if (inv.getItemInOffHand() != null && inv.getItemInOffHand().getType() == mat) return true;
         return inv.getHolder().getItemOnCursor() != null && inv.getHolder().getItemOnCursor().getType() == mat;
     }
