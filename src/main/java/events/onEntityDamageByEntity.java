@@ -3,9 +3,11 @@ package events;
 import game.Participant;
 import game.PlayerKiller;
 import game.Team;
+import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -43,6 +45,15 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
                 }
             }
         }
+
+        if (e.getDamager() instanceof TNTPrimed tnt) {
+            damager = getPlugin().getPlayers().get(tnt.getSource().getUniqueId());
+            if (damager == player) return;
+            if (e.getEntity() instanceof Player)
+                if (damager.getTeam() == player.getTeam())
+                    e.setDamage(0);
+        }
+
         if(e.getDamager() instanceof IronGolem){
             e.setDamage(8.0);
             if (e.getEntity() instanceof Player) {
@@ -61,6 +72,7 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
                 }
             }
         }
+
         if(e.getDamager() instanceof Player bukkitDamager){
         	Participant p = getPlugin().getPlayers().get(bukkitDamager.getUniqueId());
         	if (p.isInvisible()) {

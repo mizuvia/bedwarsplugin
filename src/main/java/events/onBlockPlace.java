@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -34,7 +35,8 @@ public class onBlockPlace extends SimpleListener implements Listener, EventExecu
         this.getPlugin().getGame().getBlockList().add(e.getBlockPlaced());
         if(e.getBlockPlaced().getType().equals(Material.TNT)){
             e.getItemInHand().setAmount(e.getItemInHand().getAmount() - 1);
-            Bukkit.getWorld("world").spawnEntity(WorldManager.centralizeLocation(e.getBlockPlaced().getLocation()), EntityType.PRIMED_TNT);
+            TNTPrimed tnt = (TNTPrimed) Bukkit.getWorld("world").spawnEntity(WorldManager.centralizeLocation(e.getBlockPlaced().getLocation()), EntityType.PRIMED_TNT);
+            tnt.setSource(e.getPlayer());
             e.setCancelled(true);
         }
     }
