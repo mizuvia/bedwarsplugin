@@ -51,10 +51,17 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
 
         if (e.getDamager() instanceof TNTPrimed tnt) {
             damager = getPlugin().getPlayers().get(tnt.getSource().getUniqueId());
-            if (damager == player) return;
-            if (e.getEntity() instanceof Player)
-                if (damager.getTeam() == player.getTeam())
-                    e.setDamage(0);
+            if (e.getEntity() instanceof Player) {
+                if (damager != player) {
+                    if (damager.getTeam() == player.getTeam()) {
+                        e.setDamage(0);
+                        return;
+                    }
+                }
+                if (e.getFinalDamage() >= ((Player) e.getEntity()).getHealth()) {
+                    new PlayerKiller(player, e.getCause()).killInGame();
+                }
+            }
         }
 
         if(e.getDamager() instanceof IronGolem){
