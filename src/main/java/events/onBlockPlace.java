@@ -1,5 +1,7 @@
 package events;
 
+import game.Game;
+import main.Config;
 import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,6 +15,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
+import util.MineColor;
 import util.WorldManager;
 
 public class onBlockPlace extends SimpleListener implements Listener, EventExecutor {
@@ -24,7 +27,15 @@ public class onBlockPlace extends SimpleListener implements Listener, EventExecu
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         BlockPlaceEvent e = (BlockPlaceEvent) event;
 
-        if(this.getPlugin().isLoading()) e.setCancelled(true);
+        if(this.getPlugin().isLoading()) {
+            e.setCancelled(true);
+            return;
+        }
+        if (e.getBlockPlaced().getLocation().getY() > Config.getGameHeight() + Game.MAXIMUM_BUILD_HEIGHT) {
+            e.setCancelled(true);
+            e.getPlayer().sendMessage(MineColor.RED + "Вы не можете строить выше " + Game.MAXIMUM_BUILD_HEIGHT + " блоков от игровой высоты!");
+            return;
+        }
         e.setBuild(true);
 
         if(this.getPlugin().getGame().getInaccessibleBlocks().contains(e.getBlockPlaced().getLocation())){

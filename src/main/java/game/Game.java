@@ -34,6 +34,7 @@ public class Game {
     private final Map<Integer, SimpleInventory> inventories = new HashMap<>();
     private int deadTeams = 0;
     private Messenger messenger;
+    public static final int MAXIMUM_BUILD_HEIGHT = 100;
     
     public List<Inventory> getChestsInventories() { return this.chests; }
 

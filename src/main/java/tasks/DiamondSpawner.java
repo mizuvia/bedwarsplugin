@@ -11,6 +11,7 @@ import util.Utils;
 import util.WorldManager;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class DiamondSpawner {
 
@@ -45,6 +46,7 @@ public class DiamondSpawner {
 
     public void spawnItem(){
         if(this.getDiamondTimeLeft() == 0) {
+            Logger.getLogger("").info("diamonds should be spawned");
             for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getDiamondArmorStands()){
                 if(!WorldManager.canDropResource(armorStands.getStage(), Material.DIAMOND, MAX_AMOUNT_OF_DIAMONDS)) return;
                 ItemStack diamond = Utils.createItem(Material.DIAMOND, 1, "§eАлмаз");

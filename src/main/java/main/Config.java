@@ -23,6 +23,7 @@ public class Config {
     private static int players_per_team;
     private static Location center;
     private static YamlConfiguration config;
+    private static int game_height;
 
     public static void createInstance(Plugin plugin) {
         instance = new Config(plugin);
@@ -50,6 +51,8 @@ public class Config {
 
     public static Location getCenter(){return center; }
 
+    public static int getGameHeight() {return game_height;}
+
     public static String getServerName(){return server_name;}
 
     private Config(Plugin plugin){
@@ -70,6 +73,7 @@ public class Config {
         players_amount = getPlayersPerTeam() * getTeamsAmount();
         server_name = config.getString("server_name");
         map_name = config.getString("map_name");
+        game_height = config.getInt("game_height");
 
         center = WorldManager.getLocation(config.getString("world_center"));
     }
