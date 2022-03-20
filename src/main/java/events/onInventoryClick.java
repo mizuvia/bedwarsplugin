@@ -27,15 +27,13 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
         if(e.getClickedInventory() == null) return;
 
-        InventoryHolder hold = e.getClickedInventory().getHolder();
-        if (hold instanceof Chest) Logger.getLogger("").info("wow");
-        else Logger.getLogger("").info("wow2");
+        Logger.getLogger("").info(e.getRawSlot() + " " + e.getSlot() + " " + e.getClickedInventory().getType() + " " + e.getInventory().getType());
 
         if (e.getView().getTopInventory().getHolder() instanceof Chest ) Logger.getLogger("").info("wow3");
-        if (e.getView().getBottomInventory().getHolder() instanceof Chest ) Logger.getLogger("").info("wow4");
+        if (e.getView().getBottomInventory().getHolder() instanceof Player ) Logger.getLogger("").info("wow4");
         else Logger.getLogger("").info("wow5");
 
-        Logger.getLogger("").info(e.getClickedInventory().getHolder().toString());
+        Logger.getLogger("").info(e.getInventory().getHolder().toString());
 
         if(e.getInventory().getHolder() instanceof IGUI gui){
             e.setCancelled(true);
