@@ -55,7 +55,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         e.setCancelled(true);
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
-                        updatedItem = item;
+                        updatedItem = item.clone();
                     } else {
                         updatedItem = e.getCurrentItem().clone();
                         updatedItem.setAmount(0);
@@ -69,7 +69,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         e.getCursor().setAmount(0);
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
-                        updatedItem = item;
+                        updatedItem = item.clone();
                     }
                 }
                 case SWAP_WITH_CURSOR -> {
@@ -81,7 +81,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null && item2 != e.getCurrentItem())
                             swapItem(view.getBottomInventory(), item2, view);
-                        updatedItem = item;
+                        updatedItem = item.clone();
                     }
                 }
                 case PICKUP_ALL, PICKUP_HALF, DROP_ALL_SLOT, DROP_ONE_SLOT -> {
@@ -99,13 +99,13 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         e.setCancelled(true);
                         if (act == InventoryAction.HOTBAR_MOVE_AND_READD)
                             swapItem(view.getBottomInventory(), view.getBottomInventory().getItem(e.getHotbarButton()), view);
-                        updatedItem = item;
+                        updatedItem = item.clone();
                     }
                 }
             }
 
 
-            if (updatedItem.getType() != Material.DIAMOND) {
+            if (updatedItem.getType() != Material.DIAMOND_BLOCK) {
                 ShopItem item = ShopItem.getShopItem(updatedItem.getItemMeta().getDisplayName());
                 int index = ShopItems.getIndex(ShopItems.TOOLS, item);
                 SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
