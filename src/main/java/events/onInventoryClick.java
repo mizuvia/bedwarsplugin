@@ -53,11 +53,12 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         ItemStack item = e.getCurrentItem();
                         if (!ShopItems.isTool(item.getType())) return;
                         e.setCancelled(true);
+                        e.getClickedInventory().setItem(e.getSlot(), null);
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
-                        updatedItem = item.clone();
+                        updatedItem = item;
                     } else {
-                        updatedItem = e.getCurrentItem().clone();
+                        updatedItem = e.getCurrentItem();
                         updatedItem.setAmount(0);
                     }
                 }
@@ -66,10 +67,10 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         ItemStack item = e.getCursor();
                         if (!ShopItems.isTool(item.getType())) return;
                         e.setCancelled(true);
-                        e.getCursor().setAmount(0);
+                        e.getWhoClicked().setItemOnCursor(null);
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
-                        updatedItem = item.clone();
+                        updatedItem = item;
                     }
                 }
                 case SWAP_WITH_CURSOR -> {
@@ -81,14 +82,14 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null && item2 != e.getCurrentItem())
                             swapItem(view.getBottomInventory(), item2, view);
-                        updatedItem = item.clone();
+                        updatedItem = item;
                     }
                 }
                 case PICKUP_ALL, PICKUP_HALF, DROP_ALL_SLOT, DROP_ONE_SLOT -> {
                     if (holder instanceof Player) {
                         ItemStack item = e.getCurrentItem();
                         if (!ShopItems.isTool(item.getType())) return;
-                        updatedItem = item.clone();
+                        updatedItem = item;
                         updatedItem.setAmount(0);
                     }
                 }
@@ -99,7 +100,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         e.setCancelled(true);
                         if (act == InventoryAction.HOTBAR_MOVE_AND_READD)
                             swapItem(view.getBottomInventory(), view.getBottomInventory().getItem(e.getHotbarButton()), view);
-                        updatedItem = item.clone();
+                        updatedItem = item;
                     }
                 }
             }
