@@ -28,13 +28,12 @@ public class Utils {
         return minutesStr + ":" + secondsStr;
     }
 
-    public static ItemStack clearItem(ItemStack item){
-        ItemStack newItem = new ItemStack(item.getType(), item.getAmount());
+    public static ItemStack clearLore(ItemStack item){
         ItemMeta meta = item.getItemMeta();
         meta.setLore(null);
-        newItem.setItemMeta(meta);
+        item.setItemMeta(meta);
 
-        return newItem;
+        return item;
     }
 
     public static void connectToHub(Player p) {

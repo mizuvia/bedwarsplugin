@@ -36,17 +36,7 @@ public class onEntityPickupItem extends SimpleListener implements Listener, Even
 
         Participant p = plugin.getPlayers().get(e.getEntity().getUniqueId());
         SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
-
         int index = ShopItems.getIndex(ShopItems.TOOLS, shopItem);
-        ItemStack i;
-        LinkedList<ShopItem> list = ShopItems.TOOLS.get(index);
-        if (shopItem != list.getLast()) {
-            int in = list.indexOf(shopItem);
-            i = list.get(in + 1).getItem();
-        } else {
-            i = null;
-        }
-
-        inv.setItem(index, i);
+        inv.updateSlot(index, shopItem);
     }
 }

@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -84,10 +85,16 @@ public class SimpleInventory extends CraftInventoryCustom {
     public void updateSlot(int slot) {
         String name = getItem(slot).getItemMeta().getDisplayName();
         ShopItem item = ShopItem.getShopItem(name);
+        updateSlot(slot, item);
+    }
+
+    public void updateSlot(int slot, @Nullable ShopItem item) {
         LinkedList<ShopItem> list = shopItems.get(slot);
 
         if (shopItems == ShopItems.TOOLS) {
-            if (item != list.getLast()) {
+            if (item == null) {
+                setItem(slot, list.getFirst().getItem());
+            } else if (item != list.getLast()) {
                 int in = list.indexOf(item);
                 setItem(slot, list.get(in + 1).getItem());
             } else {
