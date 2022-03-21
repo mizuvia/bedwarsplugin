@@ -69,6 +69,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         if (!ShopItems.isTool(item.getType())) return;
                         e.setCancelled(true);
                         e.getWhoClicked().setItemOnCursor(null);
+                        ((Player) e.getWhoClicked()).updateInventory();
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
                         updatedItem = item.clone();
@@ -80,6 +81,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         if (!ShopItems.isTool(item.getType())) return;
                         e.setCancelled(true);
                         e.getWhoClicked().setItemOnCursor(e.getCurrentItem());
+                        ((Player) e.getWhoClicked()).updateInventory();
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null && item2 != e.getCurrentItem())
                             swapItem(view.getBottomInventory(), item2, view);
@@ -120,8 +122,6 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                     inv.updateSlot(index, item);
                 }
             }
-
-            ((Player) e.getWhoClicked()).updateInventory();
         }
 
         if(holder instanceof IGUI gui){
