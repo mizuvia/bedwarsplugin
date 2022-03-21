@@ -47,6 +47,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         InventoryAction act = e.getAction();
 
         if (view.getTopInventory().getHolder() instanceof Chest){
+
             switch (act) {
                 case MOVE_TO_OTHER_INVENTORY -> {
                     if (holder instanceof Chest) {
@@ -89,7 +90,9 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                     if (holder instanceof Player) {
                         ItemStack item = e.getCurrentItem();
                         if (!ShopItems.isTool(item.getType())) return;
+                        Logger.getLogger("").info(item.getItemMeta().getDisplayName());
                         updatedItem = item.clone();
+                        Logger.getLogger("").info(updatedItem.getItemMeta().getDisplayName());
                         updatedItem.setAmount(2);
                     }
                 }
