@@ -37,7 +37,10 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         EntityDamageEvent e = (EntityDamageEvent) event;
         if(!(e.getEntity() instanceof Player player)) return;
         if(e.getFinalDamage() < player.getHealth()) return;
-        if (e.getEntity().getType() == EntityType.FIREWORK) return;
+        if (e.getEntity().getType() == EntityType.FIREWORK) {
+            e.setCancelled(true);
+            return;
+        }
         if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) return;
 
         e.setCancelled(true);
