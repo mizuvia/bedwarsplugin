@@ -37,7 +37,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
         if(e.getClickedInventory() == null) return;
 
-        Logger.getLogger("").info(e.getAction().name());
+        Logger.getLogger("").info(e.getWhoClicked().getName() + "совершило действие " + e.getAction().name() + "над инвентарём" + e.getClickedInventory().getHolder().toString());
 
         InventoryView view = e.getView();
         Participant p = plugin.getPlayers().get(e.getWhoClicked().getUniqueId());
@@ -109,7 +109,10 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                     updatedItem = item.clone();
                     if (e.getCurrentItem() == null)
                         updatedItem.setAmount(2);
-                    else e.setCancelled(true);
+                    else {
+                        e.setCancelled(true);
+                        e.getClickedInventory().setItem(e.getSlot(), null);
+                    }
                 }
             }
 
