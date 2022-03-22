@@ -69,7 +69,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         if (!ShopItems.isTool(item.getType())) return;
                         e.setCancelled(true);
                         e.getWhoClicked().setItemOnCursor(null);
-                        ((Player) e.getWhoClicked()).updateInventory();
+                        //((Player) e.getWhoClicked()).updateInventory();
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
                         updatedItem = item.clone();
