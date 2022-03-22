@@ -10,6 +10,7 @@ import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
@@ -38,7 +39,9 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
         if(!(e.getEntity() instanceof Player player)) return;
         if(e.getFinalDamage() < player.getHealth()) return;
         if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) return;
-
+        if (e.getEntity().getType() == EntityType.PLAYER) {
+            ((Player) e.getEntity()).getPlayer().sendMessage(e.getCause().toString());
+        }
         e.setCancelled(true);
 
         Participant p = getPlugin().getPlayers().get(player.getUniqueId());
