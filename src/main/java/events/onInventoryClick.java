@@ -46,7 +46,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         InventoryHolder holder = e.getClickedInventory().getHolder();
         InventoryAction act = e.getAction();
 
-        if (view.getTopInventory().getHolder() instanceof Chest){
+        if (!(view.getTopInventory().getHolder() instanceof IGUI)){
 
             switch (act) {
                 case MOVE_TO_OTHER_INVENTORY -> {
@@ -69,7 +69,6 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         if (!ShopItems.isTool(item.getType())) return;
                         e.setCancelled(true);
                         e.getWhoClicked().setItemOnCursor(null);
-                        //((Player) e.getWhoClicked()).updateInventory();
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
                         updatedItem = item.clone();
@@ -81,7 +80,6 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         if (!ShopItems.isTool(item.getType())) return;
                         e.setCancelled(true);
                         e.getWhoClicked().setItemOnCursor(e.getCurrentItem());
-                        ((Player) e.getWhoClicked()).updateInventory();
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null && item2 != e.getCurrentItem())
                             swapItem(view.getBottomInventory(), item2, view);
@@ -107,7 +105,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                     if (act == InventoryAction.HOTBAR_MOVE_AND_READD)
                         swapItem(view.getBottomInventory(), view.getBottomInventory().getItem(e.getHotbarButton()), view);
                     updatedItem = item.clone();
-                    if (e.getCurrentItem() == null)
+                    if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR)
                         updatedItem.setAmount(2);
                     else {
                         e.setCancelled(true);
@@ -116,7 +114,6 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                 }
             }
 
-
             if (updatedItem.getType() != Material.DIAMOND_BLOCK) {
                 ShopItem item = ShopItem.getShopItem(updatedItem.getItemMeta().getDisplayName());
                 int index = ShopItems.getIndex(ShopItems.TOOLS, item);
@@ -124,7 +121,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
                 if (updatedItem.getAmount() == 2) inv.updateSlot(index, null);
                 else {
-                    p.giveItem(item.getItem());
+                    p.giveItem(item.getItem(), e.getSlot());
                     inv.updateSlot(index, item);
                 }
             }

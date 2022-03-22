@@ -203,7 +203,7 @@ public class Participant {
         return true;
     }
 
-    public void giveItem(ItemStack item){
+    public void giveItem(ItemStack item, int index) {
 
         Material mat = item.getType();
         PlayerInventory inv = player.getInventory();
@@ -239,8 +239,8 @@ public class Participant {
             ench = Enchantment.DIG_SPEED;
             LinkedList<ShopItem> list = ShopItems.getList(ShopItems.TOOLS, shopItem);
             if (list.getFirst() != shopItem) {
-                int index = list.indexOf(shopItem) - 1;
-                PlayerInv.removeShopItem(inv, list.get(index), 1);
+                int ind = list.indexOf(shopItem) - 1;
+                PlayerInv.removeShopItem(inv, list.get(ind), 1);
             }
         }
 
@@ -261,7 +261,12 @@ public class Participant {
                 Utils.setArmor(inv, leggings);
             }
             Utils.setArmor(inv, item);
-        } else inv.addItem(item);
+        } else inv.setItem(index, item);
+
+    }
+
+    public void giveItem(ItemStack item){
+        giveItem(item, player.getInventory().firstEmpty());
     }
     
     public boolean isInvisible() {
