@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 import util.PlayerInv;
+import util.Utils;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -98,6 +99,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                             if (finalItem == null) {
                                 p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), null);
                             } else {
+                                player.setItemOnCursor(Utils.clearLore(finalTool.getItem()));
                                 givenTool = ShopItem.getShopItem(finalItem.getItemMeta().getDisplayName());
                                 p.giveItem(givenTool.getItem(), finalToolIndex);
                                 p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), givenTool);
