@@ -35,11 +35,11 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
 
         EntityDamageEvent e = (EntityDamageEvent) event;
-
+        ((Player) e.getEntity()).getPlayer().sendMessage(e.getCause().toString());
         if(!(e.getEntity() instanceof Player player)) return;
         if(e.getFinalDamage() < player.getHealth()) return;
         if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) return;
-            ((Player) e.getEntity()).getPlayer().sendMessage(e.getCause().toString());
+
         e.setCancelled(true);
 
         Participant p = getPlugin().getPlayers().get(player.getUniqueId());
