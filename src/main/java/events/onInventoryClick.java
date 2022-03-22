@@ -37,7 +37,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
         if(e.getClickedInventory() == null) return;
 
-        Logger.getLogger("").info(e.getWhoClicked().getName() + "совершило действие " + e.getAction().name() + "над инвентарём" + e.getClickedInventory().getHolder().toString());
+        Logger.getLogger("").info(e.getWhoClicked().getName() + " совершило действие " + e.getAction().name() + " над инвентарём " + e.getClickedInventory().getHolder().toString());
 
         InventoryView view = e.getView();
         Participant p = plugin.getPlayers().get(e.getWhoClicked().getUniqueId());
@@ -45,6 +45,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         ItemStack updatedItem = new ItemStack(Material.DIAMOND_BLOCK);
         InventoryHolder holder = e.getClickedInventory().getHolder();
         InventoryAction act = e.getAction();
+        Integer index = null;
 
         if (!(view.getTopInventory().getHolder() instanceof IGUI)){
 
@@ -72,6 +73,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         ItemStack item2 = findTool(view.getBottomInventory(), item);
                         if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
                         updatedItem = item.clone();
+                        index = e.getSlot();
                     }
                 }
                 case SWAP_WITH_CURSOR -> {
@@ -84,6 +86,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         if (item2 != null && item2 != e.getCurrentItem())
                             swapItem(view.getBottomInventory(), item2, view);
                         updatedItem = item.clone();
+                        index = e.getSlot();
                     }
                 }
                 case PICKUP_ALL, PICKUP_HALF, DROP_ALL_SLOT, DROP_ONE_SLOT -> {
@@ -98,12 +101,11 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                     if (holder instanceof Player) return;
 
                     ItemStack item = e.getCurrentItem();
-                    if (item == null) {
-                        item = view.getBottomInventory().getItem(e.getHotbarButton());
-                    }
+                    if (item == null) item = view.getBottomInventory().getItem(e.getHotbarButton());
                     if (!ShopItems.isTool(item.getType())) return;
                     if (act == InventoryAction.HOTBAR_MOVE_AND_READD)
                         swapItem(view.getBottomInventory(), view.getBottomInventory().getItem(e.getHotbarButton()), view);
+                    Logger.getLogger("").info("test");
                     updatedItem = item.clone();
                     if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR)
                         updatedItem.setAmount(2);
@@ -116,13 +118,14 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
             if (updatedItem.getType() != Material.DIAMOND_BLOCK) {
                 ShopItem item = ShopItem.getShopItem(updatedItem.getItemMeta().getDisplayName());
-                int index = ShopItems.getIndex(ShopItems.TOOLS, item);
+                int ind = ShopItems.getIndex(ShopItems.TOOLS, item);
                 SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
 
-                if (updatedItem.getAmount() == 2) inv.updateSlot(index, null);
+                if (updatedItem.getAmount() == 2) inv.updateSlot(ind, null);
                 else {
-                    p.giveItem(item.getItem(), e.getSlot());
-                    inv.updateSlot(index, item);
+                    if (index != null) p.giveItem(item.getItem(), index);
+                    else p.giveItem(item.getItem());
+                    inv.updateSlot(ind, item);
                 }
             }
         }
