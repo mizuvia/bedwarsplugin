@@ -203,7 +203,7 @@ public class Participant {
         return true;
     }
 
-    public void giveItem(ItemStack item, int index) {
+    public void giveItem(ItemStack item, Integer index) {
 
         Material mat = item.getType();
         PlayerInventory inv = player.getInventory();
@@ -261,12 +261,13 @@ public class Participant {
                 Utils.setArmor(inv, leggings);
             }
             Utils.setArmor(inv, item);
-        } else inv.setItem(index, item);
-
+        } else if (index != null)
+            inv.setItem(index, item);
+        else inv.addItem(item);
     }
 
     public void giveItem(ItemStack item){
-        giveItem(item, player.getInventory().firstEmpty());
+        giveItem(item, null);
     }
     
     public boolean isInvisible() {
