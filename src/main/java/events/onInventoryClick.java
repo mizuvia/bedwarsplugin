@@ -4,23 +4,20 @@ import game.Participant;
 import inventories.IGUI;
 import inventories.ShopItem;
 import inventories.ShopItems;
-import inventories.SimpleInventory;
 import main.Plugin;
-import org.bukkit.Material;
-import org.bukkit.block.Chest;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
+import util.PlayerInv;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -41,96 +38,73 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         Logger.getLogger("").info("По слоту: " + e.getSlot() + " (" + e.getRawSlot() + " по сырому слоту)");
 
         InventoryView view = e.getView();
-        Participant p = plugin.getPlayers().get(e.getWhoClicked().getUniqueId());
+        Player player = ((Player) e.getWhoClicked());
+        Participant p = plugin.getPlayers().get(player.getUniqueId());
 
-        ItemStack updatedItem = new ItemStack(Material.DIAMOND_BLOCK);
         InventoryHolder holder = e.getClickedInventory().getHolder();
-        InventoryAction act = e.getAction();
-        Integer index = null;
 
         if (!(view.getTopInventory().getHolder() instanceof IGUI)){
 
-            switch (act) {
-                case MOVE_TO_OTHER_INVENTORY -> {
-                    if (holder instanceof Chest) {
-                        ItemStack item = e.getCurrentItem();
-                        if (!ShopItems.isTool(item.getType())) return;
-                        e.setCancelled(true);
-                        e.getClickedInventory().setItem(e.getSlot(), null);
-                        ItemStack item2 = findTool(view.getBottomInventory(), item);
-                        if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
-                        updatedItem = item.clone();
+            List<List<ShopItem>> twoTools = List.of(
+                List.of( ShopItem.WOODEN_AXE, ShopItem.STONE_AXE,
+                        ShopItem.IRON_AXE, ShopItem.DIAMOND_AXE),
+                List.of( ShopItem.WOODEN_PICKAXE, ShopItem.STONE_PICKAXE,
+                        ShopItem.IRON_PICKAXE, ShopItem.DIAMOND_PICKAXE)
+            );
+
+            for (List<ShopItem> tools : twoTools) {
+
+                int toolIndex = -1;
+                ShopItem tool = null;
+
+                for (ShopItem item : tools) {
+                    if (!PlayerInv.hasShopItem(p.getPlayer().getInventory(), item)) continue;
+                    tool = item;
+                    toolIndex = player.getInventory().first(item.getMaterial());
+                    break;
+                }
+
+                int finalToolIndex = toolIndex;
+                ShopItem finalTool = tool;
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    ShopItem givenTool = null;
+                    int givenToolIndex = -1;
+                    ShopItem inOffHand = null;
+                    if (finalToolIndex == -1 && finalTool != null) inOffHand = finalTool;
+                    fir: for (ShopItem item : tools) {
+                        for (int i : player.getInventory().all(item.getMaterial()).keySet()) {
+                            if (inOffHand != null || (finalToolIndex != i)) {
+                                givenToolIndex = i;
+                                givenTool = item;
+                                break fir;
+                            }
+                        }
+                    }
+                    if (givenTool != null) {
+                        if (inOffHand != null) {
+                            view.getTopInventory().addItem(player.getInventory().getItemInOffHand());
+                            player.getInventory().setItemInOffHand(null);
+                        } else {
+                            if (finalTool != null) {
+                                view.getTopInventory().addItem(player.getInventory().getItem(finalToolIndex));
+                                player.getInventory().setItem(finalToolIndex, null);
+                            }
+                        }
+                        p.giveItem(givenTool.getItem(), givenToolIndex);
+                        p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, givenTool), givenTool);
                     } else {
-                        updatedItem = e.getCurrentItem().clone();
-                        updatedItem.setAmount(2);
+                        if (finalTool != null) {
+                            ItemStack finalItem = player.getInventory().getItem(finalToolIndex);
+                            if (finalItem == null) {
+                                p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), null);
+                            } else {
+                                givenTool = ShopItem.getShopItem(finalItem.getItemMeta().getDisplayName());
+                                p.giveItem(givenTool.getItem(), finalToolIndex);
+                                p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), givenTool);
+                            }
+                        }
                     }
-                }
-                case PLACE_ALL, PLACE_ONE -> {
-                    if (holder instanceof Player) {
-                        ItemStack item = e.getCursor();
-                        if (!ShopItems.isTool(item.getType())) return;
-                        e.setCancelled(true);
-                        e.getWhoClicked().setItemOnCursor(null);
-                        ItemStack item2 = findTool(view.getBottomInventory(), item);
-                        if (item2 != null) swapItem(view.getBottomInventory(), item2, view);
-                        updatedItem = item.clone();
-                        index = e.getSlot();
-                    }
-                }
-                case SWAP_WITH_CURSOR -> {
-                    if (holder instanceof Player) {
-                        ItemStack item = e.getCursor();
-                        if (!ShopItems.isTool(item.getType())) return;
-                        e.setCancelled(true);
-                        e.getWhoClicked().setItemOnCursor(e.getCurrentItem());
-                        ItemStack item2 = findTool(view.getBottomInventory(), item);
-                        if (item2 != null && item2 != e.getCurrentItem())
-                            swapItem(view.getBottomInventory(), item2, view);
-                        updatedItem = item.clone();
-                        index = e.getSlot();
-                    }
-                }
-                case PICKUP_ALL, PICKUP_HALF, DROP_ALL_SLOT, DROP_ONE_SLOT -> {
-                    if (holder instanceof Player) {
-                        ItemStack item = e.getCurrentItem();
-                        if (!ShopItems.isTool(item.getType())) return;
-                        updatedItem = item.clone();
-                        updatedItem.setAmount(2);
-                    }
-                }
-                case HOTBAR_MOVE_AND_READD, HOTBAR_SWAP -> {
-                    if (holder instanceof Player) return;
-
-                    Logger.getLogger("").info("" + e.getHotbarButton());
-
-                    ItemStack item = e.getCurrentItem();
-                    if (item == null) item = view.getBottomInventory().getItem(e.getHotbarButton());
-                    Logger.getLogger("").info(item.getItemMeta().getDisplayName());
-                    if (!ShopItems.isTool(item.getType())) return;
-                    if (act == InventoryAction.HOTBAR_MOVE_AND_READD)
-                        swapItem(view.getBottomInventory(), view.getBottomInventory().getItem(e.getHotbarButton()), view);
-                    Logger.getLogger("").info("test");
-                    updatedItem = item.clone();
-                    if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR)
-                        updatedItem.setAmount(2);
-                    else {
-                        e.setCancelled(true);
-                        e.getClickedInventory().setItem(e.getSlot(), null);
-                    }
-                }
-            }
-
-            if (updatedItem.getType() != Material.DIAMOND_BLOCK) {
-                ShopItem item = ShopItem.getShopItem(updatedItem.getItemMeta().getDisplayName());
-                int ind = ShopItems.getIndex(ShopItems.TOOLS, item);
-                SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
-
-                if (updatedItem.getAmount() == 2) inv.updateSlot(ind, null);
-                else {
-                    if (index != null) p.giveItem(item.getItem(), index);
-                    else p.giveItem(item.getItem());
-                    inv.updateSlot(ind, item);
-                }
+                });
             }
         }
 
@@ -143,23 +117,5 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                 case 0, 1, 2, 3, 4, 5, 6, 7, 8-> e.setCancelled(true);
             }
         }
-    }
-
-    public ItemStack findTool(Inventory inv, ItemStack i) {
-        ShopItem shopItem = ShopItem.getShopItem(i.getItemMeta().getDisplayName());
-        List<ShopItem> list = ShopItems.getList(ShopItems.TOOLS, shopItem);
-
-        for (ShopItem item : list) {
-            int index = inv.first(item.getMaterial());
-            if (index == -1) continue;
-            return inv.getItem(index);
-        }
-        return null;
-    }
-
-    public void swapItem(Inventory inv, ItemStack item, InventoryView view) {
-        Inventory opposite = view.getBottomInventory() == inv ? view.getTopInventory() : view.getBottomInventory();
-        inv.remove(item);
-        opposite.addItem(item);
     }
 }
