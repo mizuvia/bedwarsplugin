@@ -92,24 +92,24 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                     if (holder instanceof Player) {
                         ItemStack item = e.getCurrentItem();
                         if (!ShopItems.isTool(item.getType())) return;
-                        Logger.getLogger("").info(item.getItemMeta().getDisplayName());
                         updatedItem = item.clone();
-                        Logger.getLogger("").info(updatedItem.getItemMeta().getDisplayName());
                         updatedItem.setAmount(2);
                     }
                 }
                 case HOTBAR_MOVE_AND_READD, HOTBAR_SWAP -> {
                     if (holder instanceof Player) return;
+
                     ItemStack item = e.getCurrentItem();
                     if (item == null) {
                         item = view.getBottomInventory().getItem(e.getHotbarButton());
-                    } else e.setCancelled(true);
+                    }
                     if (!ShopItems.isTool(item.getType())) return;
                     if (act == InventoryAction.HOTBAR_MOVE_AND_READD)
                         swapItem(view.getBottomInventory(), view.getBottomInventory().getItem(e.getHotbarButton()), view);
                     updatedItem = item.clone();
                     if (e.getCurrentItem() == null)
                         updatedItem.setAmount(2);
+                    else e.setCancelled(true);
                 }
             }
 
