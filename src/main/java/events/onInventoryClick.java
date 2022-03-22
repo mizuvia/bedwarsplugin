@@ -38,6 +38,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         if(e.getClickedInventory() == null) return;
 
         Logger.getLogger("").info(e.getWhoClicked().getName() + " совершило действие " + e.getAction().name() + " над инвентарём " + e.getClickedInventory().getHolder().toString());
+        Logger.getLogger("").info("По слоту: " + e.getSlot() + " (" + e.getRawSlot() + " по сырому слоту)");
 
         InventoryView view = e.getView();
         Participant p = plugin.getPlayers().get(e.getWhoClicked().getUniqueId());
@@ -100,8 +101,11 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                 case HOTBAR_MOVE_AND_READD, HOTBAR_SWAP -> {
                     if (holder instanceof Player) return;
 
+                    Logger.getLogger("").info("" + e.getHotbarButton());
+
                     ItemStack item = e.getCurrentItem();
                     if (item == null) item = view.getBottomInventory().getItem(e.getHotbarButton());
+                    Logger.getLogger("").info(item.getItemMeta().getDisplayName());
                     if (!ShopItems.isTool(item.getType())) return;
                     if (act == InventoryAction.HOTBAR_MOVE_AND_READD)
                         swapItem(view.getBottomInventory(), view.getBottomInventory().getItem(e.getHotbarButton()), view);
