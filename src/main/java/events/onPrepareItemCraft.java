@@ -20,6 +20,6 @@ public class onPrepareItemCraft extends SimpleListener implements Listener, Even
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         PrepareItemCraftEvent e = (PrepareItemCraftEvent) event;
 
-        e.getInventory().setResult(new ItemStack(Material.AIR));
+        //e.getInventory().setResult(new ItemStack(Material.AIR));
     }
 }
