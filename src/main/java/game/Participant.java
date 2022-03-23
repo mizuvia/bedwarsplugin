@@ -221,6 +221,7 @@ public class Participant {
         );
 
         ItemMeta meta = item.getItemMeta();
+        meta.setLore(null);
         ShopItem shopItem = ShopItem.getShopItem(meta.getDisplayName());
         int lvl = 0;
         Enchantment ench = null;
