@@ -75,7 +75,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
                 int finalToolIndex = toolIndex;
                 ShopItem finalTool = tool;
-                ItemStack cursor = e.getCurrentItem() == null ? null : e.getCurrentItem().clone();
+                //ItemStack cursor = e.getCurrentItem() == null ? null : e.getCurrentItem().clone();
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     try {
                         p.canInteractInInventory = false;
@@ -114,7 +114,8 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                                 if (finalItem == null) {
                                     p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), null);
                                 } else {
-                                    player.setItemOnCursor(cursor);
+                                    Logger.getLogger("").info("slovili bug");
+                                    //player.setItemOnCursor(cursor);
                                     givenTool = ShopItem.getShopItem(finalItem.getItemMeta().getDisplayName());
                                     p.giveItem(finalItem, finalToolIndex);
                                     p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), givenTool);
