@@ -37,6 +37,7 @@ public class Participant {
     private final List<ItemStack> respawnItems = new ArrayList<>();
     private boolean isTeleporting = false;
     private boolean isUnderMilk = false;
+    public boolean canInteractInInventory = true;
     private int brokenBeds = 0;
     private int killedPlayers = 0;
     private int finalKills = 0;

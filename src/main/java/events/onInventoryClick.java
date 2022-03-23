@@ -41,6 +41,11 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         Player player = ((Player) e.getWhoClicked());
         Participant p = plugin.getPlayers().get(player.getUniqueId());
 
+        if (!p.canInteractInInventory) {
+            e.setCancelled(true);
+            return;
+        }
+
         InventoryHolder holder = e.getClickedInventory().getHolder();
 
         if (!(view.getTopInventory().getHolder() instanceof IGUI)){
@@ -69,6 +74,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                 ItemStack cursor = e.getCurrentItem() == null ? null : e.getCurrentItem().clone();
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     try {
+                        p.canInteractInInventory = false;
                         ShopItem givenTool = null;
                         int givenToolIndex = -1;
                         ShopItem inOffHand = null;
@@ -108,6 +114,8 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                                 }
                             }
                         }
+                        p.canInteractInInventory = true;
+                        player.updateInventory();
                     } catch (Exception ex){
                         ex.printStackTrace();
                     }
