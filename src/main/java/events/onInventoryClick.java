@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 import util.PlayerInv;
-import util.Utils;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -67,44 +66,50 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
                 int finalToolIndex = toolIndex;
                 ShopItem finalTool = tool;
+                ItemStack cursor = e.getCurrentItem() == null ? null : e.getCurrentItem().clone();
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    ShopItem givenTool = null;
-                    int givenToolIndex = -1;
-                    ShopItem inOffHand = null;
-                    if (finalToolIndex == -1 && finalTool != null) inOffHand = finalTool;
-                    fir: for (ShopItem item : tools) {
-                        for (int i : player.getInventory().all(item.getMaterial()).keySet()) {
-                            if (inOffHand != null || (finalToolIndex != i)) {
-                                givenToolIndex = i;
-                                givenTool = item;
-                                break fir;
+                    try {
+                        ShopItem givenTool = null;
+                        int givenToolIndex = -1;
+                        ShopItem inOffHand = null;
+                        if (finalToolIndex == -1 && finalTool != null) inOffHand = finalTool;
+                        fir:
+                        for (ShopItem item : tools) {
+                            for (int i : player.getInventory().all(item.getMaterial()).keySet()) {
+                                if (inOffHand != null || (finalToolIndex != i)) {
+                                    givenToolIndex = i;
+                                    givenTool = item;
+                                    break fir;
+                                }
                             }
                         }
-                    }
-                    if (givenTool != null) {
-                        if (inOffHand != null) {
-                            view.getTopInventory().addItem(player.getInventory().getItemInOffHand());
-                            player.getInventory().setItemInOffHand(null);
+                        if (givenTool != null) {
+                            if (inOffHand != null) {
+                                view.getTopInventory().addItem(player.getInventory().getItemInOffHand());
+                                player.getInventory().setItemInOffHand(null);
+                            } else {
+                                if (finalTool != null) {
+                                    view.getTopInventory().addItem(player.getInventory().getItem(finalToolIndex));
+                                    player.getInventory().setItem(finalToolIndex, null);
+                                }
+                            }
+                            p.giveItem(givenTool.getItem(), givenToolIndex);
+                            p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, givenTool), givenTool);
                         } else {
                             if (finalTool != null) {
-                                view.getTopInventory().addItem(player.getInventory().getItem(finalToolIndex));
-                                player.getInventory().setItem(finalToolIndex, null);
+                                ItemStack finalItem = player.getInventory().getItem(finalToolIndex);
+                                if (finalItem == null) {
+                                    p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), null);
+                                } else {
+                                    player.setItemOnCursor(cursor);
+                                    givenTool = ShopItem.getShopItem(finalItem.getItemMeta().getDisplayName());
+                                    p.giveItem(givenTool.getItem(), finalToolIndex);
+                                    p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), givenTool);
+                                }
                             }
                         }
-                        p.giveItem(givenTool.getItem(), givenToolIndex);
-                        p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, givenTool), givenTool);
-                    } else {
-                        if (finalTool != null) {
-                            ItemStack finalItem = player.getInventory().getItem(finalToolIndex);
-                            if (finalItem == null) {
-                                p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), null);
-                            } else {
-                                player.setItemOnCursor(Utils.clearLore(finalTool.getItem()));
-                                givenTool = ShopItem.getShopItem(finalItem.getItemMeta().getDisplayName());
-                                p.giveItem(givenTool.getItem(), finalToolIndex);
-                                p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), givenTool);
-                            }
-                        }
+                    } catch (Exception ex){
+                        ex.printStackTrace();
                     }
                 });
             }
