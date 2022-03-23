@@ -74,7 +74,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                 ItemStack cursor = e.getCurrentItem() == null ? null : e.getCurrentItem().clone();
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     try {
-                        p.canInteractInInventory = false;
+                        //p.canInteractInInventory = false;
                         ShopItem givenTool = null;
                         int givenToolIndex = -1;
                         ShopItem inOffHand = null;
@@ -89,6 +89,9 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                                 }
                             }
                         }
+                        Logger.getLogger("").info("GivenTool: " + givenTool == null ? "null" : givenTool.getName());
+                        Logger.getLogger("").info("FinalTool: " + finalTool == null ? "null" : finalTool.getName());
+                        Logger.getLogger("").info("InOffHand: " + inOffHand == null ? "null" : inOffHand.getName());
                         if (givenTool != null) {
                             if (inOffHand != null) {
                                 view.getTopInventory().addItem(player.getInventory().getItemInOffHand());
@@ -114,7 +117,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                                 }
                             }
                         }
-                        p.canInteractInInventory = true;
+                        //p.canInteractInInventory = true;
                         player.updateInventory();
                     } catch (Exception ex){
                         ex.printStackTrace();
