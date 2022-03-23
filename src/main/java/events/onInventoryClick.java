@@ -63,10 +63,14 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                 ShopItem tool = null;
 
                 for (ShopItem item : tools) {
-                    if (!PlayerInv.hasShopItem(p.getPlayer().getInventory(), item)) continue;
-                    tool = item;
-                    toolIndex = player.getInventory().first(item.getMaterial());
-                    break;
+                    if (player.getInventory().first(item.getMaterial()) != -1) {
+                        tool = item;
+                        toolIndex = player.getInventory().first(item.getMaterial());
+                        break;
+                    } else if (PlayerInv.isInOffHand(player.getInventory(), item)) {
+                        tool = item;
+                        break;
+                    }
                 }
 
                 int finalToolIndex = toolIndex;
@@ -74,7 +78,6 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                 ItemStack cursor = e.getCurrentItem() == null ? null : e.getCurrentItem().clone();
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     try {
-                        //p.canInteractInInventory = false;
                         ShopItem givenTool = null;
                         int givenToolIndex = -1;
                         ShopItem inOffHand = null;

@@ -55,7 +55,7 @@ public class PlayerInv {
         Material mat = item.getMaterial();
         if (inv.first(mat) != -1) return true;
         if (Arrays.stream(inv.getArmorContents()).anyMatch(i -> i != null && i.getType() == mat)) return true;
-        if (inv.getItemInOffHand() != null && inv.getItemInOffHand().getType() == mat) return true;
+        if (isInOffHand(inv, item)) return true;
         return inv.getHolder().getItemOnCursor() != null && inv.getHolder().getItemOnCursor().getType() == mat;
     }
 
@@ -86,6 +86,11 @@ public class PlayerInv {
 
             ((Player) inv.getHolder()).updateInventory();
         }
+    }
+
+    public static boolean isInOffHand(PlayerInventory inv, ShopItem item) {
+        ItemStack i = inv.getItemInOffHand();
+        return i != null && i.getType() == item.getMaterial();
     }
 
     public static void clear(Participant p) {
