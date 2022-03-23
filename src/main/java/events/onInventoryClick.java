@@ -89,9 +89,9 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                                 }
                             }
                         }
-                        Logger.getLogger("").info("GivenTool: " + givenTool == null ? "null" : givenTool.getName());
-                        Logger.getLogger("").info("FinalTool: " + finalTool == null ? "null" : finalTool.getName());
-                        Logger.getLogger("").info("InOffHand: " + inOffHand == null ? "null" : inOffHand.getName());
+                        Logger.getLogger("").info("GivenTool: " + (givenTool == null ? "null" : givenTool.getName()));
+                        Logger.getLogger("").info("FinalTool: " + (finalTool == null ? "null" : finalTool.getName()));
+                        Logger.getLogger("").info("InOffHand: " + (inOffHand == null ? "null" : inOffHand.getName()));
                         if (givenTool != null) {
                             if (inOffHand != null) {
                                 view.getTopInventory().addItem(player.getInventory().getItemInOffHand());
