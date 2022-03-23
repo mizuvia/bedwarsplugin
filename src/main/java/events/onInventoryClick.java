@@ -122,7 +122,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                             }
                         }
                         p.canInteractInInventory = true;
-                        player.updateInventory();
+                        //player.updateInventory();
                     } catch (Exception ex){
                         ex.printStackTrace();
                     }
