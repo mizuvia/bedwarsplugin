@@ -12,8 +12,10 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
+import util.PlayerInv;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class onEntityPickupItem extends SimpleListener implements Listener, EventExecutor {
 
@@ -35,6 +37,17 @@ public class onEntityPickupItem extends SimpleListener implements Listener, Even
         if (ShopItems.TOOLS.values().stream().noneMatch(list -> list.contains(shopItem))) return;
 
         Participant p = plugin.getPlayers().get(e.getEntity().getUniqueId());
+
+        if (ShopItems.isTool(shopItem.getMaterial())) {
+            List<ShopItem> list = ShopItems.getList(ShopItems.TOOLS, shopItem);
+            for (ShopItem si : list) {
+                if (PlayerInv.hasShopItem(p.getPlayer().getInventory(), si)) {
+                    e.setCancelled(true);
+                    return;
+                }
+            }
+        }
+
         SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
         int index = ShopItems.getIndex(ShopItems.TOOLS, shopItem);
         inv.updateSlot(index, shopItem);
