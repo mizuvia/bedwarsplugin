@@ -128,6 +128,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                     Location loc = p.getLocation();
                     Location newLoc = new Location(loc.getWorld(), loc.getX() - (1 * Math.sin(Math.toRadians(loc.getYaw()))), loc.getY() + 1.0, loc.getZ() + (1 * Math.cos(Math.toRadians(loc.getYaw()))), loc.getYaw(), loc.getPitch());
                     Fireball fireball = (Fireball) Bukkit.getWorld("world").spawnEntity(newLoc, EntityType.FIREBALL);
+                    fireball.setShooter(p);
                     consumeItem(ShopItem.FIRE_CHARGE);
                     Bukkit.getScheduler().runTaskLater(plugin, fireball::remove, 400);
                 }

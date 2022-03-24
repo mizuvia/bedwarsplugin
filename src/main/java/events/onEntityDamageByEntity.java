@@ -5,6 +5,7 @@ import game.PlayerKiller;
 import game.Team;
 import main.PlayerManager;
 import main.Plugin;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -51,17 +52,12 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
 
         if (e.getDamager() instanceof TNTPrimed tnt) {
             damager = getPlugin().getPlayers().get(tnt.getSource().getUniqueId());
-            if (e.getEntity() instanceof Player) {
-                if (damager != player) {
-                    if (damager.getTeam() == player.getTeam()) {
-                        e.setDamage(0);
-                        return;
-                    }
-                }
-                if (e.getFinalDamage() >= ((Player) e.getEntity()).getHealth()) {
-                    new PlayerKiller(player, e.getCause()).killInGame();
-                }
-            }
+            if (detectTeammate(e, player, damager)) return;
+        }
+
+        if (e.getDamager() instanceof Fireball fireball) {
+            damager = getPlugin().getPlayers().get(((Player) fireball.getShooter()).getUniqueId());
+            if (detectTeammate(e, player, damager)) return;
         }
 
         if(e.getDamager() instanceof IronGolem){
@@ -92,5 +88,20 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
                         e.setCancelled(true);
             }
         }
+    }
+
+    private boolean detectTeammate(EntityDamageByEntityEvent e, Participant player, Participant damager) {
+        if (e.getEntity() instanceof Player) {
+            if (damager != player) {
+                if (damager.getTeam() == player.getTeam()) {
+                    e.setDamage(0);
+                    return true;
+                }
+            }
+            if (e.getFinalDamage() >= ((Player) e.getEntity()).getHealth()) {
+                new PlayerKiller(player, e.getCause()).killInGame();
+            }
+        }
+        return false;
     }
 }
