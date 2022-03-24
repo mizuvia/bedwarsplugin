@@ -75,7 +75,6 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
                 int finalToolIndex = toolIndex;
                 ShopItem finalTool = tool;
-                //ItemStack cursor = e.getCurrentItem() == null ? null : e.getCurrentItem().clone();
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     try {
                         p.canInteractInInventory = false;
@@ -106,7 +105,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                                     player.getInventory().setItem(finalToolIndex, null);
                                 }
                             }
-                            p.giveItem(givenTool.getItem(), givenToolIndex);
+                            p.giveItem(givenTool.getItem(), givenToolIndex, false);
                             p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, givenTool), givenTool);
                         } else {
                             if (finalTool != null) {
@@ -114,16 +113,14 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                                 if (finalItem == null) {
                                     p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), null);
                                 } else {
-                                    Logger.getLogger("").info("slovili bug");
-                                    //player.setItemOnCursor(cursor);
                                     givenTool = ShopItem.getShopItem(finalItem.getItemMeta().getDisplayName());
-                                    p.giveItem(finalItem, finalToolIndex);
+                                    p.giveItem(finalItem, finalToolIndex, false);
                                     p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), givenTool);
                                 }
                             }
                         }
                         p.canInteractInInventory = true;
-                        //player.updateInventory();
+                        player.updateInventory();
                     } catch (Exception ex){
                         ex.printStackTrace();
                     }

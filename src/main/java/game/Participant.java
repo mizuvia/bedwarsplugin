@@ -204,7 +204,7 @@ public class Participant {
         return true;
     }
 
-    public void giveItem(ItemStack item, Integer index) {
+    public void giveItem(ItemStack item, Integer index, boolean removeFromCursor) {
 
         Material mat = item.getType();
         PlayerInventory inv = player.getInventory();
@@ -268,7 +268,7 @@ public class Participant {
     }
 
     public void giveItem(ItemStack item){
-        giveItem(item, null);
+        giveItem(item, null, true);
     }
     
     public boolean isInvisible() {
