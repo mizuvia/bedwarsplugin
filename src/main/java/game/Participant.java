@@ -241,7 +241,7 @@ public class Participant {
             LinkedList<ShopItem> list = ShopItems.getList(ShopItems.TOOLS, shopItem);
             if (list.getFirst() != shopItem) {
                 int ind = list.indexOf(shopItem) - 1;
-                PlayerInv.removeShopItem(inv, list.get(ind), 1);
+                PlayerInv.removeShopItem(inv, list.get(ind), 1, removeFromCursor);
             }
         }
 
