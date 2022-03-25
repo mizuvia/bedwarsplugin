@@ -48,7 +48,7 @@ public enum MineColor {
     public String toString() {
         String sentString = string;
         string = startingString;
-        return MineColor.RESET + sentString;
+        return "§r" + sentString;
     }
 
     private MineColor addFormat(String format){
