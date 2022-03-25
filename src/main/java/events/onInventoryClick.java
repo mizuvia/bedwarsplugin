@@ -38,9 +38,6 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         Player player = ((Player) e.getWhoClicked());
         Participant p = plugin.getPlayers().get(player.getUniqueId());
 
-        if (view.getTopInventory() != null)
-            Logger.getLogger("").info(view.getTopInventory().getHolder().toString());
-
         if (p == null) return;
 
         if (!p.canInteractInInventory) {
@@ -99,7 +96,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                         } else {
                             if (finalTool != null) {
                                 ItemStack i = player.getInventory().getItem(finalToolIndex);
-                                if (ShopItems.isTool(i.getType())) {
+                                if (i != null && tools.contains(ShopItem.getShopItem(i.getItemMeta().getDisplayName()))) {
                                     view.getTopInventory().addItem(player.getInventory().getItem(finalToolIndex));
                                     player.getInventory().setItem(finalToolIndex, null);
                                 }
