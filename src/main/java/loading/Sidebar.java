@@ -4,11 +4,17 @@ import game.Participant;
 import game.Time;
 import main.Config;
 import main.Plugin;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import util.MineColor;
 import util.Utils;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 
@@ -17,33 +23,45 @@ public class Sidebar {
     private final Time timeClass;
     private final Plugin plugin;
     public Map<String, String> stringsList = new LinkedHashMap<>();
+    public Map<String, String> spectatorStringsList = new LinkedHashMap<>();
+    public Scoreboard spectatorScoreboard;
+    public Objective spectatorObjective;
+    public LinkedList<Team> spectatorTeams = new LinkedList<>();
 
     public Sidebar(Plugin plugin){
         this.plugin = plugin;
         this.timeClass = this.getPlugin().getGame().getTime();
+        createSpectatorSidebar();
 
         fillWaitingList();
     }
 
-    private void putInList(String key, String value){
+    private void createSpectatorSidebar() {
+        spectatorScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        spectatorObjective = spectatorScoreboard.registerNewObjective("sidebar", "dummy", SIDEBAR_NAME);
+        spectatorObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
+    }
+
+    private void putInList(String key, String value, boolean forSpectator){
         stringsList.put(key, value);
+        if (forSpectator) spectatorStringsList.put(key ,value);
     }
 
     public void fillWaitingList() {
         clearSidebar();
 
-        putInList("SERVER_NAME", "   " + ChatColor.DARK_GRAY + Config.getServerName());
-        putInList("GAP1", " ");
-        putInList("PLAYERS", ChatColor.YELLOW + "" + ChatColor.BOLD + "Игроков:");
-        putInList("PLAYERS_AMOUNT", ChatColor.AQUA + "" + this.getPlugin().getOnlinePlayers() + "/" + Config.getMaxPlayers());
-        putInList("GAP2", "  ");
-        putInList("TIME", ChatColor.YELLOW + "" + ChatColor.BOLD + "Времени:");
-        putInList("TIME_AMOUNT", ChatColor.AQUA + "Ожидаем...");
-        putInList("GAP3", "   ");
-        putInList("MAP", ChatColor.YELLOW + "" + ChatColor.BOLD + "Карта:");
-        putInList("MAP_NAME", ChatColor.AQUA + Config.getMapName());
-        putInList("GAP4", "    ");
-        putInList("PROJECT", ChatColor.GOLD + "" + ChatColor.BOLD + "   Mizuvia");
+        putInList("SERVER_NAME", "   " + ChatColor.DARK_GRAY + Config.getServerName(), false);
+        putInList("GAP1", " ", false);
+        putInList("PLAYERS", ChatColor.YELLOW + "" + ChatColor.BOLD + "Игроков:", false);
+        putInList("PLAYERS_AMOUNT", ChatColor.AQUA + "" + this.getPlugin().getOnlinePlayers() + "/" + Config.getMaxPlayers(), false);
+        putInList("GAP2", "  ", false);
+        putInList("TIME", ChatColor.YELLOW + "" + ChatColor.BOLD + "Времени:", false);
+        putInList("TIME_AMOUNT", ChatColor.AQUA + "Ожидаем...", false);
+        putInList("GAP3", "   ", false);
+        putInList("MAP", ChatColor.YELLOW + "" + ChatColor.BOLD + "Карта:", false);
+        putInList("MAP_NAME", ChatColor.AQUA + Config.getMapName(), false);
+        putInList("GAP4", "    ", false);
+        putInList("PROJECT", ChatColor.GOLD + "" + ChatColor.BOLD + "   Mizuvia", false);
 
         fillPlayersSidebars();
     }
@@ -51,15 +69,15 @@ public class Sidebar {
     public void fillPlayingList(){
         clearSidebar();
 
-        putInList("SERVER_NAME", "   " + ChatColor.DARK_GRAY + Config.getServerName());
-        putInList("STAGE", ChatColor.AQUA + "" + ChatColor.BOLD + "Алмазы II: " + ChatColor.WHITE + Utils.getTime(getTime().getStage().getTime()));
-        putInList("GAP1", "  ");
+        putInList("SERVER_NAME", "   " + ChatColor.DARK_GRAY + Config.getServerName(), true);
+        putInList("STAGE", ChatColor.AQUA + "" + ChatColor.BOLD + "Алмазы II: " + ChatColor.WHITE + Utils.getTime(getTime().getStage().getTime()), true);
+        putInList("GAP1", "  ", true);
         for(String team : Config.getTeamsNames())
-            putInList("TEAM_" + team.toUpperCase(Locale.ROOT), "§a✔ §7§l| §r" + this.getPlugin().getTeams().get(team).getName().replace("§l", ""));
-        putInList("GAP2", "   ");
-        putInList("KILLS", ChatColor.WHITE + "Убийств: " + ChatColor.RED + "0");
-        putInList("BROKEN_BEDS", ChatColor.WHITE + "Разрушено кроватей: " + ChatColor.RED + "0");
-        putInList("FINAL_KILLS", ChatColor.WHITE + "Финальных убийств: " + ChatColor.RED + "0");
+            putInList("TEAM_" + team.toUpperCase(Locale.ROOT), "§a✔ §7§l| §r" + this.getPlugin().getTeams().get(team).getName().replace("§l", ""), true);
+        putInList("GAP2", "   ", false);
+        putInList("KILLS", ChatColor.WHITE + "Убийств: " + ChatColor.RED + "0", false);
+        putInList("BROKEN_BEDS", ChatColor.WHITE + "Разрушено кроватей: " + ChatColor.RED + "0", false);
+        putInList("FINAL_KILLS", ChatColor.WHITE + "Финальных убийств: " + ChatColor.RED + "0", false);
 
         fillPlayersSidebars();
 
@@ -69,8 +87,15 @@ public class Sidebar {
         }
     }
 
+    public Scoreboard getSpectatorScoreboard() {
+        return spectatorScoreboard;
+    }
+
     private void clearSidebar() {
         stringsList.clear();
+        spectatorStringsList.clear();
+        spectatorTeams.clear();
+        createSpectatorSidebar();
 
         for (Participant p : getPlugin().getPlayers().values()) {
             for (Team t : p.getSidebarTeams()) {
@@ -108,6 +133,7 @@ public class Sidebar {
     private void updateSidebar(String key, String value){
         stringsList.replace(key, value);
         updatePlayersSidebar(key, value);
+        if (spectatorStringsList.containsKey(key)) spectatorScoreboard.getTeam(key).setPrefix(value);
     }
 
     private void updatePlayersSidebar(String key, String value){
@@ -120,7 +146,7 @@ public class Sidebar {
     }
 
     public void drawPlayerSidebar(Participant p){
-        for(Team team : p.getSidebarTeams()){
+        for (Team team : p.getSidebarTeams()){
             int index = p.getSidebarTeams().indexOf(team);
             team.addEntry(ChatColor.values()[index] + "" + ChatColor.WHITE);
             p.getSidebarObjective().getScore(ChatColor.values()[index] + "" + ChatColor.WHITE).setScore(p.getSidebarTeams().size() - index);
@@ -131,6 +157,16 @@ public class Sidebar {
         for(Participant p : this.getPlugin().getPlayers().values()){
             fillPlayerSidebars(p);
         }
+        spectatorStringsList.forEach((key, value) -> {
+            Team team = spectatorScoreboard.registerNewTeam(key);
+            team.setPrefix(value);
+            spectatorTeams.add(team);
+        });
+        spectatorTeams.forEach(team -> {
+            int i = spectatorTeams.indexOf(team);
+            team.addEntry(MineColor.values()[i] + "" + MineColor.WHITE);
+            spectatorObjective.getScore(MineColor.values()[i] + "" + MineColor.WHITE).setScore(spectatorTeams.size() - i);
+        });
     }
 
     public void fillPlayerSidebars(Participant p) {

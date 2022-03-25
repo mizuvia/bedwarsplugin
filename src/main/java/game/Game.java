@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import util.PlayerInv;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Game {
 
@@ -88,6 +89,7 @@ public class Game {
         this.checkEmptyTeams();
         this.teleportPlayers();
         this.getPlugin().setWorking(true);
+        Logger.getLogger("").info("Game started successfully");
         this.messenger = new Messenger(getPlugin(), 12000);
         this.messenger.addMessage("§c§lТимерство запрещено!");
     }

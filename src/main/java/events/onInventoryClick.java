@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import util.PlayerInv;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class onInventoryClick extends SimpleListener implements Listener, EventExecutor {
 
@@ -87,9 +86,6 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                             }
                         }
                     }
-                    Logger.getLogger("").info("GivenTool: " + (givenTool == null ? "null" : givenTool.getName()));
-                    Logger.getLogger("").info("FinalTool: " + (finalTool == null ? "null" : finalTool.getName()) + " " + finalToolIndex);
-                    Logger.getLogger("").info("InOffHand: " + (inOffHand == null ? "null" : inOffHand.getName()));
                     if (givenTool != null) {
                         if (inOffHand != null) {
                             view.getTopInventory().addItem(player.getInventory().getItemInOffHand());

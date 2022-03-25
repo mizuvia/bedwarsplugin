@@ -58,7 +58,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
         if (this.getPlugin().isWorking()){
             pl.setGameMode(GameMode.SPECTATOR);
             pl.setPlayerListName("§7Наблюдатель " + pl.getName());
-            pl.setScoreboard(this.getPlugin().getScoreboard());
+            pl.setScoreboard(plugin.getSidebar().getSpectatorScoreboard());
 
             e.setJoinMessage(null);
         }
