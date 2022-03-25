@@ -69,7 +69,7 @@ public class Sidebar {
     public void fillPlayingList(){
         clearSidebar();
 
-        putInList("SERVER_NAME", MineColor.GRAY + Config.getServerName() + "        " + Utils.getTime(0), true);
+        putInList("SERVER_NAME", MineColor.GRAY + Config.getServerName() + "          " + Utils.getTime(0), true);
         putInList("STAGE", MineColor.AQUA.BOLD() + "Алмазы II: " + MineColor.WHITE + Utils.getTime(getTime().getStage().getTime()), true);
         putInList("GAP1", "  ", true);
         for(String team : Config.getTeamsNames())
@@ -209,6 +209,6 @@ public class Sidebar {
     }
 
     public void updateMatchTime() {
-        updateSidebar("SERVER_NAME", MineColor.GRAY + Config.getServerName().toUpperCase(Locale.ROOT) + "        " + Utils.getTime(plugin.getGame().getMatchTime()));
+        updateSidebar("SERVER_NAME", MineColor.GRAY + Config.getServerName().toUpperCase(Locale.ROOT) + "          " + Utils.getTime(plugin.getGame().getMatchTime()));
     }
 }
