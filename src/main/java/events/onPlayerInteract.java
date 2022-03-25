@@ -1,16 +1,14 @@
 package events;
 
 import game.Participant;
+import game.Team;
 import inventories.ShopItem;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -78,7 +76,26 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                 IronGolem golem = (IronGolem) Bukkit.getWorld("world").spawnEntity(new Location(e.getClickedBlock().getLocation().getWorld(), e.getClickedBlock().getLocation().getX() + 0.5, e.getClickedBlock().getLocation().getY() + 1, e.getClickedBlock().getLocation().getZ() + 0.5), EntityType.IRON_GOLEM);
                 golem.setCustomName(PlayerManager.getCodeColor(par) + "§lСтраж команды " + par.getTeam().getName());
                 golem.setCustomNameVisible(true);
-
+                Team parTeam = par.getTeam();
+                new BukkitRunnable() {
+                    public void run() {
+                    if (golem.isDead()) {
+                        par.getTeam().setIronGolem(null);
+                        cancel();
+                        return;
+                    }
+                    LivingEntity target = golem.getTarget();
+                    if (target != null || WorldManager.getDistance(target.getLocation(), golem.getLocation()) > 15 || target.isDead())
+                        golem.setTarget(null);
+                    for (Team team : plugin.getTeams().values()) {
+                        if (parTeam == team) continue;
+                        if (team.getIronGolem() == null || team.getIronGolem().isDead()) continue;
+                        IronGolem ironGolem = team.getIronGolem();
+                        if (WorldManager.getDistance(ironGolem.getLocation(), golem.getLocation()) > 6) continue;
+                        if (target == null || target instanceof Player) golem.setTarget(ironGolem);
+                    }
+                    }
+                }.runTaskTimer(plugin, 5, 5);
                 Bukkit.getScheduler().runTaskLater(plugin, golem::remove, 20 * 240);
 
                 par.getTeam().setIronGolem(golem);
