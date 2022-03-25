@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import util.PlayerInv;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class onInventoryClick extends SimpleListener implements Listener, EventExecutor {
 
@@ -36,6 +37,9 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         InventoryView view = e.getView();
         Player player = ((Player) e.getWhoClicked());
         Participant p = plugin.getPlayers().get(player.getUniqueId());
+
+        if (view.getTopInventory() != null)
+            Logger.getLogger("").info(view.getTopInventory().getHolder().toString());
 
         if (p == null) return;
 
@@ -94,8 +98,11 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                             player.getInventory().setItemInOffHand(null);
                         } else {
                             if (finalTool != null) {
-                                view.getTopInventory().addItem(player.getInventory().getItem(finalToolIndex));
-                                player.getInventory().setItem(finalToolIndex, null);
+                                ItemStack i = player.getInventory().getItem(finalToolIndex);
+                                if (ShopItems.isTool(i.getType())) {
+                                    view.getTopInventory().addItem(player.getInventory().getItem(finalToolIndex));
+                                    player.getInventory().setItem(finalToolIndex, null);
+                                }
                             }
                         }
                         p.giveItem(givenTool.getItem(), givenToolIndex, false);
