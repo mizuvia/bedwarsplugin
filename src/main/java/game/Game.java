@@ -7,13 +7,10 @@ import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import util.PlayerInv;
 
@@ -40,8 +37,6 @@ public class Game {
     public List<Inventory> getChestsInventories() { return this.chests; }
 
     public int getMatchTime(){ return this.matchTime; }
-
-    public void setMatchTime(int newMatchTime){ this.matchTime = newMatchTime; }
 
     public void increaseMatchTime(int newMatchTime){ this.matchTime += newMatchTime; }
 
@@ -86,12 +81,38 @@ public class Game {
         this.spawnShopEntity();
         this.getPlugin().getSidebar().fillPlayingList();
         this.getArmorStandsManager().createArmorStands();
+        this.setInaccessibleBlocks();
         this.checkEmptyTeams();
         this.teleportPlayers();
         this.getPlugin().setWorking(true);
         Logger.getLogger("").info("Game started successfully");
         this.messenger = new Messenger(getPlugin(), 12000);
         this.messenger.addMessage("§c§lТимерство запрещено!");
+    }
+
+    private void setInaccessibleBlocks() {
+        for (double x = -1; x <= 1; x++){
+            for (double y = -1; y <= 2; y++){
+                for (double z = -1; z <= 1; z++){
+                    for (Team team : plugin.getTeams().values()) {
+                        addToInaccessibleBlocks(team.getSpawnLocation(), x, y, z);
+                        addToInaccessibleBlocks(team.getShopVillager(), x, y, z);
+                        addToInaccessibleBlocks(team.getUpgradesVillager(), x, y, z);
+                        addToInaccessibleBlocks(team.getResourceLocation(), x, y, z);
+                    }
+                    for (ArmorStands as : getArmorStandsManager().getDiamondArmorStands()) {
+                        addToInaccessibleBlocks(as.getStage().getLocation(), x, y, z);
+                    }
+                    for (ArmorStands as : getArmorStandsManager().getEmeraldArmorStands()) {
+                        addToInaccessibleBlocks(as.getStage().getLocation(), x, y, z);
+                    }
+                }
+            }
+        }
+    }
+
+    private void addToInaccessibleBlocks(Location loc, double x, double y, double z){
+        getInaccessibleBlocks().add(new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY() + y, loc.getBlockZ() + z));
     }
 
     private void checkEmptyTeams() {

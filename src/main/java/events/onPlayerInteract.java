@@ -1,5 +1,6 @@
 package events;
 
+import game.Game;
 import game.Participant;
 import game.Team;
 import inventories.ShopItem;
@@ -78,14 +79,18 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                 golem.setCustomName(PlayerManager.getCodeColor(par) + "§lСтраж команды " + par.getTeam().getName());
                 golem.setCustomNameVisible(true);
                 Team parTeam = par.getTeam();
+                Game game = plugin.getGame();
                 new BukkitRunnable() {
                     public void run() {
-                    if (golem.isDead()) {
-                        par.getTeam().setIronGolem(null);
+                    if (game != plugin.getGame()) {
                         cancel();
                         return;
                     }
-                    Logger.getLogger("").info(parTeam.getColor());
+                    if (golem.isDead()) {
+                        parTeam.setIronGolem(null);
+                        cancel();
+                        return;
+                    }
                     LivingEntity target = golem.getTarget();
                     if (target != null)
                         if (WorldManager.getDistance(target.getLocation(), golem.getLocation()) > 15 || target.isDead())

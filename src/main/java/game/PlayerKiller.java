@@ -51,7 +51,7 @@ public class PlayerKiller {
             PlayerInv.clear(p);
             p.getTeam().kill(p);
         } else {
-            player.sendTitle("§cВы возродитесь через 5 секунд", "§7Ожидайте.", 10, 70, 20);
+            player.sendTitle("§cВозрождение через 5 секунд", "§7Ожидайте.", 10, 70, 20);
             updateToolsInventory();
             addRespawnedItems();
             PlayerInv.clear(p);
