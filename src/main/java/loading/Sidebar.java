@@ -13,10 +13,7 @@ import org.bukkit.scoreboard.Team;
 import util.MineColor;
 import util.Utils;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class Sidebar {
     public static final String SIDEBAR_NAME = MineColor.ORANGE.BOLD() + "BED" + MineColor.PURPLE.BOLD() + "WARS";
@@ -73,7 +70,7 @@ public class Sidebar {
         putInList("STAGE", MineColor.AQUA.BOLD() + "Алмазы II: " + MineColor.WHITE + Utils.getTime(getTime().getStage().getTime()), true);
         putInList("GAP1", "  ", true);
         for(String team : Config.getTeamsNames())
-            putInList("TEAM_" + team.toUpperCase(Locale.ROOT), MineColor.LIME + "✔ " + MineColor.LIGHT_GRAY.BOLD() + "| " + MineColor.RESET + this.getPlugin().getTeams().get(team).getName().replace("§l", ""), true);
+            putInList("TEAM_" + team.toUpperCase(Locale.ROOT), MineColor.LIME + "✔" + MineColor.LIGHT_GRAY.BOLD() + " | " + MineColor.RESET + this.getPlugin().getTeams().get(team).getName().replace("§l", ""), true);
         putInList("GAP2", "   ", true);
         putInList("KILLS", MineColor.WHITE + "Убийств: " + MineColor.RED + "0", false);
         putInList("BROKEN_BEDS", MineColor.WHITE + "Разрушено кроватей: " + MineColor.RED + "0", false);
@@ -209,6 +206,8 @@ public class Sidebar {
     }
 
     public void updateMatchTime() {
-        updateSidebar("SERVER_NAME", MineColor.GRAY + Config.getServerName().toUpperCase(Locale.ROOT) + "          " + Utils.getTime(plugin.getGame().getMatchTime()));
+        Calendar c = new GregorianCalendar(TimeZone.getTimeZone("GMT+2"));
+        String dateStr = c.get(Calendar.DAY_OF_MONTH) + "." + (c.get(Calendar.MONTH) + 1) + "." + c.get(Calendar.YEAR);
+        updateSidebar("SERVER_NAME", MineColor.GRAY + Config.getServerName().toUpperCase(Locale.ROOT) + " | " + dateStr + " | " + Utils.getTime(plugin.getGame().getMatchTime()));
     }
 }
