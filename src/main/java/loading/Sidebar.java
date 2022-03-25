@@ -50,7 +50,7 @@ public class Sidebar {
     public void fillWaitingList() {
         clearSidebar();
 
-        putInList("SERVER_NAME", "   " + MineColor.GRAY + Config.getServerName() + Utils.getTime(0), false);
+        putInList("SERVER_NAME", "   " + MineColor.GRAY + Config.getServerName() + "/" + Utils.getTime(0), false);
         putInList("GAP1", " ", false);
         putInList("PLAYERS", MineColor.YELLOW.BOLD() + "Игроков:", false);
         putInList("PLAYERS_AMOUNT", MineColor.AQUA + "" + this.getPlugin().getOnlinePlayers() + "/" + Config.getMaxPlayers(), false);
