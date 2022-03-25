@@ -37,14 +37,18 @@ public enum MineColor {
     }
 
     private String string;
+    private final String startingString;
 
     MineColor(String string){
         this.string = string;
+        this.startingString = string;
     }
 
     @Override
     public String toString() {
-        return string;
+        String sentString = string;
+        string = startingString;
+        return MineColor.RESET + sentString;
     }
 
     private MineColor addFormat(String format){
