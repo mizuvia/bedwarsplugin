@@ -83,7 +83,7 @@ public class Sidebar {
 
         for(Participant p : getPlugin().getPlayers().values()){
             String key = "TEAM_" + p.getTeam().getColor().toUpperCase(Locale.ROOT);
-            updatePlayerSidebar(p, key, p.getScoreboard().getTeam(key).getPrefix() + MineColor.LIGHT_GRAY + " ВЫ");
+            updatePlayerSidebar(p, key, p.getScoreboard().getTeam(key).getPrefix() + MineColor.RESET + MineColor.LIGHT_GRAY + " ВЫ");
         }
     }
 
@@ -188,7 +188,7 @@ public class Sidebar {
 
     public void setDead(game.Team team){
         String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
-        String message = MineColor.RED.BOLD() + "×" + MineColor.RESET + MineColor.LIGHT_GRAY.BOLD() + "| " + MineColor.RESET + team.getName().replace("§l", "");
+        String message = MineColor.RED.BOLD() + "×" + MineColor.RESET + MineColor.LIGHT_GRAY.BOLD() + " | " + MineColor.RESET + team.getName().replace("§l", "");
         updateSidebar(key, message);
         for(Participant p : team.getTeammates().values()){
             updatePlayerSidebar(p, key, message + " " + MineColor.RESET + MineColor.LIGHT_GRAY + "ВЫ");
@@ -197,7 +197,7 @@ public class Sidebar {
 
     public void decreaseAliveTeammates(game.Team team) {
         String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
-        String message = MineColor.YELLOW.BOLD() + "" + team.getAliveTeammates() + MineColor.RESET + " " + MineColor.GRAY.BOLD() + "| " + MineColor.RESET + team.getName().replace(ChatColor.BOLD.toString(), "");
+        String message = MineColor.YELLOW.BOLD() + "" + team.getAliveTeammates() + MineColor.RESET + MineColor.GRAY.BOLD() + " | " + MineColor.RESET + team.getName().replace(ChatColor.BOLD.toString(), "");
         updateSidebar(key, message);
         for(Participant p : team.getTeammates().values()){
             updatePlayerSidebar(p, key, message + " " + MineColor.RESET + MineColor.LIGHT_GRAY + "ВЫ");
