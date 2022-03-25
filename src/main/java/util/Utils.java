@@ -15,9 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Utils {
 
@@ -26,6 +26,12 @@ public class Utils {
         String secondsStr = (seconds >= 60) ? ((seconds % 60 > 9) ? String.valueOf(seconds % 60) : "0" + seconds % 60) : ((seconds > 9) ? String.valueOf(seconds) : "0" + seconds);
 
         return minutesStr + ":" + secondsStr;
+    }
+
+    public static String getDate() {
+        Calendar c = new GregorianCalendar(TimeZone.getTimeZone("GMT+2"));
+        DateFormat f = new SimpleDateFormat("dd.MM.yyyy");
+        return f.format(c.getTime());
     }
 
     public static ItemStack clearLore(ItemStack item){

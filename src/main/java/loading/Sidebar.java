@@ -206,8 +206,6 @@ public class Sidebar {
     }
 
     public void updateMatchTime() {
-        Calendar c = new GregorianCalendar(TimeZone.getTimeZone("GMT+2"));
-        String dateStr = c.get(Calendar.DAY_OF_MONTH) + "." + (c.get(Calendar.MONTH) + 1) + "." + c.get(Calendar.YEAR);
-        updateSidebar("SERVER_NAME", MineColor.GRAY + Config.getServerName().toUpperCase(Locale.ROOT) + " | " + dateStr + " | " + Utils.getTime(plugin.getGame().getMatchTime()));
+        updateSidebar("SERVER_NAME", MineColor.GRAY + Config.getServerName().toUpperCase(Locale.ROOT) + " | " + Utils.getDate() + " | " + Utils.getTime(plugin.getGame().getMatchTime()));
     }
 }
