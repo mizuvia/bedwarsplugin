@@ -68,6 +68,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             e.setJoinMessage(null);
         }
 
+        pl.setCollidable(false);
         pl.setLevel(0);
         pl.setExp(0);
         pl.setHealth(pl.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
