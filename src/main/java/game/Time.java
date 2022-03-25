@@ -53,6 +53,7 @@ public class Time extends TaskGUI {
         getGame().getArmorStandsManager().changeSpawners();
         changeStage();
         getGame().increaseMatchTime(1);
+        plugin.getSidebar().updateMatchTime();
     }
 
     public void changeStage() {

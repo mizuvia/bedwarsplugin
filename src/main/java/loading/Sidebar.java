@@ -50,7 +50,7 @@ public class Sidebar {
     public void fillWaitingList() {
         clearSidebar();
 
-        putInList("SERVER_NAME", "   " + MineColor.GRAY + Config.getServerName(), false);
+        putInList("SERVER_NAME", "   " + MineColor.GRAY + Config.getServerName() + Utils.getTime(0), false);
         putInList("GAP1", " ", false);
         putInList("PLAYERS", MineColor.YELLOW.BOLD() + "Игроков:", false);
         putInList("PLAYERS_AMOUNT", MineColor.AQUA + "" + this.getPlugin().getOnlinePlayers() + "/" + Config.getMaxPlayers(), false);
@@ -206,5 +206,9 @@ public class Sidebar {
 
     public void changeFinalKills(Participant p) {
         updatePlayerSidebar(p, "FINAL_KILLS", MineColor.WHITE + "Финальных убийств: " + MineColor.RED + p.getFinalKills());
+    }
+
+    public void updateMatchTime() {
+        updateSidebar("SERVER_NAME", MineColor.GRAY + Config.getServerName().toUpperCase(Locale.ROOT) + "/" + Utils.getTime(plugin.getGame().getMatchTime()));
     }
 }
