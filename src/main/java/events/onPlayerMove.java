@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -32,10 +33,12 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
         PlayerMoveEvent e = (PlayerMoveEvent) event;
 
         if(!e.getPlayer().getGameMode().equals(GameMode.SPECTATOR)){
-            if (!this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).hasTeam()) return;
-            if (this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getTeamUpgrades().get("Healing") != 0) {
+            Participant p = plugin.getPlayers().get(e.getPlayer().getUniqueId());
+            if (!p.hasTeam()) return;
+            Team t = p.getTeam();
+            if (t.getTeamUpgrades().get("Healing") != 0) {
                 Location playerLoc = e.getPlayer().getLocation();
-                Location teamLoc = this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getSpawnLocation();
+                Location teamLoc = t.getSpawnLocation();
                 double distance = Math.sqrt(Math.pow(playerLoc.getX() - teamLoc.getX(), 2.0) + Math.pow(playerLoc.getZ() - teamLoc.getZ(), 2.0));
                 if (distance <= 25 && playerLoc.getY() > 0)
                     e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100000, 0));
@@ -45,23 +48,19 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                 Location playerLoc = e.getPlayer().getLocation();
 
                 if (team.getIronGolem() != null) {
-                    if (this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getColor().equals(team.getColor()))
+                    IronGolem golem = team.getIronGolem();
+                    if (t.getColor().equals(team.getColor()))
                         continue;
-                    Location golemLoc = team.getIronGolem().getLocation();
+                    Location golemLoc = golem.getLocation();
                     double distance = Math.sqrt(Math.pow(playerLoc.getX() - golemLoc.getX(), 2.0) + Math.pow(playerLoc.getZ() - golemLoc.getZ(), 2.0));
                     if (distance <= 6) {
-                        if (team.getIronGolem().getTarget() == null) team.getIronGolem().setTarget(e.getPlayer());
-                    }
-                    if (distance >= 15) {
-                        if (team.getIronGolem().getTarget() != null)
-                            if (team.getIronGolem().getTarget().equals(e.getPlayer()))
-                                team.getIronGolem().setTarget(null);
+                        if (golem.getTarget() == null) golem.setTarget(e.getPlayer());
                     }
                 }
 
                 if (team.getTraps().size() != 0) {
-                    if (this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).isUnderMilk()) return;
-                    if (team.getColor().equals(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getColor()))
+                    if (p.isUnderMilk()) return;
+                    if (team.getColor().equals(t.getColor()))
                         continue;
 
                     double distance = Math.sqrt(Math.pow(playerLoc.getX() - team.getSpawnLocation().getX(), 2.0) + Math.pow(playerLoc.getZ() - team.getSpawnLocation().getZ(), 2.0));

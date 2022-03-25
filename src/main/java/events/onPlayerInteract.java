@@ -24,6 +24,7 @@ import util.WorldManager;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 public class onPlayerInteract extends SimpleListener implements Listener, EventExecutor {
 
@@ -84,9 +85,11 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                         cancel();
                         return;
                     }
+                    Logger.getLogger("").info(parTeam.getColor());
                     LivingEntity target = golem.getTarget();
-                    if (target != null || WorldManager.getDistance(target.getLocation(), golem.getLocation()) > 15 || target.isDead())
-                        golem.setTarget(null);
+                    if (target != null)
+                        if (WorldManager.getDistance(target.getLocation(), golem.getLocation()) > 15 || target.isDead())
+                            golem.setTarget(null);
                     for (Team team : plugin.getTeams().values()) {
                         if (parTeam == team) continue;
                         if (team.getIronGolem() == null || team.getIronGolem().isDead()) continue;
