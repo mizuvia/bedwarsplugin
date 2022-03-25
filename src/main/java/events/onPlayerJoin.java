@@ -35,12 +35,16 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
         PlayerJoinEvent e = (PlayerJoinEvent) event;
         Player pl = e.getPlayer();
         if (pl.getGameMode() == GameMode.SURVIVAL || pl.getGameMode() == GameMode.ADVENTURE) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Bukkit.getScheduler().runTask(plugin, () -> {
                 pl.getWorld().getPlayers().forEach(p -> {
-                    p.showPlayer(getPlugin(), pl);
-                    pl.showPlayer(getPlugin(), p);
+                    p.hidePlayer(plugin, pl);
+                    pl.hidePlayer(plugin, p);
                 });
-            }, 15);
+                pl.getWorld().getPlayers().forEach(p -> {
+                    p.showPlayer(plugin, pl);
+                    pl.showPlayer(plugin, p);
+                });
+            });
         }
         if (this.getPlugin().isLoading()){
             Bukkit.getServer().getScheduler().runTaskLater(getPlugin(), () -> getPlugin().getWaiting().checkAmount(), 5);
@@ -54,6 +58,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
 
             changePlayerAmount(e, pl);
             addToTeam(p);
+            pl.teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
         }
         if (this.getPlugin().isWorking()){
             pl.setGameMode(GameMode.SPECTATOR);
