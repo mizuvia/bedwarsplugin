@@ -37,6 +37,8 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
         Player player = ((Player) e.getWhoClicked());
         Participant p = plugin.getPlayers().get(player.getUniqueId());
 
+        if (p == null) return;
+
         if (!p.canInteractInInventory) {
             e.setCancelled(true);
             return;

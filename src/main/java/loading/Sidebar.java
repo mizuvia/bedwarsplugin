@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Sidebar {
-    public static final String SIDEBAR_NAME = ChatColor.GOLD + "" + ChatColor.BOLD + "BED" + ChatColor.DARK_PURPLE + ChatColor.BOLD + "WARS";
+    public static final String SIDEBAR_NAME = MineColor.ORANGE.BOLD() + "BED" + MineColor.PURPLE.BOLD() + "WARS";
     private final Time timeClass;
     private final Plugin plugin;
     public Map<String, String> stringsList = new LinkedHashMap<>();
@@ -50,18 +50,18 @@ public class Sidebar {
     public void fillWaitingList() {
         clearSidebar();
 
-        putInList("SERVER_NAME", "   " + ChatColor.DARK_GRAY + Config.getServerName(), false);
+        putInList("SERVER_NAME", "   " + MineColor.GRAY + Config.getServerName(), false);
         putInList("GAP1", " ", false);
-        putInList("PLAYERS", ChatColor.YELLOW + "" + ChatColor.BOLD + "Игроков:", false);
-        putInList("PLAYERS_AMOUNT", ChatColor.AQUA + "" + this.getPlugin().getOnlinePlayers() + "/" + Config.getMaxPlayers(), false);
+        putInList("PLAYERS", MineColor.YELLOW.BOLD() + "Игроков:", false);
+        putInList("PLAYERS_AMOUNT", MineColor.AQUA + "" + this.getPlugin().getOnlinePlayers() + "/" + Config.getMaxPlayers(), false);
         putInList("GAP2", "  ", false);
-        putInList("TIME", ChatColor.YELLOW + "" + ChatColor.BOLD + "Времени:", false);
-        putInList("TIME_AMOUNT", ChatColor.AQUA + "Ожидаем...", false);
+        putInList("TIME", MineColor.YELLOW.BOLD() + "Времени:", false);
+        putInList("TIME_AMOUNT", MineColor.AQUA + "Ожидаем...", false);
         putInList("GAP3", "   ", false);
-        putInList("MAP", ChatColor.YELLOW + "" + ChatColor.BOLD + "Карта:", false);
-        putInList("MAP_NAME", ChatColor.AQUA + Config.getMapName(), false);
+        putInList("MAP", MineColor.YELLOW.BOLD() + "Карта:", false);
+        putInList("MAP_NAME", MineColor.AQUA + Config.getMapName(), false);
         putInList("GAP4", "    ", false);
-        putInList("PROJECT", ChatColor.GOLD + "" + ChatColor.BOLD + "   Mizuvia", false);
+        putInList("PROJECT", MineColor.ORANGE.BOLD()  + "    Mizuvia", false);
 
         fillPlayersSidebars();
     }
@@ -69,21 +69,21 @@ public class Sidebar {
     public void fillPlayingList(){
         clearSidebar();
 
-        putInList("SERVER_NAME", "   " + ChatColor.DARK_GRAY + Config.getServerName(), true);
-        putInList("STAGE", ChatColor.AQUA + "" + ChatColor.BOLD + "Алмазы II: " + ChatColor.WHITE + Utils.getTime(getTime().getStage().getTime()), true);
+        putInList("SERVER_NAME", MineColor.GRAY + Config.getServerName().toUpperCase(Locale.ROOT), true);
+        putInList("STAGE", MineColor.AQUA.BOLD() + "Алмазы II: " + MineColor.WHITE + Utils.getTime(getTime().getStage().getTime()), true);
         putInList("GAP1", "  ", true);
         for(String team : Config.getTeamsNames())
-            putInList("TEAM_" + team.toUpperCase(Locale.ROOT), "§a✔ §7§l| §r" + this.getPlugin().getTeams().get(team).getName().replace("§l", ""), true);
-        putInList("GAP2", "   ", false);
-        putInList("KILLS", ChatColor.WHITE + "Убийств: " + ChatColor.RED + "0", false);
-        putInList("BROKEN_BEDS", ChatColor.WHITE + "Разрушено кроватей: " + ChatColor.RED + "0", false);
-        putInList("FINAL_KILLS", ChatColor.WHITE + "Финальных убийств: " + ChatColor.RED + "0", false);
+            putInList("TEAM_" + team.toUpperCase(Locale.ROOT), MineColor.LIME + "✔ " + MineColor.LIGHT_GRAY.BOLD() + "| " + MineColor.RESET + this.getPlugin().getTeams().get(team).getName().replace("§l", ""), true);
+        putInList("GAP2", "   ", true);
+        putInList("KILLS", MineColor.WHITE + "Убийств: " + MineColor.RED + "0", false);
+        putInList("BROKEN_BEDS", MineColor.WHITE + "Разрушено кроватей: " + MineColor.RED + "0", false);
+        putInList("FINAL_KILLS", MineColor.WHITE + "Финальных убийств: " + MineColor.RED + "0", false);
 
         fillPlayersSidebars();
 
         for(Participant p : getPlugin().getPlayers().values()){
             String key = "TEAM_" + p.getTeam().getColor().toUpperCase(Locale.ROOT);
-            updatePlayerSidebar(p, key, p.getScoreboard().getTeam(key).getPrefix() + ChatColor.GRAY + " ВЫ");
+            updatePlayerSidebar(p, key, p.getScoreboard().getTeam(key).getPrefix() + MineColor.LIGHT_GRAY + " ВЫ");
         }
     }
 
@@ -108,18 +108,18 @@ public class Sidebar {
     }
 
     public void changePlayersAmount(){
-        updateSidebar("PLAYERS_AMOUNT", ChatColor.AQUA.toString() + (this.getPlugin().getOnlinePlayers()) + "/" + Config.getMaxPlayers());
+        updateSidebar("PLAYERS_AMOUNT", MineColor.AQUA.toString() + (this.getPlugin().getOnlinePlayers()) + "/" + Config.getMaxPlayers());
     }
 
     public void changeTime(int time){
         if(time == -1)
-            updateSidebar("TIME_AMOUNT", "§bОжидаем...");
+            updateSidebar("TIME_AMOUNT", MineColor.AQUA + "Ожидаем...");
         else
-            updateSidebar("TIME_AMOUNT", "§b" + time + " сек.");
+            updateSidebar("TIME_AMOUNT", MineColor.AQUA.toString() + time + " сек.");
     }
 
     public void updateStage(Time.Stage stage){
-        updateSidebar("STAGE", stage.getName() + ChatColor.RESET +  ": " + Utils.getTime(stage.getTime()));
+        updateSidebar("STAGE", stage.getName() + MineColor.RESET +  ": " + Utils.getTime(stage.getTime()));
     }
 
     public void updateStage(String stage){
@@ -127,7 +127,7 @@ public class Sidebar {
     }
 
     public void changeKilled(Participant p){
-        updatePlayerSidebar(p, "KILLS", "Убито игроков: §c" + p.getKilledPlayers());
+        updatePlayerSidebar(p, "KILLS", "Убито игроков: " + MineColor.RED + p.getKilledPlayers());
     }
 
     private void updateSidebar(String key, String value){
@@ -148,8 +148,8 @@ public class Sidebar {
     public void drawPlayerSidebar(Participant p){
         for (Team team : p.getSidebarTeams()){
             int index = p.getSidebarTeams().indexOf(team);
-            team.addEntry(ChatColor.values()[index] + "" + ChatColor.WHITE);
-            p.getSidebarObjective().getScore(ChatColor.values()[index] + "" + ChatColor.WHITE).setScore(p.getSidebarTeams().size() - index);
+            team.addEntry(MineColor.values()[index] + "" + MineColor.WHITE);
+            p.getSidebarObjective().getScore(MineColor.values()[index] + "" + MineColor.WHITE).setScore(p.getSidebarTeams().size() - index);
         }
     }
 
@@ -179,7 +179,7 @@ public class Sidebar {
     }
 
     public void changeBrokenBeds(Participant p){
-        updatePlayerSidebar(p, "BROKEN_BEDS", ChatColor.WHITE + "Разрушено кроватей: " + ChatColor.RED + p.getBrokenBeds());
+        updatePlayerSidebar(p, "BROKEN_BEDS", MineColor.WHITE + "Разрушено кроватей: " + MineColor.RED + p.getBrokenBeds());
     }
 
     public Time getTime(){return this.timeClass;}
@@ -188,23 +188,23 @@ public class Sidebar {
 
     public void setDead(game.Team team){
         String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
-        String message = ChatColor.RED + "" + ChatColor.BOLD + "×" + ChatColor.RESET + " " + ChatColor.GRAY + ChatColor.BOLD + "| " + ChatColor.RESET + team.getName().replace("§l", "");
+        String message = MineColor.RED.BOLD() + "×" + MineColor.RESET + MineColor.LIGHT_GRAY.BOLD() + "| " + MineColor.RESET + team.getName().replace("§l", "");
         updateSidebar(key, message);
         for(Participant p : team.getTeammates().values()){
-            updatePlayerSidebar(p, key, message + " " + ChatColor.RESET + ChatColor.GRAY + "ВЫ");
+            updatePlayerSidebar(p, key, message + " " + MineColor.RESET + MineColor.LIGHT_GRAY + "ВЫ");
         }
     }
 
     public void decreaseAliveTeammates(game.Team team) {
         String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
-        String message = ChatColor.YELLOW + "" + ChatColor.BOLD + team.getAliveTeammates() + ChatColor.RESET + " " + ChatColor.GRAY + ChatColor.BOLD + "| " + ChatColor.RESET + team.getName().replace(ChatColor.BOLD.toString(), "");
+        String message = MineColor.YELLOW.BOLD() + "" + team.getAliveTeammates() + MineColor.RESET + " " + MineColor.GRAY.BOLD() + "| " + MineColor.RESET + team.getName().replace(ChatColor.BOLD.toString(), "");
         updateSidebar(key, message);
         for(Participant p : team.getTeammates().values()){
-            updatePlayerSidebar(p, key, message + " " + ChatColor.RESET + ChatColor.GRAY + "ВЫ");
+            updatePlayerSidebar(p, key, message + " " + MineColor.RESET + MineColor.LIGHT_GRAY + "ВЫ");
         }
     }
 
     public void changeFinalKills(Participant p) {
-        updatePlayerSidebar(p, "FINAL_KILLS", ChatColor.WHITE + "Финальных убийств: " + ChatColor.RED + p.getFinalKills());
+        updatePlayerSidebar(p, "FINAL_KILLS", MineColor.WHITE + "Финальных убийств: " + MineColor.RED + p.getFinalKills());
     }
 }
