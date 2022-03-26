@@ -175,7 +175,9 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
             }
         }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().name().endsWith("_BED")) {
-        	e.setCancelled(true);
+            if (e.getClickedBlock().getRelative(e.getBlockFace()).getType() != Material.AIR || e.getItem() == null){
+                e.setCancelled(true);
+            }
         }
     }
 
