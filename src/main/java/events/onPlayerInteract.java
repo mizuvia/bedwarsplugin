@@ -4,11 +4,13 @@ import game.Game;
 import game.Participant;
 import game.Team;
 import inventories.ShopItem;
+import inventories.ShopItems;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
@@ -175,8 +177,12 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
             }
         }
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().name().endsWith("_BED")) {
-            if (e.getClickedBlock().getRelative(e.getBlockFace()).getType() != Material.AIR || e.getItem() == null){
-                e.setCancelled(true);
+            e.setCancelled(true);
+            Block rel = e.getClickedBlock().getRelative(e.getBlockFace());
+            if (rel.getType() == Material.AIR && e.getItem() != null){
+                ShopItem item = ShopItem.getShopItem(e.getItem().getItemMeta().getDisplayName());
+                int index = ShopItems.getIndex(ShopItems.BLOCKS, item);
+                if (index != -1) rel.setType(item.getMaterial());
             }
         }
     }
