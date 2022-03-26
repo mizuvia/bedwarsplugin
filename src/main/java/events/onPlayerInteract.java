@@ -183,6 +183,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                 ShopItem item = ShopItem.getShopItem(e.getItem().getItemMeta().getDisplayName());
                 int index = ShopItems.getIndex(ShopItems.BLOCKS, item);
                 if (index != -1) rel.setType(e.getItem().getType());
+                plugin.getGame().getBlockList().add(rel);
             }
         }
     }
