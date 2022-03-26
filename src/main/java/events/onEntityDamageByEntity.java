@@ -32,7 +32,6 @@ public class onEntityDamageByEntity extends SimpleListener implements Listener, 
         if (e.getEntity() instanceof Player)
             player = getPlugin().getPlayers().get(e.getEntity().getUniqueId());
 
-
         Participant damager = null;
         if (e.getDamager() instanceof Player)
             damager = getPlugin().getPlayers().get(e.getDamager().getUniqueId());
