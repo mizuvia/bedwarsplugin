@@ -174,7 +174,7 @@ public class Team {
 
     public void removeTeammate(Participant p) {
         this.getTeammates().remove(p.getPlayer().getName());
-        this.decreaseAliveTeammates();
+        if (!p.isDead()) this.decreaseAliveTeammates();
         this.decreaseTeammates();
     }
 

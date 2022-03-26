@@ -47,6 +47,21 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
         InventoryHolder holder = e.getClickedInventory().getHolder();
 
+        if(holder instanceof IGUI gui){
+            e.setCancelled(true);
+            gui.onGUIClick((Player) e.getWhoClicked(), e.getRawSlot(), e.getClickedInventory());
+            return;
+        }
+
+        if(holder instanceof HumanEntity){
+            switch (e.getRawSlot()) {
+                case 0, 1, 2, 3, 4, 5, 6, 7, 8 -> {
+                    e.setCancelled(true);
+                    return;
+                }
+            }
+        }
+
         List<List<ShopItem>> twoTools = List.of(
             List.of( ShopItem.WOODEN_AXE, ShopItem.STONE_AXE,
                     ShopItem.IRON_AXE, ShopItem.DIAMOND_AXE),
@@ -116,22 +131,13 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                             }
                         }
                     }
-                    p.canInteractInInventory = true;
                     player.updateInventory();
                 } catch (Exception ex){
                     ex.printStackTrace();
+                } finally {
+                    p.canInteractInInventory = true;
                 }
             });
-        }
-
-        if(holder instanceof IGUI gui){
-            e.setCancelled(true);
-            gui.onGUIClick((Player) e.getWhoClicked(), e.getRawSlot(), e.getClickedInventory());
-        }
-        if(holder instanceof HumanEntity){
-            switch (e.getRawSlot()) {
-                case 0, 1, 2, 3, 4, 5, 6, 7, 8-> e.setCancelled(true);
-            }
         }
     }
 }

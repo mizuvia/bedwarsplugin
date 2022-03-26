@@ -37,6 +37,7 @@ public class Participant {
     private final List<ItemStack> respawnItems = new ArrayList<>();
     private boolean isTeleporting = false;
     private boolean isUnderMilk = false;
+    private boolean isDead = true;
     public boolean canInteractInInventory = true;
     private int brokenBeds = 0;
     private int killedPlayers = 0;
@@ -126,7 +127,6 @@ public class Participant {
             tab.addPlayerToTabs(this);
 
             this.getPlayer().setDisplayName("§8§l[" + team.getName() + "§8§l]§r§7 " + this.getPlayer().getName());
-            this.getPlayer().setPlayerListName("§8§l[" + team.getName() + "§8§l]§r§7 " + this.getPlayer().getName());
 
             team.addTeammate(this);
         }
@@ -202,6 +202,10 @@ public class Participant {
         }
 
         return true;
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 
     public void giveItem(ItemStack item, Integer index, boolean removeFromCursor) {
@@ -309,6 +313,7 @@ public class Participant {
 
     public void destroy() {
         setTeam(null);
+        isDead = true;
         getPlayer().getInventory().clear();
         clearPotionEffects();
         if (isInvisible()) showArmor();
@@ -331,5 +336,9 @@ public class Participant {
             }
         }
         return inventories.get(index);
+    }
+
+    public void setDead(boolean isDead) {
+        this.isDead = isDead;
     }
 }

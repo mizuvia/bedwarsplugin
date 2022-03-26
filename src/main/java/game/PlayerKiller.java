@@ -50,6 +50,7 @@ public class PlayerKiller {
             player.setPlayerListName("§7Наблюдатель " + player.getName());
             PlayerInv.clear(p);
             p.getTeam().kill(p);
+            p.setDead(true);
         } else {
             player.sendTitle("§cВозрождение через 5 секунд", "§7Ожидайте.", 10, 70, 20);
             updateToolsInventory();

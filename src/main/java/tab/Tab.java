@@ -4,16 +4,24 @@ package tab;
 
 import game.Participant;
 import main.Plugin;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
+import tasks.TaskGUI;
 
-public class Tab {
+public class Tab /*extends TaskGUI*/ {
 
     private final Plugin plugin;
     private static final String ANOTHER_TEAM_NAME = "zwithout";
 
     public Tab(Plugin plugin){ this.plugin = plugin; }
+
+//    @Override
+//    protected void execute() {
+//
+//    }
 
     public Plugin getPlugin(){ return this.plugin; }
 
@@ -22,7 +30,8 @@ public class Tab {
         objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 
         for(game.Team team : this.getPlugin().getTeams().values()){
-            scoreboard.registerNewTeam(team.getColor());
+            Team t = scoreboard.registerNewTeam(team.getColor());
+            t.setPrefix(team.getName());
         }
 
         scoreboard.registerNewTeam(ANOTHER_TEAM_NAME);
@@ -49,4 +58,8 @@ public class Tab {
         if(!par.hasTeam()) tabOwner.getScoreboard().getTeam(ANOTHER_TEAM_NAME).removeEntry(par.getPlayer().getName());
         else tabOwner.getScoreboard().getTeam(par.getTeam().getColor()).removeEntry(par.getPlayer().getName());
     }
+
+//    public void updateTab(Player p) {
+//
+//    }
 }
