@@ -6,7 +6,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,8 +19,10 @@ public class onBlockFromTo extends SimpleListener implements Listener, EventExec
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         BlockFromToEvent e = (BlockFromToEvent) event;
 
-        for (ItemStack i : e.getToBlock().getDrops()) {
-            i.setType(Material.AIR);
+        if (e.getToBlock().getType() != Material.AIR) {
+            e.setCancelled(true);
+            e.getToBlock().setType(Material.AIR);
         }
+
     }
 }

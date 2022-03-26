@@ -182,7 +182,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
             if (rel.getType() == Material.AIR && e.getItem() != null){
                 ShopItem item = ShopItem.getShopItem(e.getItem().getItemMeta().getDisplayName());
                 int index = ShopItems.getIndex(ShopItems.BLOCKS, item);
-                if (index != -1) rel.setType(item.getMaterial());
+                if (index != -1) rel.setType(e.getItem().getType());
             }
         }
     }
