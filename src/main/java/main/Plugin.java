@@ -18,10 +18,7 @@ import org.bukkit.craftbukkit.v1_16_R3.entity.CraftItem;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -185,6 +182,9 @@ public class Plugin extends JavaPlugin {
 
         onBlockBreak onBlockBreak = new onBlockBreak(this);
         Bukkit.getPluginManager().registerEvent(BlockBreakEvent.class, onBlockBreak, EventPriority.NORMAL, onBlockBreak, this);
+
+        onBlockFromTo onBlockFromTo = new onBlockFromTo(this);
+        Bukkit.getPluginManager().registerEvent(BlockFromToEvent.class, onBlockFromTo, EventPriority.NORMAL, onBlockFromTo, this);
 
         onBlockPhysics onBlockPhysics = new onBlockPhysics(this);
         Bukkit.getPluginManager().registerEvent(BlockPhysicsEvent.class, onBlockPhysics, EventPriority.NORMAL, onBlockPhysics, this);

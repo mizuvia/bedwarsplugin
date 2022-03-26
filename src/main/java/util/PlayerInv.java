@@ -59,8 +59,7 @@ public class PlayerInv {
         return inv.getHolder().getItemOnCursor() != null && inv.getHolder().getItemOnCursor().getType() == mat;
     }
 
-    public static void removeShopItem(PlayerInventory inv, ShopItem item, int amount, boolean removeFromCursor) {
-        Material mat = item.getMaterial();
+    public static void removeMaterial(PlayerInventory inv, Material mat, int amount, boolean removeFromCursor) {
         ItemStack i = null;
 
         if (inv.first(mat) != -1) {
@@ -86,6 +85,15 @@ public class PlayerInv {
 
             ((Player) inv.getHolder()).updateInventory();
         }
+    }
+
+    public static void removeShopItem(PlayerInventory inv, ShopItem item, int amount, boolean removeFromCursor) {
+        Material mat = item.getMaterial();
+        removeMaterial(inv, mat, amount, removeFromCursor);
+    }
+
+    public static void removeMaterial(PlayerInventory inv, Material mat, int amount) {
+        removeMaterial(inv, mat, amount, true);
     }
 
     public static void removeShopItem(PlayerInventory inv, ShopItem item, int amount) {

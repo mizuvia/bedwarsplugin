@@ -158,10 +158,10 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                     Bukkit.getScheduler().runTaskLater(plugin, fireball::remove, 400);
                 }
             }
-//            case WATER_BUCKET -> {
-//                if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-//                consumeItem(ShopItem.WATER_BUCKET);
-//            }
+            case WATER_BUCKET -> {
+                if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+                Bukkit.getScheduler().runTask(plugin, () -> PlayerInv.removeMaterial(p.getInventory(), Material.BUCKET, 1));
+            }
             case MILK_BUCKET -> {
                 if(!Utils.isRightClick(e.getAction())) return;
 
