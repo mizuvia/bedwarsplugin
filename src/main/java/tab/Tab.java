@@ -10,6 +10,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import tasks.TaskGUI;
+import util.MineColor;
 
 public class Tab /*extends TaskGUI*/ {
 
@@ -26,9 +27,6 @@ public class Tab /*extends TaskGUI*/ {
     public Plugin getPlugin(){ return this.plugin; }
 
     public void createTab(Scoreboard scoreboard) {
-        //Objective objective = scoreboard.registerNewObjective("tab", "dummy", "§6§lMizuvia");
-        //objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-
         for(game.Team team : this.getPlugin().getTeams().values()){
             Team t = scoreboard.registerNewTeam(team.getColor());
             t.setPrefix(team.getName());
@@ -37,31 +35,35 @@ public class Tab /*extends TaskGUI*/ {
         scoreboard.registerNewTeam(ANOTHER_TEAM_NAME);
     }
 
-    public void addPlayerToTabs(Participant par){
+    public void updateTabs(){
         for(Participant tabOwner : plugin.getPlayers().values()){
-            addPlayerToTab(tabOwner, par);
-        }
-        if (par.hasTeam()) par.getPlayer().setPlayerListName(par.getTeam().getName() + " " + par.getPlayer());
-    }
-
-    private void addPlayerToTab(Participant tabOwner, Participant par){
-        Scoreboard sb = tabOwner.getScoreboard();
-        if(!par.hasTeam()) sb.getTeam(ANOTHER_TEAM_NAME).addEntry(par.getPlayer().getName());
-        else sb.getTeam(par.getTeam().getColor()).addEntry(par.getPlayer().getName());
-        tabOwner.getPlayer().setScoreboard(sb);
-    }
-
-    public void removePlayerFromTabs(Participant par){
-        for(Participant tabOwner : this.getPlugin().getPlayers().values()){
-            removePlayerFromTab(tabOwner, par);
+            updateTab(tabOwner);
         }
     }
 
-    private void removePlayerFromTab(Participant tabOwner, Participant par){
+    private void updateTab(Participant tabOwner){
+        updateTeams(tabOwner);
+
         Scoreboard sb = tabOwner.getScoreboard();
-        if(!par.hasTeam()) sb.getTeam(ANOTHER_TEAM_NAME).removeEntry(par.getPlayer().getName());
-        else sb.getTeam(par.getTeam().getColor()).removeEntry(par.getPlayer().getName());
+
+        for (Participant p : plugin.getPlayers().values()) {
+            game.Team team = p.getTeam();
+            if (team != null) sb.getTeam(team.getColor()).addEntry(p.getPlayer().getName());
+            else sb.getTeam(ANOTHER_TEAM_NAME).addEntry(p.getPlayer().getName());
+        }
+
         tabOwner.getPlayer().setScoreboard(sb);
+    }
+
+    private void updateTeams(Participant tabOwner) {
+        Scoreboard sb = tabOwner.getScoreboard();
+        for (game.Team team : plugin.getTeams().values()) {
+            sb.getTeam(team.getColor()).unregister();
+            Team t = sb.registerNewTeam(team.getColor());
+            t.setPrefix(MineColor.GRAY.BOLD() + "[" + MineColor.RESET + team.getName() + MineColor.GRAY.BOLD() + "]");
+        }
+        sb.getTeam(ANOTHER_TEAM_NAME).unregister();
+        sb.registerNewTeam(ANOTHER_TEAM_NAME);
     }
 
 //    public void updateTab(Player p) {

@@ -65,7 +65,7 @@ public class Participant {
         this.getPlayer().setScoreboard(scoreboard);
         plugin.getSidebar().fillPlayerSidebars(this);
         plugin.getTab().createTab(this.scoreboard);
-        plugin.getTab().addPlayerToTabs(this);
+        plugin.getTab().updateTabs();
         plugin.getPlayers().put(player.getUniqueId(), this);
     }
 
@@ -115,7 +115,6 @@ public class Participant {
 
     public void setTeam(Team team){
         Tab tab = this.plugin.getTab();
-        tab.removePlayerFromTabs(this);
 
     	if (this.team != null) {
             TeamSelection.removePlayerFromItem(plugin, this);
@@ -130,7 +129,7 @@ public class Participant {
         }
 
         this.team = team;
-        tab.addPlayerToTabs(this);
+        tab.updateTabs();
     }
 
     public String getGroup(){

@@ -210,8 +210,8 @@ public class Team {
         }
     }
 
-    public void kill(Participant p) {
+    public void kill() {
         updateTeammates();
-        plugin.getTab().removePlayerFromTabs(p);
+        plugin.getTab().updateTabs();
     }
 }
