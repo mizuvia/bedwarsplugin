@@ -9,6 +9,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -19,6 +20,7 @@ import org.bukkit.plugin.EventExecutor;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import util.WorldManager;
 
 import java.util.List;
 
@@ -31,21 +33,22 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         PlayerMoveEvent e = (PlayerMoveEvent) event;
+        Player pl = e.getPlayer();
 
-        if(!e.getPlayer().getGameMode().equals(GameMode.SPECTATOR)){
-            Participant p = plugin.getPlayers().get(e.getPlayer().getUniqueId());
+        if(!pl.getGameMode().equals(GameMode.SPECTATOR)){
+            Participant p = plugin.getPlayers().get(pl.getUniqueId());
             if (!p.hasTeam()) return;
             Team t = p.getTeam();
             if (t.getTeamUpgrades().get("Healing") != 0) {
-                Location playerLoc = e.getPlayer().getLocation();
+                Location playerLoc = pl.getLocation();
                 Location teamLoc = t.getSpawnLocation();
-                double distance = Math.sqrt(Math.pow(playerLoc.getX() - teamLoc.getX(), 2.0) + Math.pow(playerLoc.getZ() - teamLoc.getZ(), 2.0));
-                if (distance <= 25 && playerLoc.getY() > 0)
-                    e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100000, 0));
-                else e.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
+                double distance = WorldManager.getDistance(playerLoc, teamLoc);
+                if (distance <= 25 && playerLoc.getY() > 0 && pl.getActivePotionEffects().stream().noneMatch(pe -> pe.getType() == PotionEffectType.REGENERATION))
+                    pl.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100000, 0));
+                else pl.removePotionEffect(PotionEffectType.REGENERATION);
             }
             for (Team team : this.getPlugin().getTeams().values()) {
-                Location playerLoc = e.getPlayer().getLocation();
+                Location playerLoc = pl.getLocation();
 
                 if (team.getIronGolem() != null) {
                     IronGolem golem = team.getIronGolem();
@@ -54,7 +57,7 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                     Location golemLoc = golem.getLocation();
                     double distance = Math.sqrt(Math.pow(playerLoc.getX() - golemLoc.getX(), 2.0) + Math.pow(playerLoc.getZ() - golemLoc.getZ(), 2.0));
                     if (distance <= 6) {
-                        if (golem.getTarget() == null) golem.setTarget(e.getPlayer());
+                        if (golem.getTarget() == null) golem.setTarget(pl);
                     }
                 }
 
@@ -67,8 +70,8 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                     if (distance <= 25) {
                         switch (team.getTraps().get(0)) {
                             case "Задержка":
-                                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 160, 0, false, false));
-                                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 0, false, false));
+                                pl.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 160, 0, false, false));
+                                pl.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 0, false, false));
                                 break;
                             case "Поддержка":
                                 for (Participant participant : team.getTeammates()) {
@@ -82,11 +85,11 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                                 }
                                 break;
                             case "Видимость":
-                                e.getPlayer().setGlowing(true);
-                                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> e.getPlayer().setGlowing(false), 200);
+                                pl.setGlowing(true);
+                                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), () -> pl.setGlowing(false), 200);
                                 break;
                             case "Усталость":
-                                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 0, false, false));
+                                pl.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 0, false, false));
                                 break;
                         }
 
@@ -114,17 +117,17 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
             }
         }
 
-        double distance = Math.sqrt(Math.pow(e.getPlayer().getLocation().getX() - Config.getCenter().getX(), 2.0) + Math.pow(e.getPlayer().getLocation().getZ() - Config.getCenter().getZ(), 2.0));
-        double k = (e.getPlayer().getLocation().getX() - Config.getCenter().getX()) / (e.getPlayer().getLocation().getZ() - Config.getCenter().getZ());
+        double distance = Math.sqrt(Math.pow(pl.getLocation().getX() - Config.getCenter().getX(), 2.0) + Math.pow(pl.getLocation().getZ() - Config.getCenter().getZ(), 2.0));
+        double k = (pl.getLocation().getX() - Config.getCenter().getX()) / (pl.getLocation().getZ() - Config.getCenter().getZ());
         if(distance >= 300) {
 
             if(k < 0) k = -k;
 
-            double x = (e.getPlayer().getLocation().getX() - Config.getCenter().getX() < 0 ? -1 : 1) * (k * (distance - 1)) / Math.sqrt(Math.pow(k, 2.0) + 1);
-            double z = (e.getPlayer().getLocation().getZ() - Config.getCenter().getZ() < 0 ? -1 : 1) * Math.abs(x) / k;
+            double x = (pl.getLocation().getX() - Config.getCenter().getX() < 0 ? -1 : 1) * (k * (distance - 1)) / Math.sqrt(Math.pow(k, 2.0) + 1);
+            double z = (pl.getLocation().getZ() - Config.getCenter().getZ() < 0 ? -1 : 1) * Math.abs(x) / k;
 
-            e.getPlayer().teleport(new Location(e.getPlayer().getLocation().getWorld(), Config.getCenter().getX() + x, e.getPlayer().getLocation().getY(), Config.getCenter().getZ() + z, e.getPlayer().getLocation().getYaw(), e.getPlayer().getLocation().getPitch()));
-            e.getPlayer().sendMessage("§cПокидать границы карты запрещено!");
+            pl.teleport(new Location(pl.getLocation().getWorld(), Config.getCenter().getX() + x, pl.getLocation().getY(), Config.getCenter().getZ() + z, pl.getLocation().getYaw(), pl.getLocation().getPitch()));
+            pl.sendMessage("§cПокидать границы карты запрещено!");
         }
     }
 }

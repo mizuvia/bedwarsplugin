@@ -2,7 +2,6 @@ package tasks;
 
 import game.ArmorStands;
 import game.Game;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
@@ -11,7 +10,6 @@ import util.Utils;
 import util.WorldManager;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class DiamondSpawner {
 
