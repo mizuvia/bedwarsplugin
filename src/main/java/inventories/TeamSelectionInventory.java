@@ -25,39 +25,39 @@ public class TeamSelectionInventory extends SimpleInventory {
         List<String> teams = Config.getTeamsNames();
         if(Config.getTeamsAmount() == 8){
             this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(0).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(0)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(0).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(0)).getName(), ""));
             this.addItem(this.createItem(1, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(1).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(1)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(1).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(1)).getName(), ""));
             this.addItem(this.createItem(1, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(2).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(2)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(2).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(2)).getName(), ""));
             this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(3).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(3)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(3).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(3)).getName(), ""));
             this.addItem(this.createItem(7, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(4).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(4)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(4).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(4)).getName(), ""));
             this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(5).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(5)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(5).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(5)).getName(), ""));
             this.addItem(this.createItem(1, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(6).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(6)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(6).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(6)).getName(), ""));
             this.addItem(this.createItem(1, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(7).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(7)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(7).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(7)).getName(), ""));
             this.addItem(this.createItem(2, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         }
         if(Config.getTeamsAmount() == 4){
             this.addItem(this.createItem(10, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(0).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(0)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(0).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(0)).getName(), ""));
             this.addItem(this.createItem(1, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(1).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(1)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(1).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(1)).getName(), ""));
             this.addItem(this.createItem(1, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(2).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(2)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(2).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(2)).getName(), ""));
             this.addItem(this.createItem(1, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(3).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(3)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(3).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(3)).getName(), ""));
             this.addItem(this.createItem(10, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         }
         if(Config.getTeamsAmount() == 2){
             this.addItem(this.createItem(11, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(0).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(0)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(0).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(0)).getName(), ""));
             this.addItem(this.createItem(3, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
-            this.addItem(this.createItem(1, Material.getMaterial(teams.get(1).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeams().get(teams.get(1)).getName(), ""));
+            this.addItem(this.createItem(1, Material.getMaterial(teams.get(1).toUpperCase(Locale.ROOT) + "_WOOL"), 1, false, this.getPlugin().getTeam(teams.get(1)).getName(), ""));
             this.addItem(this.createItem(11, Material.GRAY_STAINED_GLASS_PANE, 1, false, " ", ""));
         }
     }

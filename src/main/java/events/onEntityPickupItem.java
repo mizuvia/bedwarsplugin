@@ -5,6 +5,7 @@ import inventories.ShopItem;
 import inventories.ShopItems;
 import inventories.SimpleInventory;
 import main.Plugin;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
@@ -36,7 +37,7 @@ public class onEntityPickupItem extends SimpleListener implements Listener, Even
 
         if (ShopItems.TOOLS.values().stream().noneMatch(list -> list.contains(shopItem))) return;
 
-        Participant p = plugin.getPlayers().get(e.getEntity().getUniqueId());
+        Participant p = plugin.getPlayer((Player) e.getEntity());
 
         if (ShopItems.isTool(shopItem.getMaterial())) {
             List<ShopItem> list = ShopItems.getList(ShopItems.TOOLS, shopItem);

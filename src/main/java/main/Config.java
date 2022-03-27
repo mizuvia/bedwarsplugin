@@ -101,7 +101,7 @@ public class Config {
 
             Config.reloadTeam(team);
 
-            plugin.getTeams().put(color, team);
+            plugin.addTeam(team);
         }
     }
 

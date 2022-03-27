@@ -34,7 +34,7 @@ public class onBlockBreak extends SimpleListener implements Listener, EventExecu
         e.setDropItems(false);
 
         Block b = e.getBlock();
-        Participant p = plugin.getPlayers().get(e.getPlayer().getUniqueId());
+        Participant p = plugin.getPlayer(e.getPlayer());
 
         if(b.getType().name().matches("(.*)BED")){
             String color = b.getType().name().replace("_BED", "").toLowerCase(Locale.ROOT);
@@ -44,7 +44,7 @@ public class onBlockBreak extends SimpleListener implements Listener, EventExecu
                 return;
             }
 
-            Team team = plugin.getTeams().get(color);
+            Team team = plugin.getTeam(color);
             if(team.isBroken()) return;
             team.setBroken(true);
 

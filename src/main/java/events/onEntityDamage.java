@@ -45,7 +45,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
         e.setCancelled(true);
 
-        Participant p = getPlugin().getPlayers().get(player.getUniqueId());
+        Participant p = getPlugin().getPlayer(player);
 
         if (p == null) return;
 

@@ -28,7 +28,7 @@ public class RedisSubscription extends JedisPubSub{
         else {
             int amount = party.members.size();
 
-            for(Team team : this.getPlugin().getTeams().values()){
+            for(Team team : this.getPlugin().getTeams()){
                 if(Config.getPlayersPerTeam() - team.getTeammatesAmount() >= amount){
                     this.getPlugin().getJedis().publish("pending", uuid + " true");
                     return;

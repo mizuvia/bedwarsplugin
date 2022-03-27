@@ -39,10 +39,10 @@ public class onAsyncPlayerChat extends SimpleListener implements Listener, Event
             } else {
                 if (e.getMessage().startsWith("!")) {
                     for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                        player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId())) + e.getPlayer().getName() + "§7: " + Colors.colorize(e.getMessage()).replace("!", ""));
+                        player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayer(e.getPlayer())) + e.getPlayer().getName() + "§7: " + Colors.colorize(e.getMessage()).replace("!", ""));
                     }
                 } else {
-                    for (Participant participant : this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getTeammates()) {
+                    for (Participant participant : this.getPlugin().getPlayer(e.getPlayer()).getTeam().getTeammates()) {
                         participant.getPlayer().sendMessage(PlayerManager.getCodeColor(participant) + "[Чат команды] " + e.getPlayer().getName() + "§7: " + Colors.colorize(e.getMessage()));
                     }
                 }

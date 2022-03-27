@@ -13,10 +13,10 @@ import java.util.UUID;
 public class PartyManager{
 
     public static void addPlayer(Plugin plugin, Party party, Player player){
-        for(Team team : plugin.getTeams().values()){
+        for(Team team : plugin.getTeams()){
             if(team.getTeammatesAmount() == Config.getPlayersPerTeam()) continue;
             if(checkPlayerInTeam(party, team.getTeammates())){
-                plugin.getPlayers().get(UUID.fromString(player.uuid)).setTeam(team);
+                plugin.getPlayer(UUID.fromString(player.uuid)).setTeam(team);
                 return;
             }
         }
@@ -24,9 +24,9 @@ public class PartyManager{
     }
 
     private static void addToEmptyTeam(Plugin plugin, Party party, Player player){
-        for(Team team : plugin.getTeams().values()){
+        for(Team team : plugin.getTeams()){
             if(team.getTeammatesAmount() != 0) continue;
-            plugin.getPlayers().get(UUID.fromString(player.uuid)).setTeam(team);
+            plugin.getPlayer(UUID.fromString(player.uuid)).setTeam(team);
             return;
         }
         addToRandomTeam(plugin, player);
@@ -34,10 +34,10 @@ public class PartyManager{
 
     private static void addToRandomTeam(Plugin plugin, Player player){
         String teamColor = Config.getTeamsNames().get(0);
-        for(Team team : plugin.getTeams().values())
-            if(plugin.getTeams().get(teamColor).getTeammatesAmount() > team.getTeammatesAmount())
+        for(Team team : plugin.getTeams())
+            if(plugin.getTeam(teamColor).getTeammatesAmount() > team.getTeammatesAmount())
                 teamColor = team.getColor();
-        plugin.getPlayers().get(UUID.fromString(player.uuid)).setTeam(plugin.getTeams().get(teamColor));
+        plugin.getPlayer(UUID.fromString(player.uuid)).setTeam(plugin.getTeam(teamColor));
     }
 
     private static boolean checkPlayerInTeam(Party party, Collection<Participant> participants){

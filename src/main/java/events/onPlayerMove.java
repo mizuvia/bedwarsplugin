@@ -36,7 +36,7 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
         Player pl = e.getPlayer();
 
         if(!pl.getGameMode().equals(GameMode.SPECTATOR)){
-            Participant p = plugin.getPlayers().get(pl.getUniqueId());
+            Participant p = plugin.getPlayer(pl);
             if (!p.hasTeam()) return;
             Team t = p.getTeam();
             if (t.getTeamUpgrades().get("Healing") != 0) {
@@ -47,7 +47,7 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                     pl.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100000, 0));
                 else pl.removePotionEffect(PotionEffectType.REGENERATION);
             }
-            for (Team team : this.getPlugin().getTeams().values()) {
+            for (Team team : this.getPlugin().getTeams()) {
                 Location playerLoc = pl.getLocation();
 
                 if (team.getIronGolem() != null) {
@@ -63,7 +63,7 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
 
                 if (team.getTraps().size() != 0) {
                     if (p.isUnderMilk()) return;
-                    if (team.getColor().equals(t.getColor()))
+                    if (team == t)
                         continue;
 
                     double distance = Math.sqrt(Math.pow(playerLoc.getX() - team.getSpawnLocation().getX(), 2.0) + Math.pow(playerLoc.getZ() - team.getSpawnLocation().getZ(), 2.0));

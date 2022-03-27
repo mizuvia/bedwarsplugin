@@ -66,7 +66,7 @@ public class Participant {
         plugin.getSidebar().fillPlayerSidebars(this);
         plugin.getTab().createTab(this.scoreboard);
         plugin.getTab().updateTabs();
-        plugin.getPlayers().put(player.getUniqueId(), this);
+        plugin.addPlayer(this);
     }
 
     private void createInventories() {
@@ -315,7 +315,7 @@ public class Participant {
         getPlayer().getInventory().clear();
         clearPotionEffects();
         if (isInvisible()) showArmor();
-        plugin.getPlayers().remove(getPlayer().getUniqueId());
+        plugin.removePlayer(getPlayer());
     }
 
     public void clearPotionEffects() {

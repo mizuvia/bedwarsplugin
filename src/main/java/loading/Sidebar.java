@@ -70,7 +70,7 @@ public class Sidebar {
         putInList("STAGE", MineColor.AQUA.BOLD() + "Алмазы II: " + MineColor.WHITE + Utils.getTime(getTime().getStage().getTime()), true);
         putInList("GAP1", "  ", true);
         for(String team : Config.getTeamsNames())
-            putInList("TEAM_" + team.toUpperCase(Locale.ROOT), MineColor.LIME + "✔" + MineColor.LIGHT_GRAY.BOLD() + " | " + MineColor.RESET + this.getPlugin().getTeams().get(team).getName().replace("§l", ""), true);
+            putInList("TEAM_" + team.toUpperCase(Locale.ROOT), MineColor.LIME + "✔" + MineColor.LIGHT_GRAY.BOLD() + " | " + MineColor.RESET + this.getPlugin().getTeam(team).getName().replace("§l", ""), true);
         putInList("GAP2", "   ", true);
         putInList("KILLS", MineColor.WHITE + "Убийств: " + MineColor.RED + "0", false);
         putInList("BROKEN_BEDS", MineColor.WHITE + "Разрушено кроватей: " + MineColor.RED + "0", false);
@@ -78,7 +78,7 @@ public class Sidebar {
 
         fillPlayersSidebars();
 
-        for(Participant p : getPlugin().getPlayers().values()){
+        for(Participant p : getPlugin().getPlayers()){
             String key = "TEAM_" + p.getTeam().getColor().toUpperCase(Locale.ROOT);
             updatePlayerSidebar(p, key, p.getScoreboard().getTeam(key).getPrefix() + MineColor.LIGHT_GRAY + " ВЫ");
         }
@@ -94,7 +94,7 @@ public class Sidebar {
         spectatorTeams.clear();
         createSpectatorSidebar();
 
-        for (Participant p : getPlugin().getPlayers().values()) {
+        for (Participant p : getPlugin().getPlayers()) {
             for (Team t : p.getSidebarTeams()) {
                 String entry = t.getEntries().stream().findFirst().orElse(null);
                 p.getScoreboard().resetScores(entry);
@@ -134,7 +134,7 @@ public class Sidebar {
     }
 
     private void updatePlayersSidebar(String key, String value){
-        for(Participant p : this.getPlugin().getPlayers().values())
+        for(Participant p : this.getPlugin().getPlayers())
             updatePlayerSidebar(p, key, value);
     }
 
@@ -153,7 +153,7 @@ public class Sidebar {
     }
 
     public void fillPlayersSidebars(){
-        for(Participant p : this.getPlugin().getPlayers().values()){
+        for(Participant p : this.getPlugin().getPlayers()){
             fillPlayerSidebars(p);
         }
         spectatorStringsList.forEach((key, value) -> {

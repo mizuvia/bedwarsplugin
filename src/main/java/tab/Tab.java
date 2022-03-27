@@ -20,7 +20,7 @@ public class Tab {
     public Plugin getPlugin(){ return this.plugin; }
 
     public void createTab(Scoreboard scoreboard) {
-        for(game.Team team : this.getPlugin().getTeams().values()){
+        for(game.Team team : this.getPlugin().getTeams()){
             Team t = scoreboard.registerNewTeam(team.getColor());
             if (plugin.isWorking()) t.setPrefix(PlayerManager.getCodeColor(team.getColor()));
         }
@@ -29,7 +29,7 @@ public class Tab {
     }
 
     public void updateTabs(){
-        for(Participant tabOwner : plugin.getPlayers().values()){
+        for(Participant tabOwner : plugin.getPlayers()){
             updateTab(tabOwner);
         }
     }
@@ -39,7 +39,7 @@ public class Tab {
 
         Scoreboard sb = tabOwner.getScoreboard();
 
-        for (Participant p : plugin.getPlayers().values()) {
+        for (Participant p : plugin.getPlayers()) {
             Player pl = p.getPlayer();
             game.Team team = p.getTeam();
             if (team != null) {
@@ -55,7 +55,7 @@ public class Tab {
 
     private void updateTeams(Participant tabOwner) {
         Scoreboard sb = tabOwner.getScoreboard();
-        for (game.Team team : plugin.getTeams().values()) {
+        for (game.Team team : plugin.getTeams()) {
             sb.getTeam(team.getColor()).unregister();
             Team t = sb.registerNewTeam(team.getColor());
             t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.FOR_OWN_TEAM);

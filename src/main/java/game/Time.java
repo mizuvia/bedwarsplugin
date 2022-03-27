@@ -80,9 +80,9 @@ public class Time extends TaskGUI {
 
         if(reason == FinishReason.WIN){
             plugin.getSidebar().updateStage(MineColor.ORANGE.BOLD() + "Победа!");
-            Team winningTeam = plugin.getTeams().values().stream().filter(team -> !team.isDead()).findFirst().orElse(null);
+            Team winningTeam = plugin.getTeams().stream().filter(team -> !team.isDead()).findFirst().orElse(null);
 
-            plugin.getPlayers().forEach((uuid, p) -> {
+            plugin.getPlayers().forEach(p -> {
                 if (p.getTeam() != winningTeam) {
                     String mainTitle = MineColor.DARK_RED.BOLD() + "Поражение!";
                     String secondTitle = "Победила команда " + winningTeam.getName();
@@ -126,7 +126,7 @@ public class Time extends TaskGUI {
     }
 
     private void breakBeds() {
-        for (Team team : plugin.getTeams().values()){
+        for (Team team : plugin.getTeams()){
             Bukkit.getWorld("world").getBlockAt(team.getBedBottomLocation()).getDrops().clear();
             Bukkit.getWorld("world").getBlockAt(team.getBedTopLocation()).getDrops().clear();
 
@@ -136,7 +136,7 @@ public class Time extends TaskGUI {
             team.setBroken(true);
         }
 
-        for (Participant p : plugin.getPlayers().values()){
+        for (Participant p : plugin.getPlayers()){
             p.getPlayer().sendTitle(MineColor.DARK_RED.BOLD() + "Ваша кровать разрушена", MineColor.RED + "Вы больше не возродитесь", 10, 20, 20);
         }
     }

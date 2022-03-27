@@ -38,7 +38,7 @@ public class onPlayerDropItem extends SimpleListener implements Listener, EventE
 
         if (ShopItems.TOOLS.values().stream().noneMatch(list -> list.contains(shopItem))) return;
 
-        Participant p = plugin.getPlayers().get(e.getPlayer().getUniqueId());
+        Participant p = plugin.getPlayer(e.getPlayer());
         SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
 
         int index = ShopItems.getIndex(ShopItems.TOOLS, shopItem);

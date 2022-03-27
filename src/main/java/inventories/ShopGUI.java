@@ -23,7 +23,7 @@ public class ShopGUI implements IGUI{
     public void onGUIClick(Player whoClicked, int slot, Inventory inventory) {
         if (inventory.getItem(slot) == null) return;
 
-        Participant p = plugin.getPlayers().get(whoClicked.getUniqueId());
+        Participant p = plugin.getPlayer(whoClicked);
         if (p.getInventories().containsKey(slot)) {
             SimpleInventory inv = p.getInventories().get(slot);
             p.getPlayer().openInventory(inv);

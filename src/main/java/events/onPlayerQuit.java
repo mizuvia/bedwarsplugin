@@ -22,7 +22,7 @@ public class onPlayerQuit extends SimpleListener implements Listener, EventExecu
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
         PlayerQuitEvent e = (PlayerQuitEvent) event;
 
-        Participant p = this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId());
+        Participant p = this.getPlugin().getPlayer(e.getPlayer());
         if (p == null) {
             e.setQuitMessage(null);
             return;

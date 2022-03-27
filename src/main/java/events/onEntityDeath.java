@@ -21,7 +21,7 @@ public class onEntityDeath extends SimpleListener implements Listener, EventExec
         EntityDeathEvent e = (EntityDeathEvent) event;
 
         if(e.getEntity() instanceof IronGolem){
-            for(Team team : this.getPlugin().getTeams().values()){
+            for(Team team : this.getPlugin().getTeams()){
                 if(e.getEntity().getCustomName().matches("(.*)" + team.getName())){
                     team.setIronGolem(null);
                 }

@@ -33,7 +33,7 @@ public class PlayerKiller {
 
     public void killInGame() {
         Player player = p.getPlayer();
-        plugin.getPlayers().get(player.getUniqueId());
+        plugin.getPlayer(player);
         boolean isFinal = p.getTeam().isBroken();
         String finalMessage = isFinal ? " §b§lФинальное убийство!" : "";
         String deathMessage = hasKiller() ? killWithKiller(isFinal) : killWithoutKiller(isFinal);
@@ -112,7 +112,7 @@ public class PlayerKiller {
 
     private String killWithKiller(boolean isFinal) {
         if (Utils.isUUID(p.getLastDamager().get())) {
-            Participant killer = plugin.getPlayers().get(UUID.fromString(p.getLastDamager().get()));
+            Participant killer = plugin.getPlayer(UUID.fromString(p.getLastDamager().get()));
 
             if (isFinal) killer.increaseFinalKills();
             else killer.increaseKilledPlayers();

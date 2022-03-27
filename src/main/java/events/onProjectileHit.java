@@ -23,14 +23,14 @@ public class onProjectileHit extends SimpleListener implements Listener, EventEx
 
         if (e.getHitEntity() == null || !(e.getEntity() instanceof Arrow arrow)) return;
         Player bukkitShooter = (Player) arrow.getShooter();
-        Participant shooter = plugin.getPlayers().get(bukkitShooter.getUniqueId());
+        Participant shooter = plugin.getPlayer(bukkitShooter);
 
         if (e.getHitEntity() instanceof IronGolem golem) {
             if (shooter.getTeam().getIronGolem() == golem) e.setCancelled(true);
         }
 
         if (e.getHitEntity() instanceof Player bukkitPlayer) {
-            Participant player = plugin.getPlayers().get(bukkitPlayer.getUniqueId());
+            Participant player = plugin.getPlayer(bukkitPlayer);
 
             if (player.getTeam() == shooter.getTeam()) {
                 e.setCancelled(true);

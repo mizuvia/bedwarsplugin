@@ -36,7 +36,7 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
 
         InventoryView view = e.getView();
         Player player = ((Player) e.getWhoClicked());
-        Participant p = plugin.getPlayers().get(player.getUniqueId());
+        Participant p = plugin.getPlayer(player);
 
         if (p == null) return;
 

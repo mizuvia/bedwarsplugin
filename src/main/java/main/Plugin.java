@@ -33,6 +33,7 @@ import util.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -63,9 +64,41 @@ public class Plugin extends JavaPlugin {
 
     public Scoreboard getScoreboard() { return this.scoreboard; }
 
-    public HashMap<String, Team> getTeams() {return this.teams; }
+    public Collection<Team> getTeams() {
+        return this.teams.values();
+    }
 
-    public HashMap<UUID, Participant> getPlayers(){ return this.players; }
+    public Team getTeam(String color){
+        return this.teams.get(color);
+    }
+
+    public void addTeam(Team team) {
+        this.teams.put(team.getColor(), team);
+    }
+
+    public void removeTeam(String color){
+        this.teams.remove(color);
+    }
+
+    public void removePlayer(Entity p) {
+        players.remove(p.getUniqueId());
+    }
+
+    public Collection<Participant> getPlayers() {
+        return this.players.values();
+    }
+
+    public Participant getPlayer(Entity p){
+        return getPlayer(p.getUniqueId());
+    }
+
+    public Participant getPlayer(UUID uuid) {
+        return players.get(uuid);
+    }
+
+    public void addPlayer(Participant p) {
+        players.put(p.getPlayer().getUniqueId(), p);
+    }
 
     public Game getGame(){ return this.game; }
 

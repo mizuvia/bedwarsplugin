@@ -43,7 +43,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
 
         if(e.getAction().equals(Action.PHYSICAL)) return;
         Player p = e.getPlayer();
-        Participant par = getPlugin().getPlayers().get(p.getUniqueId());
+        Participant par = getPlugin().getPlayer(p);
 
         List<Material> interactiveItems = List.of(
                 Material.RED_BED, Material.DARK_OAK_DOOR,
@@ -97,7 +97,7 @@ public class onPlayerInteract extends SimpleListener implements Listener, EventE
                     if (target != null)
                         if (WorldManager.getDistance(target.getLocation(), golem.getLocation()) > 15 || target.isDead())
                             golem.setTarget(null);
-                    for (Team team : plugin.getTeams().values()) {
+                    for (Team team : plugin.getTeams()) {
                         if (parTeam == team) continue;
                         if (team.getIronGolem() == null || team.getIronGolem().isDead()) continue;
                         IronGolem ironGolem = team.getIronGolem();
