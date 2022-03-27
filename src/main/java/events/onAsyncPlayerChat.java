@@ -34,16 +34,16 @@ public class onAsyncPlayerChat extends SimpleListener implements Listener, Event
                 for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                     if (!player.getGameMode().equals(GameMode.SPECTATOR)) continue;
 
-                    player.sendMessage("§7[НАБЛЮДАТЕЛЬ] " + e.getPlayer().getName() + ": " + e.getMessage());
+                    player.sendMessage("§7[НАБЛЮДАТЕЛЬ] " + e.getPlayer().getName() + ": " + Colors.colorize(e.getMessage()));
                 }
             } else {
                 if (e.getMessage().startsWith("!")) {
                     for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                        player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId())) + e.getPlayer().getName() + "§7: " + e.getMessage().replace("!", ""));
+                        player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId())) + e.getPlayer().getName() + "§7: " + Colors.colorize(e.getMessage()).replace("!", ""));
                     }
                 } else {
                     for (Participant participant : this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getTeammates()) {
-                        participant.getPlayer().sendMessage(PlayerManager.getCodeColor(participant) + "[Чат команды] " + e.getPlayer().getName() + "§7: " + e.getMessage());
+                        participant.getPlayer().sendMessage(PlayerManager.getCodeColor(participant) + "[Чат команды] " + e.getPlayer().getName() + "§7: " + Colors.colorize(e.getMessage()));
                     }
                 }
             }

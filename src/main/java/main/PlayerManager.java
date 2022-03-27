@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import util.Colors;
 
 import java.util.Objects;
 
@@ -23,7 +24,7 @@ public class PlayerManager {
         String displayNameRaw = api.getGroupManager().getGroup(p.getGroup()).getDisplayName();
         if(displayNameRaw == null) displayNameRaw = "";
 
-        return displayNameRaw.replaceAll("&", "§");
+        return Colors.colorize(displayNameRaw);
     }
 
     public static String getCodeColor(Participant p){

@@ -6,11 +6,8 @@ import game.Participant;
 import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import tasks.TaskGUI;
 import util.MineColor;
 
 public class Tab {
@@ -43,10 +40,14 @@ public class Tab {
         Scoreboard sb = tabOwner.getScoreboard();
 
         for (Participant p : plugin.getPlayers().values()) {
+            Player pl = p.getPlayer();
             game.Team team = p.getTeam();
-            if (team != null) sb.getTeam(team.getColor()).addEntry(p.getPlayer().getName());
+            if (team != null) {
+                sb.getTeam(team.getColor()).addEntry(pl.getName());
+                String name = PlayerManager.getCodeColor(p) + team.getName().charAt(4) + " | " + PlayerManager.getGroupDisplayName(p).split(" ")[1] + pl.getName();
+                if (plugin.isWorking()) p.getPlayer().setPlayerListName(name);
+            }
             else sb.getTeam(ANOTHER_TEAM_NAME).addEntry(p.getPlayer().getName());
-            //if (plugin.isWorking()) p.getPlayer().setPlayerListName(PlayerManager.getCodeColor(p) + p.getTeam().getName().charAt(4) + " | " + p.getPlayer().getName());
         }
 
         tabOwner.getPlayer().setScoreboard(sb);

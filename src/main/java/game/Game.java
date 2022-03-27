@@ -137,7 +137,7 @@ public class Game {
     public void teleportPlayers(){
         for(Participant participant : this.getPlugin().getPlayers().values()) {
             participant.getPlayer().setGameMode(GameMode.SURVIVAL);
-            //participant.getPlayer().setDisplayName(PlayerManager.getCodeColor(participant) + participant.getTeam().getName().charAt(4) + " | " + participant.getPlayer().getName());
+            participant.getPlayer().setDisplayName(PlayerManager.getCodeColor(participant) + participant.getTeam().getName().charAt(4) + " | " + participant.getPlayer().getName());
             participant.getPlayer().teleport(participant.getTeam().getSpawnLocation());
             PlayerInv.setPlayingInventory(participant);
 

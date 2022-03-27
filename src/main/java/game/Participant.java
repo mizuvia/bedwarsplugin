@@ -124,7 +124,7 @@ public class Participant {
         if (team != null) {
             TeamSelection.addPlayerToItem(plugin, team, this.getPlayer());
 
-            this.getPlayer().setDisplayName("§8§l[" + team.getName() + "§8§l] " + this.getPlayer().getName());
+            this.getPlayer().setDisplayName("§8§l[" + team.getName() + "§8§l]§r§7 " + this.getPlayer().getName());
             team.addTeammate(this);
         }
 
