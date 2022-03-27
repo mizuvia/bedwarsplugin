@@ -47,7 +47,7 @@ public class DiamondSpawner {
     public void spawnItem(){
         if(this.getDiamondTimeLeft() == 0) {
             for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getDiamondArmorStands()){
-                if(!WorldManager.canDropResource(armorStands.getStage(), Material.DIAMOND, MAX_AMOUNT_OF_DIAMONDS)) return;
+                if(!WorldManager.canDropResource(armorStands.getStage(), Material.DIAMOND, MAX_AMOUNT_OF_DIAMONDS)) continue;
                 ItemStack diamond = Utils.createItem(Material.DIAMOND, 1, "§eАлмаз");
                 Item item = WorldManager.dropItem(armorStands.getTime().getLocation(), diamond);
                 item.setVelocity(new Vector());

@@ -41,8 +41,10 @@ public class EmeraldSpawner {
     }
 
     public void updateSpawner() {
-        spawnItem();
-        if(this.getEmeraldTimeLeft() == 0) this.setEmeraldTimeLeft(this.getEmeraldTimeout());
+        if(this.getEmeraldTimeLeft() == 0) {
+            spawnItem();
+            setEmeraldTimeLeft(this.getEmeraldTimeout());
+        }
         changeArmorTime();
         this.emeraldTimeLeft--;
     }
@@ -54,13 +56,11 @@ public class EmeraldSpawner {
     }
 
     public void spawnItem(){
-        if(this.getEmeraldTimeLeft() == 0) {
-            for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getEmeraldArmorStands()){
-                if(!WorldManager.canDropResource(armorStands.getStage(), Material.EMERALD, MAX_AMOUNT_OF_EMERALDS)) return;
-                ItemStack emerald = Utils.createItem(Material.EMERALD, 1, "§eИзумруд");
-                Item item = WorldManager.dropItem(armorStands.getTime().getLocation(), emerald);
-                item.setVelocity(new Vector());
-            }
+        for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getEmeraldArmorStands()){
+            if(!WorldManager.canDropResource(armorStands.getStage(), Material.EMERALD, MAX_AMOUNT_OF_EMERALDS)) continue;
+            ItemStack emerald = Utils.createItem(Material.EMERALD, 1, "§eИзумруд");
+            Item item = WorldManager.dropItem(armorStands.getTime().getLocation(), emerald);
+            item.setVelocity(new Vector());
         }
     }
 

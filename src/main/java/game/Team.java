@@ -180,7 +180,7 @@ public class Team {
             teammatesAmount++;
         }
         if (plugin.isWorking()) {
-            if (isBroken) plugin.getSidebar().updateTeammates(this);
+            if (isBroken && !isDead) plugin.getSidebar().updateTeammates(this);
             checkAlive();
         }
     }
