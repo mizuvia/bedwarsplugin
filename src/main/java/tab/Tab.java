@@ -46,7 +46,7 @@ public class Tab {
             game.Team team = p.getTeam();
             if (team != null) sb.getTeam(team.getColor()).addEntry(p.getPlayer().getName());
             else sb.getTeam(ANOTHER_TEAM_NAME).addEntry(p.getPlayer().getName());
-            if (plugin.isWorking()) p.getPlayer().setPlayerListName(PlayerManager.getCodeColor(p) + p.getTeam().getName().charAt(4) + " | " + p.getPlayer().getName());
+            //if (plugin.isWorking()) p.getPlayer().setPlayerListName(PlayerManager.getCodeColor(p) + p.getTeam().getName().charAt(4) + " | " + p.getPlayer().getName());
         }
 
         tabOwner.getPlayer().setScoreboard(sb);
