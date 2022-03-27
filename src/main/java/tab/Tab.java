@@ -44,7 +44,7 @@ public class Tab {
             game.Team team = p.getTeam();
             if (team != null) {
                 sb.getTeam(team.getColor()).addEntry(pl.getName());
-                String name = PlayerManager.getCodeColor(p) + team.getName().charAt(4) + " | " + PlayerManager.getGroupDisplayName(p).split(" ")[1] + pl.getName();
+                String name = PlayerManager.getCodeColor(p) + team.getName().charAt(4) + " | " + PlayerManager.getCodeColor(p) + pl.getName();
                 if (plugin.isWorking()) p.getPlayer().setPlayerListName(name);
             }
             else sb.getTeam(ANOTHER_TEAM_NAME).addEntry(p.getPlayer().getName());
