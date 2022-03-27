@@ -3,6 +3,7 @@ package util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -45,5 +46,9 @@ public class WorldManager {
         double y2 = loc2.getY();
 
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+    public static Block getBlock(Location loc) {
+        return Bukkit.getWorld("world").getBlockAt(loc);
     }
 }

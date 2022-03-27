@@ -44,8 +44,10 @@ public class Tab /*extends TaskGUI*/ {
     }
 
     private void addPlayerToTab(Participant tabOwner, Participant par){
-        if(!par.hasTeam()) tabOwner.getScoreboard().getTeam(ANOTHER_TEAM_NAME).addEntry(par.getPlayer().getName());
-        else tabOwner.getScoreboard().getTeam(par.getTeam().getColor()).addEntry(par.getPlayer().getName());
+        Scoreboard sb = tabOwner.getScoreboard();
+        if(!par.hasTeam()) sb.getTeam(ANOTHER_TEAM_NAME).addEntry(par.getPlayer().getName());
+        else sb.getTeam(par.getTeam().getColor()).addEntry(par.getPlayer().getName());
+        tabOwner.getPlayer().setScoreboard(sb);
     }
 
     public void removePlayerFromTabs(Participant par){
@@ -55,8 +57,10 @@ public class Tab /*extends TaskGUI*/ {
     }
 
     private void removePlayerFromTab(Participant tabOwner, Participant par){
-        if(!par.hasTeam()) tabOwner.getScoreboard().getTeam(ANOTHER_TEAM_NAME).removeEntry(par.getPlayer().getName());
-        else tabOwner.getScoreboard().getTeam(par.getTeam().getColor()).removeEntry(par.getPlayer().getName());
+        Scoreboard sb = tabOwner.getScoreboard();
+        if(!par.hasTeam()) sb.getTeam(ANOTHER_TEAM_NAME).removeEntry(par.getPlayer().getName());
+        else sb.getTeam(par.getTeam().getColor()).removeEntry(par.getPlayer().getName());
+        tabOwner.getPlayer().setScoreboard(sb);
     }
 
 //    public void updateTab(Player p) {

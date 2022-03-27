@@ -4,7 +4,6 @@ import inventories.TeamUpgrades;
 import inventories.TeamUpgradesInventory;
 import inventories.Traps;
 import inventories.TrapsInventory;
-import main.Config;
 import main.Plugin;
 import org.bukkit.Location;
 import org.bukkit.entity.IronGolem;
@@ -20,16 +19,16 @@ public class Team {
     private String name;
     private Location spawnLocation;
     private Location resourceLocation;
-    private HashMap<String, Integer> teamUpgrades = new HashMap<>();
+    private final HashMap<String, Integer> teamUpgrades = new HashMap<>();
     public int silverTimeout = (int) (1.5 * 20);
     public int goldTimeout = 6 * 20;
     private boolean isBroken = false;
     private boolean isDead = false;
-    private TeamUpgradesInventory upgradesInventory = new TeamUpgradesInventory(new TeamUpgrades(this), 27, "Улучшение команды");
+    private final TeamUpgradesInventory upgradesInventory = new TeamUpgradesInventory(new TeamUpgrades(this), 27, "Улучшение команды");
     private TrapsInventory trapsInventory = new TrapsInventory(new Traps(this), 27, "Ловушки");
     private int teammatesAmount = 0;
     private int aliveTeammates = 0;
-    private HashMap<String, Participant> teammates = new HashMap<>();
+    private final HashMap<String, Participant> teammates = new HashMap<>();
     private IronGolem golem;
     private List<String> traps = new ArrayList<>();
     private Participant bedDestroyer;
@@ -66,8 +65,7 @@ public class Team {
     public void setBroken(boolean isBroken) {
         if(this.isBroken) return;
         this.isBroken = isBroken;
-        this.getPlugin().getSidebar().decreaseAliveTeammates(this);
-        this.checkAlive();
+        updateTeammates();
     }
 
     public boolean isBroken() {return this.isBroken; }
@@ -114,16 +112,6 @@ public class Team {
 
     public int getTeammatesAmount(){return this.teammatesAmount;}
 
-    public void decreaseAliveTeammates() {
-        this.aliveTeammates--;
-        if(this.getPlugin().isWorking()){
-            if(this.isBroken()) this.getPlugin().getSidebar().decreaseAliveTeammates(this);
-            this.checkAlive();
-        }
-    }
-
-    public void increaseAliveTeammates(){this.aliveTeammates++;}
-
     public void setDead(boolean isDead) {
         this.isDead = isDead;
         this.getPlugin().getSidebar().setDead(this);
@@ -140,9 +128,9 @@ public class Team {
     }
 
     public void checkAlive() {
-        if (this.getAliveTeammates() == 0) {
-            this.setDead(true);
-            this.getPlugin().getGame().increaseDeadTeams();
+        if (aliveTeammates == 0) {
+            setDead(true);
+            plugin.getGame().increaseDeadTeams();
         }
     }
 
@@ -164,22 +152,24 @@ public class Team {
 
     public void addTeammate(Participant p) {
         this.getTeammates().put(p.getPlayer().getName(), p);
-        this.increaseAliveTeammates();
-        this.increaseTeammates();
-    }
-
-    private void increaseTeammates(){
-        this.teammatesAmount++;
+        updateTeammates();
     }
 
     public void removeTeammate(Participant p) {
-        this.getTeammates().remove(p.getPlayer().getName());
-        if (!p.isDead()) this.decreaseAliveTeammates();
-        this.decreaseTeammates();
+        teammates.remove(p.getPlayer().getName());
+        updateTeammates();
     }
 
-    private void decreaseTeammates() {
-        this.teammatesAmount--;
+    private void updateTeammates() {
+        aliveTeammates = teammatesAmount = 0;
+        for (Participant p : teammates.values()) {
+            if (!p.isDead()) aliveTeammates++;
+            teammatesAmount++;
+        }
+        if (plugin.isWorking()) {
+            if (isBroken) plugin.getSidebar().updateTeammates(this);
+            checkAlive();
+        }
     }
 
     public void setBedBottomLocation(Location location) {
@@ -209,7 +199,7 @@ public class Team {
     }
 
     public void kill(Participant p) {
-        decreaseAliveTeammates();
+        updateTeammates();
         plugin.getTab().removePlayerFromTabs(p);
     }
 }

@@ -192,7 +192,7 @@ public class Sidebar {
         }
     }
 
-    public void decreaseAliveTeammates(game.Team team) {
+    public void updateTeammates(game.Team team) {
         String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
         String message = MineColor.YELLOW.BOLD() + "" + team.getAliveTeammates() + MineColor.LIGHT_GRAY.BOLD() + " | " + MineColor.RESET + team.getName().replace(ChatColor.BOLD.toString(), "");
         updateSidebar(key, message);

@@ -7,12 +7,14 @@ import main.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
 
 import util.PlayerInv;
+import util.WorldManager;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -119,13 +121,15 @@ public class Game {
         for(Team team : this.getPlugin().getTeams().values()){
             if(team.getAliveTeammates() == 0) {
                 team.setBroken(true);
+                WorldManager.getBlock(team.getBedBottomLocation()).setType(Material.AIR);
+                WorldManager.getBlock(team.getBedTopLocation()).setType(Material.AIR);
             }
         }
     }
 
     public void checkWin(){
         if (Config.getTeamsAmount() - 1 == this.getDeadTeams()) {
-            this.getPlugin().getGame().getTime().finishGame(Time.FinishReason.WIN);
+            time.finishGame(Time.FinishReason.WIN);
         }
     }
 
