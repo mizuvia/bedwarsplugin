@@ -37,7 +37,7 @@ public class Participant {
     private final List<ItemStack> respawnItems = new ArrayList<>();
     private boolean isTeleporting = false;
     private boolean isUnderMilk = false;
-    private boolean isDead = true;
+    private boolean isDead = false;
     public boolean canInteractInInventory = true;
     private int brokenBeds = 0;
     private int killedPlayers = 0;
@@ -115,23 +115,22 @@ public class Participant {
 
     public void setTeam(Team team){
         Tab tab = this.plugin.getTab();
+        tab.removePlayerFromTabs(this);
 
     	if (this.team != null) {
             TeamSelection.removePlayerFromItem(plugin, this);
 
             this.team.removeTeammate(this);
-            tab.removePlayerFromTabs(this);
         }
         if (team != null) {
             TeamSelection.addPlayerToItem(plugin, team, this.getPlayer());
-            tab.addPlayerToTabs(this);
 
             this.getPlayer().setDisplayName("§8§l[" + team.getName() + "§8§l]§r§7 " + this.getPlayer().getName());
-
             team.addTeammate(this);
         }
 
         this.team = team;
+        tab.addPlayerToTabs(this);
     }
 
     public String getGroup(){

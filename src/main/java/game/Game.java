@@ -84,9 +84,9 @@ public class Game {
         this.getPlugin().getSidebar().fillPlayingList();
         this.getArmorStandsManager().createArmorStands();
         this.setInaccessibleBlocks();
-        this.checkEmptyTeams();
         this.teleportPlayers();
         this.getPlugin().setWorking(true);
+        this.checkEmptyTeams();
         Logger.getLogger("").info("Game started successfully");
         this.messenger = new Messenger(getPlugin(), 12000);
         this.messenger.addMessage("§c§lТимерство запрещено!");
