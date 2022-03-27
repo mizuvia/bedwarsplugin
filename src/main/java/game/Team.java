@@ -139,6 +139,7 @@ public class Team {
     }
 
     public void checkAlive() {
+        if (isDead) return;
         if (aliveTeammates == 0) {
             setDead(true);
             plugin.getGame().increaseDeadTeams();

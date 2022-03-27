@@ -102,6 +102,8 @@ public class PlayerKiller {
             if (!PlayerInv.hasShopItem(inv, item)) continue;
             p.getRespawnItems().add(item.getItem());
         }
+
+        p.getRespawnItems().add(ShopItem.WOODEN_SWORD.getItem());
     }
 
     private boolean hasKiller() {
