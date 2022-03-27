@@ -79,14 +79,15 @@ public class Game {
     }
 
     public void start() {
-        this.spawnUpgradeEntity();
-        this.spawnShopEntity();
-        this.getPlugin().getSidebar().fillPlayingList();
-        this.getArmorStandsManager().createArmorStands();
-        this.setInaccessibleBlocks();
-        this.teleportPlayers();
-        this.getPlugin().setWorking(true);
-        this.checkEmptyTeams();
+        spawnUpgradeEntity();
+        spawnShopEntity();
+        plugin.getSidebar().fillPlayingList();
+        armorStandsManager.createArmorStands();
+        setInaccessibleBlocks();
+        teleportPlayers();
+        plugin.setWorking(true);
+        plugin.getTab().updateTabs();
+        checkEmptyTeams();
         Logger.getLogger("").info("Game started successfully");
         this.messenger = new Messenger(getPlugin(), 12000);
         this.messenger.addMessage("§c§lТимерство запрещено!");
@@ -136,7 +137,6 @@ public class Game {
     public void teleportPlayers(){
         for(Participant participant : this.getPlugin().getPlayers().values()) {
             participant.getPlayer().setGameMode(GameMode.SURVIVAL);
-            participant.getPlayer().setPlayerListName(PlayerManager.getCodeColor(participant) + participant.getTeam().getName().charAt(4) + " | " + participant.getPlayer().getName());
             participant.getPlayer().setDisplayName(PlayerManager.getCodeColor(participant) + participant.getTeam().getName().charAt(4) + " | " + participant.getPlayer().getName());
             participant.getPlayer().teleport(participant.getTeam().getSpawnLocation());
             PlayerInv.setPlayingInventory(participant);

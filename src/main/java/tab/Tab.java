@@ -3,6 +3,7 @@
 package tab;
 
 import game.Participant;
+import main.PlayerManager;
 import main.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -12,24 +13,19 @@ import org.bukkit.scoreboard.Team;
 import tasks.TaskGUI;
 import util.MineColor;
 
-public class Tab /*extends TaskGUI*/ {
+public class Tab {
 
     private final Plugin plugin;
     private static final String ANOTHER_TEAM_NAME = "zwithout";
 
     public Tab(Plugin plugin){ this.plugin = plugin; }
 
-//    @Override
-//    protected void execute() {
-//
-//    }
-
     public Plugin getPlugin(){ return this.plugin; }
 
     public void createTab(Scoreboard scoreboard) {
         for(game.Team team : this.getPlugin().getTeams().values()){
             Team t = scoreboard.registerNewTeam(team.getColor());
-            t.setPrefix(team.getName());
+            if (plugin.isWorking()) t.setPrefix(PlayerManager.getCodeColor(team.getColor()));
         }
 
         scoreboard.registerNewTeam(ANOTHER_TEAM_NAME);
@@ -50,6 +46,7 @@ public class Tab /*extends TaskGUI*/ {
             game.Team team = p.getTeam();
             if (team != null) sb.getTeam(team.getColor()).addEntry(p.getPlayer().getName());
             else sb.getTeam(ANOTHER_TEAM_NAME).addEntry(p.getPlayer().getName());
+            if (plugin.isWorking()) p.getPlayer().setPlayerListName(PlayerManager.getCodeColor(p) + p.getTeam().getName().charAt(4) + " | " + p.getPlayer().getName());
         }
 
         tabOwner.getPlayer().setScoreboard(sb);
@@ -60,13 +57,11 @@ public class Tab /*extends TaskGUI*/ {
         for (game.Team team : plugin.getTeams().values()) {
             sb.getTeam(team.getColor()).unregister();
             Team t = sb.registerNewTeam(team.getColor());
-            t.setPrefix(MineColor.GRAY.BOLD() + "[" + MineColor.RESET + team.getName() + MineColor.GRAY.BOLD() + "]");
+            t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.FOR_OTHER_TEAMS);
+            if (plugin.isWorking()) t.setPrefix(PlayerManager.getCodeColor(team.getColor()));
+            else t.setPrefix(MineColor.GRAY.BOLD() + "[" + MineColor.RESET + team.getName() + MineColor.GRAY.BOLD() + "] ");
         }
         sb.getTeam(ANOTHER_TEAM_NAME).unregister();
         sb.registerNewTeam(ANOTHER_TEAM_NAME);
     }
-
-//    public void updateTab(Player p) {
-//
-//    }
 }
