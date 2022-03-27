@@ -69,8 +69,11 @@ public class Colors{
      * @param str String with color codes
      * @return String without color codes
      */
-
     public static String clearColors(String str){
         return str.replaceAll("§.", "");
+    }
+
+    public static String colorize(String str) {
+        return Colors.replaceHex(str).replaceAll("&", "§");
     }
 }

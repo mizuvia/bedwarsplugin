@@ -21,7 +21,7 @@ public class Traps implements IGUI{
 
     @Override
     public void onGUIClick(Player whoClicked, int slot, Inventory inventory) {
-        Participant p = team.getTeammates().get(whoClicked.getName());
+        Participant p = team.getTeammate(whoClicked.getName());
         int price = (int) Math.pow(2, this.getTeam().getTraps().size());
         if(p.takeItem(Material.DIAMOND, price)) {
             String name;

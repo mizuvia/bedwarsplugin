@@ -71,7 +71,7 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 0, false, false));
                                 break;
                             case "Поддержка":
-                                for (Participant participant : team.getTeammates().values()) {
+                                for (Participant participant : team.getTeammates()) {
                                     Location teammateLoc = participant.getPlayer().getLocation();
                                     Location teamLoc = team.getSpawnLocation();
                                     double tmdistance = Math.sqrt(Math.pow(teammateLoc.getX() - teamLoc.getX(), 2.0) + Math.pow(teammateLoc.getZ() - teamLoc.getZ(), 2.0));
@@ -105,7 +105,7 @@ public class onPlayerMove extends SimpleListener implements Listener, EventExecu
                         meta.setLore(lore);
                         item.setItemMeta(meta);
 
-                        for (Participant participant : team.getTeammates().values()) {
+                        for (Participant participant : team.getTeammates()) {
                             participant.getPlayer().sendTitle("§4Ловушка активирована!", "§cВозвращайтесь на базу и защитите кровать.", 10, 70, 20);
                             participant.getPlayer().playSound(participant.getPlayer().getLocation(), Sound.BLOCK_ANVIL_LAND, 10F, 1F);
                         }

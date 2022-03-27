@@ -50,7 +50,7 @@ public class onBlockBreak extends SimpleListener implements Listener, EventExecu
 
             Utils.sendToAll("§7Кровать команды " + team.getName() + "§r§7 была разрушена игроком " + PlayerManager.getCodeColor(p) + e.getPlayer().getName());
 
-            for(Participant participant : team.getTeammates().values()){
+            for(Participant participant : team.getTeammates()){
                 participant.getPlayer().sendTitle("§4Ваша кровать разрушена!", "§cВы больше не возродитесь!", 10, 70, 20);
                 participant.getPlayer().playSound(participant.getPlayer().getLocation(), Sound.ENTITY_WITHER_DEATH, 10F, 1F);
             }

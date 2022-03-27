@@ -118,7 +118,7 @@ public class Game {
     }
 
     private void checkEmptyTeams() {
-        for(Team team : this.getPlugin().getTeams().values()){
+        for(Team team : plugin.getTeams().values()){
             if(team.getAliveTeammates() == 0) {
                 team.setBroken(true);
                 WorldManager.getBlock(team.getBedBottomLocation()).setType(Material.AIR);

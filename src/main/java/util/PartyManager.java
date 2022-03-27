@@ -15,7 +15,7 @@ public class PartyManager{
     public static void addPlayer(Plugin plugin, Party party, Player player){
         for(Team team : plugin.getTeams().values()){
             if(team.getTeammatesAmount() == Config.getPlayersPerTeam()) continue;
-            if(checkPlayerInTeam(party, team.getTeammates().values())){
+            if(checkPlayerInTeam(party, team.getTeammates())){
                 plugin.getPlayers().get(UUID.fromString(player.uuid)).setTeam(team);
                 return;
             }

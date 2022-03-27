@@ -26,8 +26,8 @@ public class Tab /*extends TaskGUI*/ {
     public Plugin getPlugin(){ return this.plugin; }
 
     public void createTab(Scoreboard scoreboard) {
-        Objective objective = scoreboard.registerNewObjective("tab", "dummy", "§6§lMizuvia");
-        objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+        //Objective objective = scoreboard.registerNewObjective("tab", "dummy", "§6§lMizuvia");
+        //objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 
         for(game.Team team : this.getPlugin().getTeams().values()){
             Team t = scoreboard.registerNewTeam(team.getColor());
@@ -38,9 +38,10 @@ public class Tab /*extends TaskGUI*/ {
     }
 
     public void addPlayerToTabs(Participant par){
-        for(Participant tabOwner : this.getPlugin().getPlayers().values()){
+        for(Participant tabOwner : plugin.getPlayers().values()){
             addPlayerToTab(tabOwner, par);
         }
+        if (par.hasTeam()) par.getPlayer().setPlayerListName(par.getTeam().getName() + " " + par.getPlayer());
     }
 
     private void addPlayerToTab(Participant tabOwner, Participant par){

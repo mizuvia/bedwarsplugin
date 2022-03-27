@@ -106,13 +106,13 @@ public class TeamUpgrades implements IGUI{
 
     private boolean takePrice(String name, int level, Player whoClicked) {
         ItemPrice itemPrice = upgrades.get(name).getLevels().get(level).getItemPrice();
-        boolean abil = this.getTeam().getTeammates().get(whoClicked.getName()).takeItem(itemPrice.getMaterial(), itemPrice.getPrice());
+        boolean abil = this.getTeam().getTeammate(whoClicked.getName()).takeItem(itemPrice.getMaterial(), itemPrice.getPrice());
         if(!abil) whoClicked.sendMessage("§cНедостаточно ресурсов");
         return abil;
     }
 
     private void updateEnchantment(String name, int level, Player whoClicked){
-        for(Participant p : this.getTeam().getTeammates().values()){
+        for(Participant p : this.getTeam().getTeammates()){
             for(ItemStack itemStack : p.getPlayer().getInventory().getContents()){
                 if(itemStack == null) continue;
                 if(!upgrades.get(name).getTypes().contains(itemStack.getType())) continue;
@@ -216,7 +216,7 @@ public class TeamUpgrades implements IGUI{
     }
 
     private void informPlayers(String name, Player whoClicked) {
-        for(Participant p : this.getTeam().getTeammates().values()){
+        for(Participant p : this.getTeam().getTeammates()){
             p.getPlayer().sendMessage(PlayerManager.getCodeColor(p) + whoClicked.getName() + " §7купил улучшение " + upgrades.get(name).getName());
         }
     }

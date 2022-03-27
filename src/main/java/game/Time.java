@@ -90,7 +90,7 @@ public class Time extends TaskGUI {
                 }
             });
 
-            for(Participant participant : winningTeam.getTeammates().values()){
+            for(Participant participant : winningTeam.getTeammates()){
                 participant.getPlayer().sendTitle("§6§lПобеда!", "§eСейчас вы будете перемещены в хаб!", 10, 150, 20);
                 new BukkitRunnable(){
                     public int amount = 8;

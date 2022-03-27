@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.IronGolem;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class Team {
     private int aliveTeammates = 0;
     private final HashMap<String, Participant> teammates = new HashMap<>();
     private IronGolem golem;
-    private List<String> traps = new ArrayList<>();
+    private final List<String> traps = new ArrayList<>();
     private Participant bedDestroyer;
     private Location shopVillager;
     private Location upgradesVillager;
@@ -50,6 +51,18 @@ public class Team {
         this.teamUpgrades.put("Forge", 0);
         this.teamUpgrades.put("Healing", 0);
         this.teamUpgrades.put("Trap", 0);
+    }
+
+    public Participant getTeammate(String name) {
+        return teammates.get(name);
+    }
+
+    public Collection<Participant> getTeammates() {
+        return teammates.values();
+    }
+
+    public void putTeammate(Participant p) {
+        teammates.put(p.getPlayer().getName(), p);
     }
 
     public List<String> getTraps(){return this.traps;}
@@ -97,8 +110,6 @@ public class Team {
     public TeamUpgradesInventory getUpgradesInventory(){
         return this.upgradesInventory;
     }
-
-    public HashMap<String, Participant> getTeammates(){ return this.teammates; }
 
     public Plugin getPlugin()  {return this.plugin; }
 
@@ -151,7 +162,7 @@ public class Team {
     }
 
     public void addTeammate(Participant p) {
-        this.getTeammates().put(p.getPlayer().getName(), p);
+        putTeammate(p);
         updateTeammates();
     }
 
@@ -161,7 +172,8 @@ public class Team {
     }
 
     private void updateTeammates() {
-        aliveTeammates = teammatesAmount = 0;
+        aliveTeammates = 0;
+        teammatesAmount = 0;
         for (Participant p : teammates.values()) {
             if (!p.isDead()) aliveTeammates++;
             teammatesAmount++;

@@ -139,7 +139,9 @@ public class Sidebar {
     }
 
     private void updatePlayerSidebar(Participant p, String key, String value){
-        p.getScoreboard().getTeam(key).setPrefix(value);
+        Scoreboard sb = p.getScoreboard();
+        sb.getTeam(key).setPrefix(value);
+        p.getPlayer().setScoreboard(sb);
     }
 
     public void drawPlayerSidebar(Participant p){
@@ -187,7 +189,7 @@ public class Sidebar {
         String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
         String message = MineColor.RED.BOLD() + "×" + MineColor.RESET + MineColor.LIGHT_GRAY.BOLD() + " | " + MineColor.RESET + team.getName().replace("§l", "");
         updateSidebar(key, message);
-        for(Participant p : team.getTeammates().values()){
+        for(Participant p : team.getTeammates()){
             updatePlayerSidebar(p, key, message + " " + MineColor.LIGHT_GRAY + "ВЫ");
         }
     }
@@ -196,7 +198,7 @@ public class Sidebar {
         String key = "TEAM_" + team.getColor().toUpperCase(Locale.ROOT);
         String message = MineColor.YELLOW.BOLD() + "" + team.getAliveTeammates() + MineColor.LIGHT_GRAY.BOLD() + " | " + MineColor.RESET + team.getName().replace(ChatColor.BOLD.toString(), "");
         updateSidebar(key, message);
-        for(Participant p : team.getTeammates().values()){
+        for(Participant p : team.getTeammates()){
             updatePlayerSidebar(p, key, message + " " + MineColor.LIGHT_GRAY + "ВЫ");
         }
     }

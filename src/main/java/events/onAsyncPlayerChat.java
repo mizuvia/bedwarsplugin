@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
+import util.Colors;
 
 public class onAsyncPlayerChat extends SimpleListener implements Listener, EventExecutor {
     public onAsyncPlayerChat(Plugin plugin) {
@@ -25,7 +26,7 @@ public class onAsyncPlayerChat extends SimpleListener implements Listener, Event
         e.setCancelled(true);
         if (this.getPlugin().isLoading()) {
             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                player.sendMessage(e.getPlayer().getDisplayName() + ": " + e.getMessage().replaceAll("&", "§"));
+                player.sendMessage(e.getPlayer().getDisplayName() + ": " + Colors.colorize(e.getMessage()));
             }
         }
         if (this.getPlugin().isWorking()) {
@@ -41,7 +42,7 @@ public class onAsyncPlayerChat extends SimpleListener implements Listener, Event
                         player.sendMessage(PlayerManager.getCodeColor(this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId())) + e.getPlayer().getName() + "§7: " + e.getMessage().replace("!", ""));
                     }
                 } else {
-                    for (Participant participant : this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getTeammates().values()) {
+                    for (Participant participant : this.getPlugin().getPlayers().get(e.getPlayer().getUniqueId()).getTeam().getTeammates()) {
                         participant.getPlayer().sendMessage(PlayerManager.getCodeColor(participant) + "[Чат команды] " + e.getPlayer().getName() + "§7: " + e.getMessage());
                     }
                 }
