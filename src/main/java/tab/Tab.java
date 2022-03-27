@@ -57,8 +57,8 @@ public class Tab {
         for (game.Team team : plugin.getTeams().values()) {
             sb.getTeam(team.getColor()).unregister();
             Team t = sb.registerNewTeam(team.getColor());
-            t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.FOR_OTHER_TEAMS);
-            if (plugin.isWorking()) t.setPrefix(PlayerManager.getCodeColor(team.getColor()));
+            t.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.FOR_OWN_TEAM);
+            if (plugin.isWorking()) t.setPrefix(PlayerManager.getCodeColor(team.getColor()) + " ");
             else t.setPrefix(MineColor.GRAY.BOLD() + "[" + MineColor.RESET + team.getName() + MineColor.GRAY.BOLD() + "] ");
         }
         sb.getTeam(ANOTHER_TEAM_NAME).unregister();
