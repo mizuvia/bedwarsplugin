@@ -83,7 +83,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
     }
 
     private void setNames(Participant p){
-        p.getPlayer().setDisplayName(Colors.replaceHex(PlayerManager.getGroupDisplayName(p)) + p.getPlayer().getName());
+        //p.getPlayer().setDisplayName(Colors.replaceHex(PlayerManager.getGroupDisplayName(p)) + p.getPlayer().getName());
         //p.getPlayer().setPlayerListName(p.getPlayer().getDisplayName());
         String serverName = ChatColor.GOLD + "" + ChatColor.BOLD + "Mizuvia";
         p.getPlayer().setPlayerListHeader(serverName + "\n ");
