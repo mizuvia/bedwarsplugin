@@ -32,8 +32,10 @@ public class DiamondSpawner {
     public DiamondSpawner(Game game){ this.game = game; }
 
     public void updateSpawner(){
-        spawnItem();
-        if(this.getDiamondTimeLeft() == 0) this.setDiamondTimeLeft(this.getDiamondTimeout());
+        if(this.getDiamondTimeLeft() == 0) {
+            spawnItem();
+            setDiamondTimeLeft(this.getDiamondTimeout());
+        }
         changeArmorTime();
         this.diamondTimeLeft--;
     }
@@ -45,15 +47,15 @@ public class DiamondSpawner {
     }
 
     public void spawnItem(){
-        if(this.getDiamondTimeLeft() == 0) {
-            for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getDiamondArmorStands()){
-                if(!WorldManager.canDropResource(armorStands.getStage(), Material.DIAMOND, MAX_AMOUNT_OF_DIAMONDS)) continue;
-                ItemStack diamond = Utils.createItem(Material.DIAMOND, 1, "§eАлмаз");
-                Item item = WorldManager.dropItem(armorStands.getTime().getLocation(), diamond);
-                item.setVelocity(new Vector());
-            }
+        for(ArmorStands armorStands : this.getGame().getArmorStandsManager().getDiamondArmorStands()){
+            if(!WorldManager.canDropResource(armorStands.getStage(), Material.DIAMOND, MAX_AMOUNT_OF_DIAMONDS)) continue;
+            ItemStack diamond = Utils.createItem(Material.DIAMOND, 1, "§eАлмаз");
+            Item item = WorldManager.dropItem(armorStands.getTime().getLocation(), diamond);
+            item.setVelocity(new Vector());
         }
     }
 
-    public Game getGame() {return this.game;}
+    public Game getGame() {
+        return this.game;
+    }
 }
