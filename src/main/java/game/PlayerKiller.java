@@ -11,9 +11,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.PlayerInventory;
+import util.MineColor;
 import util.PlayerInv;
 import util.Utils;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class PlayerKiller {
@@ -33,7 +35,6 @@ public class PlayerKiller {
 
     public void killInGame() {
         Player player = p.getPlayer();
-        plugin.getPlayer(player);
         boolean isFinal = p.getTeam().isBroken();
         String finalMessage = isFinal ? " §b§lФинальное убийство!" : "";
         String deathMessage = hasKiller() ? killWithKiller(isFinal) : killWithoutKiller(isFinal);
@@ -120,7 +121,13 @@ public class PlayerKiller {
 
             giveKillerResources(killer);
 
-            return "§7 был зверски убит " + PlayerManager.getCodeColor(killer) + killer.getPlayer().getName();
+            String health = MineColor.RED + (new DecimalFormat("##.#").format(killer.getPlayer().getHealth()));
+
+            return "§7 был зверски убит "
+                    + PlayerManager.getCodeColor(killer) + killer.getPlayer().getName()
+                    + MineColor.LIGHT_GRAY + " ("
+                    + health
+                    + MineColor.LIGHT_GRAY + ")";
         } else {
             return "§7 был зверски убит " + p.getLastDamager().get();
         }
