@@ -44,6 +44,7 @@ public class PlayerKiller {
         player.setHealth(20.0);
         player.teleport(Config.getCenter());
         p.clearPotionEffects();
+        if (p.isInvisible()) p.showArmor();
 
         if (isFinal) {
             player.sendTitle("§cВы умерли и больше не возродитесь", "§7Наблюдайте за игрой.", 10, 70, 20);

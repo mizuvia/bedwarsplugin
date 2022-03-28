@@ -76,10 +76,6 @@ public class Plugin extends JavaPlugin {
         this.teams.put(team.getColor(), team);
     }
 
-    public void removeTeam(String color){
-        this.teams.remove(color);
-    }
-
     public void removePlayer(Entity p) {
         players.remove(p.getUniqueId());
     }

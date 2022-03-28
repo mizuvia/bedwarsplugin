@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
@@ -33,15 +34,12 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
+        if (event instanceof EntityDamageByEntityEvent) return;
 
         EntityDamageEvent e = (EntityDamageEvent) event;
+
         if(!(e.getEntity() instanceof Player player)) return;
         if(e.getFinalDamage() < player.getHealth()) return;
-        if (e.getEntity().getType() == EntityType.FIREWORK) {
-            e.setCancelled(true);
-            return;
-        }
-        if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) return;
 
         e.setCancelled(true);
 
@@ -49,11 +47,7 @@ public class onEntityDamage extends SimpleListener implements Listener, EventExe
 
         if (p == null) return;
 
-        if (p.isInvisible()) {
-            p.showArmor();
-        }
-
-        if(this.getPlugin().isLoading()) {
+        if (this.getPlugin().isLoading()) {
             if(this.getPlugin().isLoading()) PlayerInv.setWaitingInventory(p);
             e.getEntity().teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
         } else {
