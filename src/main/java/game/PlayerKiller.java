@@ -53,6 +53,12 @@ public class PlayerKiller {
             PlayerInv.clear(p);
             p.setDead(true);
             p.getTeam().kill();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                Participant par = plugin.getPlayer(p);
+                if (par != null) {
+                    if (!par.isDead()) p.hidePlayer(plugin, player);
+                }
+            }
         } else {
             player.sendTitle("§cВозрождение через 5 секунд", "§7Ожидайте.", 10, 70, 20);
             updateToolsInventory();
