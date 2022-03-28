@@ -51,7 +51,7 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             pl.teleport(WorldManager.centralizeLocation(Bukkit.getWorld("waiting").getSpawnLocation()));
             pl.setGameMode(GameMode.ADVENTURE);
             
-            Participant p = new Participant(pl, this.getPlugin());
+            Participant p = new Participant(pl, plugin);
 
             this.setNames(p);
             PlayerInv.setWaitingInventory(p);
@@ -64,6 +64,13 @@ public class onPlayerJoin extends SimpleListener implements Listener, EventExecu
             pl.setGameMode(GameMode.SPECTATOR);
             pl.setPlayerListName("§7Наблюдатель " + pl.getName());
             pl.setScoreboard(plugin.getSidebar().getSpectatorScoreboard());
+
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                Participant par = plugin.getPlayer(p);
+                if (par != null) {
+                    if (!par.isDead()) p.hidePlayer(plugin, pl);
+                }
+            }
 
             e.setJoinMessage(null);
         }
