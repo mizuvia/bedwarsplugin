@@ -12,7 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
-import util.Colors;
+import com.hoshion.library.MizuviaLibrary.Colors;
 
 public class onAsyncPlayerChat extends SimpleListener implements Listener, EventExecutor {
     public onAsyncPlayerChat(Plugin plugin) {

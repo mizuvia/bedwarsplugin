@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import tasks.DiamondSpawner;
 import tasks.EmeraldSpawner;
 import tasks.TaskGUI;
-import util.Colors;
+import com.hoshion.library.MizuviaLibrary.Colors;
 import util.Utils;
 import util.WorldManager;
 

@@ -8,7 +8,7 @@ import main.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import util.MineColor;
+import com.hoshion.library.MizuviaLibrary.MineColor;
 
 public class Tab {
 

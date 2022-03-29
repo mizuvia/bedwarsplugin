@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import util.Colors;
+import com.hoshion.library.MizuviaLibrary.Colors;
 
 import java.util.Objects;
 

@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.PlayerInventory;
-import util.MineColor;
+import com.hoshion.library.MizuviaLibrary.MineColor;
 import util.PlayerInv;
 import util.Utils;
 

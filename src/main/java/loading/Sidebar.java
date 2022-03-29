@@ -10,7 +10,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import util.MineColor;
+import com.hoshion.library.MizuviaLibrary.MineColor;
 import util.Utils;
 
 import java.util.*;

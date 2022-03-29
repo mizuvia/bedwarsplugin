@@ -7,7 +7,7 @@ import game.Participant;
 import game.PlayerKiller;
 import game.Team;
 import inventories.*;
-import jedis.RedisThread;
+import jedis.RedisSubscription;
 import loading.Sidebar;
 import loading.Waiting;
 import org.bukkit.Bukkit;
@@ -198,11 +198,9 @@ public class Plugin extends JavaPlugin {
     }
     
     private void loadJedis(){
-        Jedis subJedis = new Jedis("127.0.0.1", 6379);
         this.jedis = new Jedis("127.0.0.1", 6379);
         this.jedis.publish(Plugin.JedisChannel, Config.getServerName() + " 0");
-        Thread jedisThread = new Thread(new RedisThread(subJedis, this));
-        jedisThread.start();
+        new RedisSubscription(this, Config.getServerName());
     }
 
     private void loadEvents(){

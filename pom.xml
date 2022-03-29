@@ -18,7 +18,7 @@
     <repositories>
         <repository>
             <id>repository</id>
-            <url>http://cloud.ctzl.gq:1338</url>
+            <url>http://mizuvia.com:1338</url>
         </repository>
     </repositories>
 
@@ -51,9 +51,9 @@
             <version>2.11.0</version>
         </dependency>
         <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>3.6.0</version>
+            <groupId>com.hoshion.library</groupId>
+            <artifactId>MizuviaLibrary</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 

@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import util.MineColor;
+import com.hoshion.library.MizuviaLibrary.MineColor;
 import util.PlayerInv;
 import util.Utils;
 import util.WorldManager;
