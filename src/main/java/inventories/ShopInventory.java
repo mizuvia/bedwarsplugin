@@ -20,11 +20,12 @@ public class ShopInventory extends SimpleInventory {
     public Map<Integer, LinkedList<ShopItem>> items = new HashMap<>();
     private final Participant p;
 
-    public ShopInventory(Plugin plugin, Participant p) {
-        super(new ShopGUI(plugin), 54, "Магазин");
+    public ShopInventory(ShopGUI holder, Participant p) {
+        super(holder, 54, "Магазин");
         this.p = p;
         this.setMaxStackSize(1);
         createItems();
+        holder.setShopItems(items);
         this.addItems();
     }
 
