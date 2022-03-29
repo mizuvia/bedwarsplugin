@@ -23,9 +23,8 @@ public class ShopInventory extends SimpleInventory {
     public ShopInventory(ShopGUI holder, Participant p) {
         super(holder, 54, "Магазин");
         this.p = p;
-        this.setMaxStackSize(1);
         createItems();
-        holder.setShopItems(items);
+        holder.setShopItems(shopItems);
         this.addItems();
     }
 
@@ -45,20 +44,20 @@ public class ShopInventory extends SimpleInventory {
     private void createItems() {
         UUID uuid = p.getPlayer().getUniqueId();
         Player p = MongoService.findByUUID(uuid);
-        items.put(28, getItem(p.bw$don21));
-        items.put(29, getItem(p.bw$don11));
-        items.put(30, getItem(p.bw$def1));
-        items.put(31, getItem(p.bw$def3));
-        items.put(32, getItem(p.bw$def5));
-        items.put(33, getItem(p.bw$don13));
-        items.put(34, getItem(p.bw$don23));
-        items.put(37, getItem(p.bw$don22));
-        items.put(38, getItem(p.bw$don12));
-        items.put(39, getItem(p.bw$def2));
-        items.put(40, getItem(p.bw$def4));
-        items.put(41, getItem(p.bw$def6));
-        items.put(42, getItem(p.bw$don14));
-        items.put(43, getItem(p.bw$don24));
+        shopItems.put(28, getItem(p.bw$don21));
+        shopItems.put(29, getItem(p.bw$don11));
+        shopItems.put(30, getItem(p.bw$def1));
+        shopItems.put(31, getItem(p.bw$def3));
+        shopItems.put(32, getItem(p.bw$def5));
+        shopItems.put(33, getItem(p.bw$don13));
+        shopItems.put(34, getItem(p.bw$don23));
+        shopItems.put(37, getItem(p.bw$don22));
+        shopItems.put(38, getItem(p.bw$don12));
+        shopItems.put(39, getItem(p.bw$def2));
+        shopItems.put(40, getItem(p.bw$def4));
+        shopItems.put(41, getItem(p.bw$def6));
+        shopItems.put(42, getItem(p.bw$don14));
+        shopItems.put(43, getItem(p.bw$don24));
     }
 
     private void addItems() {
