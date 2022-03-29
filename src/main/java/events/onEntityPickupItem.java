@@ -37,7 +37,7 @@ public class onEntityPickupItem extends SimpleListener implements Listener, Even
 
         if (ShopItems.TOOLS.values().stream().noneMatch(list -> list.contains(shopItem))) return;
 
-        Participant p = plugin.getPlayer((Player) e.getEntity());
+        Participant p = plugin.getPlayer(e.getEntity());
 
         if (ShopItems.isTool(shopItem.getMaterial())) {
             List<ShopItem> list = ShopItems.getList(ShopItems.TOOLS, shopItem);
@@ -51,6 +51,6 @@ public class onEntityPickupItem extends SimpleListener implements Listener, Even
 
         SimpleInventory inv = p.getShopInventory(ShopItem.TOOLS);
         int index = ShopItems.getIndex(ShopItems.TOOLS, shopItem);
-        inv.updateSlot(index, shopItem);
+        inv.updateSlot(p, index, shopItem);
     }
 }

@@ -40,7 +40,7 @@ public class ShopGUI implements IGUI{
         if (shopItems.containsKey(slot)) {
             SimpleInventory inv = (SimpleInventory) inventory;
             if (inv.makeTrade(p, inv.getItem(slot)))
-                inv.updateSlot(slot);
+                inv.updateSlot(p, slot);
         }
     }
 

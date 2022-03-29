@@ -118,16 +118,16 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
                             }
                         }
                         p.giveItem(givenTool.getItem(), givenToolIndex, false);
-                        p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, givenTool), givenTool);
+                        p.getShopInventory(ShopItem.TOOLS).updateSlot(p, ShopItems.getIndex(ShopItems.TOOLS, givenTool), givenTool);
                     } else {
                         if (inOffHand == null && finalTool != null) {
                             ItemStack finalItem = player.getInventory().getItem(finalToolIndex);
                             if (finalItem == null) {
-                                p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), null);
+                                p.getShopInventory(ShopItem.TOOLS).updateSlot(p, ShopItems.getIndex(ShopItems.TOOLS, finalTool), null);
                             } else {
                                 givenTool = ShopItem.getShopItem(finalItem.getItemMeta().getDisplayName());
                                 p.giveItem(finalItem, finalToolIndex, false);
-                                p.getShopInventory(ShopItem.TOOLS).updateSlot(ShopItems.getIndex(ShopItems.TOOLS, finalTool), givenTool);
+                                p.getShopInventory(ShopItem.TOOLS).updateSlot(p, ShopItems.getIndex(ShopItems.TOOLS, finalTool), givenTool);
                             }
                         }
                     }

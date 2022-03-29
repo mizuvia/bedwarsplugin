@@ -82,27 +82,28 @@ public class SimpleInventory extends CraftInventoryCustom {
         return take;
     }
 
-    public void updateSlot(int slot) {
+    public void updateSlot(Participant p, int slot) {
         String name = getItem(slot).getItemMeta().getDisplayName();
         ShopItem item = ShopItem.getShopItem(name);
-        updateSlot(slot, item);
+        updateSlot(p, slot, item);
     }
 
-    public void updateSlot(int slot, @Nullable ShopItem item) {
+    public void updateSlot(Participant p, int slot, @Nullable ShopItem item) {
         LinkedList<ShopItem> list = shopItems.get(slot);
 
-        if (ShopItems.getList(ShopItems.TOOLS, item) != null) {
-            if (item == null) {
-                setItem(slot, list.getFirst().getItem());
-            } else if (item != list.getLast()) {
-                int in = list.indexOf(item);
-                setItem(slot, list.get(in + 1).getItem());
-            } else {
-                setItem(slot, null);
-            }
+
+        if (ShopItems.getIndex(ShopItems.TOOLS, item) != -1) {
+            p.getShopInventory(ShopItem.TOOLS).setNextStage(list, item, slot);
+            if (ShopItems.getIndex(p.getShopInventory().shopItems, item) != -1)
+                p.getShopInventory().setNextStage(list, item, slot);
         }
 
         if (ShopItems.isArmor(item.getMaterial())) setItem(slot, null);
+
+        if (ShopItems.getIndex(ShopItems.ARMOR, item) != -1) {
+            p.getShopInventory(ShopItem.ARMOR).removePrevious(ShopItems.ARMOR_ORDER, item);
+            p.getShopInventory().removePrevious(ShopItems.ARMOR_ORDER, item);
+        }
 
         if (shopItems == ShopItems.ARMOR){
             int index = ShopItems.ARMOR_ORDER.indexOf(item);
@@ -111,6 +112,32 @@ public class SimpleInventory extends CraftInventoryCustom {
                 setItem(ShopItems.getIndex(shopItems, it.previous()), null);
             }
         }
+    }
+
+    public void setNextStage(LinkedList<ShopItem> list, ShopItem item, int slot) {
+        if (item == null) {
+            this.setItem(slot, list.getFirst().getItem());
+        } else if (item != list.getLast()) {
+            int in = list.indexOf(item);
+            this.setItem(slot, list.get(in + 1).getItem());
+        } else {
+            removeItem(slot);
+        }
+    }
+
+    public void removePrevious(List<ShopItem> order, ShopItem item) {
+        int index = order.indexOf(item);
+        ListIterator<ShopItem> it = order.listIterator(index);
+        int i = ShopItems.getIndex(shopItems, item);
+        removeItem(i);
+        while (it.hasPrevious()) {
+            i = ShopItems.getIndex(shopItems, it.previous());
+            removeItem(i);
+        }
+    }
+
+    public void removeItem(int i) {
+        if (i != -1) setItem(i, null);
     }
 
     public Plugin getPlugin() { return this.plugin; }
