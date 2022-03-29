@@ -12,10 +12,18 @@ import java.util.Map;
 public class ShopGUI implements IGUI{
 
     private final Plugin plugin;
-    private final Map<Integer, LinkedList<ShopItem>> shopItems;
+    private Map<Integer, LinkedList<ShopItem>> shopItems;
 
     public ShopGUI(Plugin plugin, Map<Integer, LinkedList<ShopItem>> shopItems) {
         this.plugin = plugin;
+        this.shopItems = shopItems;
+    }
+
+    public ShopGUI(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public void setShopItems(Map<Integer, LinkedList<ShopItem>> shopItems) {
         this.shopItems = shopItems;
     }
 

@@ -91,7 +91,7 @@ public class SimpleInventory extends CraftInventoryCustom {
     public void updateSlot(int slot, @Nullable ShopItem item) {
         LinkedList<ShopItem> list = shopItems.get(slot);
 
-        if (shopItems == ShopItems.TOOLS) {
+        if (ShopItems.getList(ShopItems.TOOLS, item) != null) {
             if (item == null) {
                 setItem(slot, list.getFirst().getItem());
             } else if (item != list.getLast()) {
@@ -102,10 +102,11 @@ public class SimpleInventory extends CraftInventoryCustom {
             }
         }
 
+        if (ShopItems.isArmor(item.getMaterial())) setItem(slot, null);
+
         if (shopItems == ShopItems.ARMOR){
             int index = ShopItems.ARMOR_ORDER.indexOf(item);
             ListIterator<ShopItem> it = ShopItems.ARMOR_ORDER.listIterator(index);
-            setItem(slot, null);
             while (it.hasPrevious()) {
                 setItem(ShopItems.getIndex(shopItems, it.previous()), null);
             }

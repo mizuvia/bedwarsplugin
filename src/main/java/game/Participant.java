@@ -32,7 +32,7 @@ public class Participant {
     private final Plugin plugin;
     private Team team;
     private String group;
-    private final ShopInventory shop = new ShopInventory(new Shop(this), 54, "Магазин");
+    private final ShopInventory shop;
     private final Map<Integer, SimpleInventory> inventories = new HashMap<>();
     private final List<ItemStack> respawnItems = new ArrayList<>();
     private boolean isTeleporting = false;
@@ -58,6 +58,7 @@ public class Participant {
         this.clearPotionEffects();
         player.getEnderChest().clear();
         createInventories();
+        this.shop = new ShopInventory(plugin, this);
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.sidebarObjective = scoreboard.registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
         this.sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);

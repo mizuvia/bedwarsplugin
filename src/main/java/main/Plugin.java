@@ -140,6 +140,7 @@ public class Plugin extends JavaPlugin {
         this.tab = new Tab(this);
 
         this.loadEvents();
+        Stats.createInstance(this);
         MongoService.createInstance();
         this.loadJedis();
 
