@@ -1,6 +1,5 @@
 package inventories;
 
-import game.Game;
 import game.ItemPrice;
 import game.Participant;
 import main.Plugin;
@@ -98,19 +97,9 @@ public class SimpleInventory extends CraftInventoryCustom {
                 p.getShopInventory().setNextStage(list, item, slot);
         }
 
-        if (ShopItems.isArmor(item.getMaterial())) setItem(slot, null);
-
         if (ShopItems.getIndex(ShopItems.ARMOR, item) != -1) {
             p.getShopInventory(ShopItem.ARMOR).removePrevious(ShopItems.ARMOR_ORDER, item);
             p.getShopInventory().removePrevious(ShopItems.ARMOR_ORDER, item);
-        }
-
-        if (shopItems == ShopItems.ARMOR){
-            int index = ShopItems.ARMOR_ORDER.indexOf(item);
-            ListIterator<ShopItem> it = ShopItems.ARMOR_ORDER.listIterator(index);
-            while (it.hasPrevious()) {
-                setItem(ShopItems.getIndex(shopItems, it.previous()), null);
-            }
         }
     }
 
