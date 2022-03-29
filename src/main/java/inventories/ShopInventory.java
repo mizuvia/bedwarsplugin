@@ -29,8 +29,12 @@ public class ShopInventory extends SimpleInventory {
     }
 
     public LinkedList<ShopItem> getItem(String name) {
-        ShopItem item = ShopItem.valueOf(name);
-        if (item == null) return null;
+        ShopItem item;
+        try {
+            item = ShopItem.valueOf(name);
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
         if (ShopItems.getList(ShopItems.TOOLS, item) != null) {
             return ShopItems.getList(ShopItems.TOOLS, item);
         }
