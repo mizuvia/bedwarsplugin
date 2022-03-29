@@ -21,7 +21,7 @@ public class PlayerManager {
     public static String getGroupDisplayName(Participant p){
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         LuckPerms api = provider.getProvider();
-        String displayNameRaw = api.getGroupManager().getGroup(p.getGroup()).getDisplayName();
+        String displayNameRaw = api.getGroupManager().getGroup(p.getGroup().getDbName()).getDisplayName();
         if(displayNameRaw == null) displayNameRaw = "";
 
         return Colors.colorize(displayNameRaw);

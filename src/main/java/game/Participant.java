@@ -1,5 +1,6 @@
 package game;
 
+import com.hoshion.library.MizuviaLibrary.Donate;
 import inventories.*;
 import loading.Sidebar;
 import main.PlayerManager;
@@ -31,7 +32,7 @@ public class Participant {
     private final Player player;
     private final Plugin plugin;
     private Team team;
-    private String group;
+    private Donate group;
     private final ShopInventory shop;
     private final Map<Integer, SimpleInventory> inventories = new HashMap<>();
     private final List<ItemStack> respawnItems = new ArrayList<>();
@@ -133,16 +134,16 @@ public class Participant {
         tab.updateTabs();
     }
 
-    public String getGroup(){
+    public Donate getGroup(){
         return this.group;
     }
 
-    public void setGroup(String group){
+    public void setGroup(Donate group){
         this.group = group;
     }
 
     public void setGroup(){
-        this.group = PlayerManager.getPlayerGroupName(this.player);
+        this.group = Donate.getByName(PlayerManager.getPlayerGroupName(player));
     }
 
     public ShopInventory getShopInventory(){
