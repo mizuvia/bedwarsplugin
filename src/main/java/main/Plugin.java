@@ -44,7 +44,7 @@ public class Plugin extends JavaPlugin {
     private boolean isLoading = false;
     private boolean isWorking = false;
     public TeamSelectionInventory choose_team;
-    private final ChangeItemInventory changeItemInventory = new ChangeItemInventory(new ChangeItemGUI(this));
+    private ChangeItemInventory changeItemInventory;
     public HashMap<String, Team> teams = new HashMap<>();
     public HashMap<UUID, Participant> players;
     private Sidebar sidebar;
@@ -131,6 +131,7 @@ public class Plugin extends JavaPlugin {
         PlayerKiller.createInstance(this);
         Config.createInstance(this);
         this.game = new Game(this);
+        this.changeItemInventory = new ChangeItemInventory(new ChangeItemGUI(this));
         this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
         this.sidebar = new Sidebar(this);
         this.waiting = new Waiting(this);
