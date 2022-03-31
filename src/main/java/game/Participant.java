@@ -145,7 +145,6 @@ public class Participant {
 
     public void setGroup(){
         this.group = Donate.getByName(PlayerManager.getPlayerGroupName(player));
-        Logger.getLogger("").info(group.getDbName());
         if (group == null) group = Donate.PLAYER;
     }
 
