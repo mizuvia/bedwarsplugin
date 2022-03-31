@@ -26,6 +26,7 @@ import util.PlayerInv;
 import util.Utils;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Participant {
 
@@ -144,6 +145,8 @@ public class Participant {
 
     public void setGroup(){
         this.group = Donate.getByName(PlayerManager.getPlayerGroupName(player));
+        Logger.getLogger("").info(group.getDbName());
+        if (group == null) group = Donate.PLAYER;
     }
 
     public ShopInventory getShopInventory(){
