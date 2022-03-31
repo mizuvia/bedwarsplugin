@@ -27,7 +27,6 @@ public class ShopInventory extends SimpleInventory {
 
     public ShopInventory(QuickSearchGUI holder, Participant p) {
         super(holder, 54, "Магазин");
-        shopItems = new HashMap<>();
         this.p = p;
         createItems();
         holder.setInventory(this);

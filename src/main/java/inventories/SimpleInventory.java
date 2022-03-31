@@ -23,6 +23,7 @@ public class SimpleInventory extends CraftInventoryCustom {
 
     public SimpleInventory(InventoryHolder owner, int size, String title) {
         super(owner, size, title);
+        shopItems = new HashMap<>();
     }
 
     public SimpleInventory(Plugin plugin, String title, Map<Integer, LinkedList<ShopItem>> shopItems) {
