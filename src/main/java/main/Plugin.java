@@ -20,13 +20,9 @@ import org.bukkit.event.EventException;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Scoreboard;
 import redis.clients.jedis.Jedis;
 import tab.Tab;
 import util.Utils;
@@ -43,12 +39,12 @@ public class Plugin extends JavaPlugin {
     public static final String JedisChannel = "bw";
     public static final String PluginName = "BedWarsPlugin";
     private Tab tab;
-    private Scoreboard scoreboard;
     private Game game;
     public Waiting waiting;
     private boolean isLoading = false;
     private boolean isWorking = false;
     public TeamSelectionInventory choose_team;
+    private final ChangeItemInventory changeItemInventory = new ChangeItemInventory(new ChangeItemGUI(this));
     public HashMap<String, Team> teams = new HashMap<>();
     public HashMap<UUID, Participant> players;
     private Sidebar sidebar;
@@ -58,11 +54,13 @@ public class Plugin extends JavaPlugin {
 
     public boolean isWorking() {return this.isWorking; }
 
+    public ChangeItemInventory getChangeItemInventory() {
+        return changeItemInventory;
+    }
+
     public void setLoading(boolean isLoading) {this.isLoading = isLoading;}
 
     public void setWorking(boolean isWorking) {this.isWorking = isWorking;}
-
-    public Scoreboard getScoreboard() { return this.scoreboard; }
 
     public Collection<Team> getTeams() {
         return this.teams.values();
@@ -133,7 +131,6 @@ public class Plugin extends JavaPlugin {
         PlayerKiller.createInstance(this);
         Config.createInstance(this);
         this.game = new Game(this);
-        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.choose_team = new TeamSelectionInventory(new TeamSelection(this), 27, "Выбор команды", this);
         this.sidebar = new Sidebar(this);
         this.waiting = new Waiting(this);
@@ -249,6 +246,9 @@ public class Plugin extends JavaPlugin {
 
         onInventoryClick onInventoryClick = new onInventoryClick(this);
         Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class, onInventoryClick, EventPriority.NORMAL, onInventoryClick, this);
+
+        onInventoryClose onInventoryClose = new onInventoryClose(this);
+        Bukkit.getPluginManager().registerEvent(InventoryCloseEvent.class, onInventoryClose, EventPriority.NORMAL, onInventoryClose, this);
 
         onInventoryDrag onInventoryDrag = new onInventoryDrag(this);
         Bukkit.getPluginManager().registerEvent(InventoryDragEvent.class, onInventoryDrag, EventPriority.NORMAL, onInventoryDrag, this);

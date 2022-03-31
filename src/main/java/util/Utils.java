@@ -42,6 +42,15 @@ public class Utils {
         return item;
     }
 
+    public static ItemStack addLore(ItemStack item, List<String> lore) {
+        ItemMeta meta = item.getItemMeta();
+        List<String> list = meta.getLore();
+        list.addAll(lore);
+        meta.setLore(list);
+        item.setItemMeta(meta);
+        return item;
+    }
+
     public static void connectToHub(Player p) {
         ByteArrayDataOutput hub = ByteStreams.newDataOutput();
         hub.writeUTF("Connect");

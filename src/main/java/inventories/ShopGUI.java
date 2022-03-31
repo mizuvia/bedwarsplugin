@@ -44,6 +44,14 @@ public class ShopGUI implements IGUI{
         }
     }
 
+    public static boolean openShopInventory(Participant p, int slot) {
+        if (!p.getInventories().containsKey(slot)) return false;
+
+        SimpleInventory inv = p.getInventories().get(slot);
+        p.getPlayer().openInventory(inv);
+        return true;
+    }
+
     @NotNull
     @Override
     public Inventory getInventory() {

@@ -59,7 +59,7 @@ public class Participant {
         this.clearPotionEffects();
         player.getEnderChest().clear();
         createInventories();
-        this.shop = new ShopInventory(new ShopGUI(plugin), this);
+        this.shop = new ShopInventory(new QuickSearchGUI(plugin), this);
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.sidebarObjective = scoreboard.registerNewObjective("sidebar", "dummy", Sidebar.SIDEBAR_NAME);
         this.sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);

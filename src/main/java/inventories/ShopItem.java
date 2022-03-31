@@ -1,5 +1,6 @@
 package inventories;
 
+import com.hoshion.library.MizuviaLibrary.MineColor;
 import game.ItemPrice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -143,7 +144,9 @@ public enum ShopItem {
     POTIONS
             (Material.POTION, 1, "§e§lЗелья", null),
     OTHERS
-            (Material.GOLDEN_APPLE, 1, "§e§lРазное", null)
+            (Material.GOLDEN_APPLE, 1, "§e§lРазное", null),
+    SEARCH_SLOT
+            (Material.PURPLE_DYE, 1, MineColor.PURPLE + "Пустая ячейка", null, "", MineColor.LIGHT_GRAY + "Нажмите, чтобы выбрать", MineColor.LIGHT_GRAY + "предмет из магазина.")
     ;
 
 

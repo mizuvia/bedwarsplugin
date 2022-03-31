@@ -2,6 +2,7 @@ package events;
 
 import game.Participant;
 import inventories.IGUI;
+import inventories.QuickSearchGUI;
 import inventories.ShopItem;
 import inventories.ShopItems;
 import main.Plugin;
@@ -20,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import util.PlayerInv;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class onInventoryClick extends SimpleListener implements Listener, EventExecutor {
 
@@ -52,7 +52,11 @@ public class onInventoryClick extends SimpleListener implements Listener, EventE
             gui.onGUIClick((Player) e.getWhoClicked(), e.getRawSlot(), e.getClickedInventory());
             return;
         }
-
+        if (holder instanceof QuickSearchGUI gui){
+            e.setCancelled(true);
+            gui.onClick((Player) e.getWhoClicked(), e.getSlot(), e.getClick());
+            return;
+        }
         if(holder instanceof HumanEntity){
             switch (e.getRawSlot()) {
                 case 0, 1, 2, 3, 4, 5, 6, 7, 8 -> {

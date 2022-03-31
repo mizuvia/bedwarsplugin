@@ -125,6 +125,7 @@ public class Team {
 
     public void setDead(boolean isDead) {
         this.isDead = isDead;
+        isDead = false;
         this.getPlugin().getSidebar().setDead(this);
     }
 
