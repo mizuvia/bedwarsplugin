@@ -66,41 +66,39 @@ BedWars — відома міні-гра в пісочниці Minecraft, гол
 
 Види матеріалів:
 
-![javaw_QjfyROhJIi.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/6b6e9129-7525-4399-9857-10ba1a09c3b9/javaw_QjfyROhJIi.png)
+![image](https://github.com/user-attachments/assets/666d7e46-9041-4c77-9bd7-d430cf42fbd6)
 
 Вигляд бічного вікна бару:
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/a6a5930d-3b21-4404-9846-cc4234fd9f09/image.png)
+![image](https://github.com/user-attachments/assets/ad62f9b6-7a36-4ef8-85b4-c51631cb9121)
 
 Вигляд літаючих блоків для генерації діамантів:
 
-![javaw_RkEfahBbVp.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/f49e0c34-87f9-46e7-a18f-b04af2925309/javaw_RkEfahBbVp.png)
+![image](https://github.com/user-attachments/assets/9afb15ff-66d9-4afd-aa2c-7d4bfd9c2e35)
 
 Вигляд генерації:
-
-![javaw_UE3EpXhwHU.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/5535d811-4699-473e-928f-114f6e371895/javaw_UE3EpXhwHU.png)
+![image](https://github.com/user-attachments/assets/d1c6f89d-d764-4768-9303-2f19ed2e5542)
 
 Вигляд меню магазину:
 
-![javaw_kcPf5giOy2.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/39d32771-989d-4a01-abff-745dd6efc6a8/javaw_kcPf5giOy2.png)
-
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/0250d19b-2955-4538-bf21-7c3ac696b1be/image.png)
+![image](https://github.com/user-attachments/assets/e7468c15-a488-42c6-be92-c8c2bb029c1c)
+![image](https://github.com/user-attachments/assets/0383d7df-bbc7-4ff1-9d3a-98a9a0ec10ed)
 
 Вигляд зміни фази:
 
-![javaw_tbVgVD6K0o.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/8c48a8a7-26c8-4123-ba49-2508388e666c/javaw_tbVgVD6K0o.png)
+![image](https://github.com/user-attachments/assets/8332a4a7-408e-4223-8687-3e8941edadf0)
 
 Вигляд подій з гравцем:
 
-![javaw_jGOyCkobuK.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/9af06d89-75d3-47a9-96ab-0ad6b830ad32/javaw_jGOyCkobuK.png)
+![image](https://github.com/user-attachments/assets/e5a366bb-5bfe-44b8-b328-61a231ca0e4d)
 
 Покращення команди:
 
-![javaw_XlBqIHKGuQ.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/bf762d3a-d534-41ae-a46c-de6a97d2fcc8/javaw_XlBqIHKGuQ.png)
+![image](https://github.com/user-attachments/assets/a63c416e-e375-4dab-95c1-416e55218ed2)
 
 NPC і генерація:
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ddfe4240-9a65-412e-9633-25b8cc00e00d/20329654-9646-4d2c-b72e-11fff9f1ae16/image.png)
+![image](https://github.com/user-attachments/assets/507b4ce5-b774-427f-b537-68ddb655d877)
 
 Загалом до формування ігрового контенту (ігрові карти, текстури окремих предметів, набір товарів) долучалося багато інших людей, яким я дуже вдячний за роботу!
 
